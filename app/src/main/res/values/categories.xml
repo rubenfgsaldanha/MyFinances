@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="categories">
+        <item>Comida e/ou bebida</item>
+        <item>Pagamentos</item>
+        <item>Eletrodomésticos</item>
+        <item>Carro e/ou Transporte</item>
+        <item>Roupa</item>
+        <item>Desporto</item>
+        <item>Criança</item>
+        <item>Férias</item>
+        <item>Viagem</item>
+        <item>Lazer</item>
+        <item>Tecnologia</item>
+        <item>Salário</item>
+        <item>Presentes</item>
+        <item>Outros</item>
+    </string-array>
+</resources>
