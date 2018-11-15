@@ -3,7 +3,6 @@ package pt.uc.dei.cm.myfinances;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
