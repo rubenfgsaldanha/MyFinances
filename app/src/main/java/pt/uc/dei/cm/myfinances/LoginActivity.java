@@ -34,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 100;
 
     @BindView(R.id.root) View mRootView;
-
     private boolean useGoogle = true;
 
     @NonNull
