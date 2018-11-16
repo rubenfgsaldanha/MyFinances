@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/drive_sync"
+        android:icon="@drawable/ic_action_drive_sync"
+        app:showAsAction="always"
+        android:title="@string/drive_sync"/>
+
+    <item
+        android:id="@+id/action_bar_export"
+        android:icon="@drawable/ic_action_export"
+        app:showAsAction="never"
+        android:title="@string/export"/>
+
+    <item
+        android:id="@+id/action_bar_about"
+        android:icon="@drawable/ic_action_about"
+        app:showAsAction="never"
+        android:title="@string/about"/>
+</menu>
