@@ -43,8 +43,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     public void addItem(){
         Toast.makeText(getContext(),"Now we had something",Toast.LENGTH_SHORT).show();
     }
-
-
+    
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
