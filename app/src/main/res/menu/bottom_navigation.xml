@@ -14,14 +14,4 @@
         android:id="@+id/navigation_graphics"
         android:icon="@drawable/ic_action_graphics"
         android:title="@string/graphics" />
-
-    <item
-        android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_action_settings"
-        android:title="@string/settings" />
-
-    <item
-        android:id="@+id/navigation_log_off"
-        android:icon="@drawable/ic_action_log_off"
-        android:title="@string/log_off" />
 </menu>

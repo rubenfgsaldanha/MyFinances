@@ -17,4 +17,9 @@ public final class ConfigurationUtils {
         return AuthUI.UNCONFIGURED_CONFIG_VALUE.equals(
                 context.getString(R.string.default_web_client_id));
     }
+
+    public static boolean isFacebookMisconfigured(@NonNull Context context) {
+        return AuthUI.UNCONFIGURED_CONFIG_VALUE.equals(
+                context.getString(R.string.facebook_application_id));
+    }
 }

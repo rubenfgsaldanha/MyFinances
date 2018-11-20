@@ -1,4 +1,4 @@
-package pt.uc.dei.cm.myfinances;
+package pt.uc.dei.cm.myfinances.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,11 +6,16 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import pt.uc.dei.cm.myfinances.fragments.CategoriesFragment;
+import pt.uc.dei.cm.myfinances.fragments.HomeFragment;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -31,12 +36,12 @@ import com.google.firebase.auth.FirebaseUser;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SignedInActivity extends AppCompatActivity {
+public class SignedInActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
+        CategoriesFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "SignedInActivity";
 
-    @BindView(R.id.content) View mRootView;
-    @BindView(R.id.welcome) TextView welcomeText;
+    @BindView(R.id.activity_signed_in) View mRootView;
     @BindView(R.id.navigation) BottomNavigationView navigation;
 
     private FirebaseUser currentUser;
@@ -60,10 +65,19 @@ public class SignedInActivity extends AppCompatActivity {
             return;
         }
 
-        welcomeText.setText("Welcome, "+currentUser.getDisplayName());
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        Fragment aux = getSupportFragmentManager().findFragmentById(R.id.activity_signed_in);
+
+        if(aux == null){
+            HomeFragment homeFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.activity_signed_in, homeFragment,"HomeFragment").commit();
+        }
+        else{
+            System.out.println("Fragment exists");
+        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,10 +109,35 @@ public class SignedInActivity extends AppCompatActivity {
             case R.id.action_bar_about:
                 Toast.makeText(getApplicationContext(),"About",Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.action_settings:
+                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_log_off:
+                askSignOut();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = item -> {
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                home();
+                Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.navigation_categories:
+                categories();
+                Toast.makeText(getApplicationContext(), "Categories", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.navigation_graphics:
+                Toast.makeText(getApplicationContext(), "Graphics", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return false;
+    };
+
 
     private void showSnackbar(@StringRes int errorMessageRes) {
         Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
@@ -132,25 +171,23 @@ public class SignedInActivity extends AppCompatActivity {
                 );
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = item -> {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.navigation_categories:
-                        Toast.makeText(getApplicationContext(), "Categories", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.navigation_graphics:
-                        Toast.makeText(getApplicationContext(), "Graphics", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.navigation_settings:
-                        Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.navigation_log_off:
-                        askSignOut();
-                        return true;
-                }
-                return false;
-            };
+
+    private void home(){
+        HomeFragment homeFragment = new HomeFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.activity_signed_in,homeFragment);
+        ft.addToBackStack("ToHome");
+        ft.commit();
+    }
+
+    private void categories(){
+        CategoriesFragment categoriesFragment = new CategoriesFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.activity_signed_in,categoriesFragment);
+        ft.addToBackStack("ToCategories");
+        ft.commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri){}
 }

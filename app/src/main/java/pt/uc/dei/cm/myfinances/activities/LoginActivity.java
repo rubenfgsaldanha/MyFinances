@@ -1,4 +1,4 @@
-package pt.uc.dei.cm.myfinances;
+package pt.uc.dei.cm.myfinances.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,9 +9,9 @@ import pt.uc.dei.cm.myfinances.myfinances.R;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.AuthUI.IdpConfig;
@@ -25,7 +25,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.util.ConfigurationUtils;
 
 public class LoginActivity extends AppCompatActivity {
@@ -35,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.root) View mRootView;
     private boolean useGoogle = true;
+    private boolean useFacebook = true;
 
     @NonNull
     public static Intent createIntent(@NonNull Context context) {
@@ -50,6 +50,11 @@ public class LoginActivity extends AppCompatActivity {
         if (ConfigurationUtils.isGoogleMisconfigured(this)) {
             useGoogle = false;
             showSnackbar(R.string.configuration_required);
+        }
+
+        if(ConfigurationUtils.isFacebookMisconfigured(this)){
+            useFacebook = false;
+            System.out.println("---------------------------------------No to Facebook");
         }
 
         signIn();
@@ -117,6 +122,9 @@ public class LoginActivity extends AppCompatActivity {
 
         if(useGoogle){
             addProviders.add(new IdpConfig.GoogleBuilder().build());
+        }
+        if(useFacebook){
+            addProviders.add(new IdpConfig.FacebookBuilder().build());
         }
         addProviders.add(new IdpConfig.EmailBuilder()
                 .setRequireName(true)
