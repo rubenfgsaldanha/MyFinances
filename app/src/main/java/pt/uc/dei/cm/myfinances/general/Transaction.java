@@ -3,18 +3,20 @@ package pt.uc.dei.cm.myfinances.general;
 import java.util.Date;
 
 public class Transaction {
-    private String category;
-    private double amount;
     private Date date;
+    private String category;
+    private boolean isExpense;
+    private double amount;
     private String comment;
 
     public Transaction() {
     }
 
-    public Transaction(String category, double amount, Date date, String comment) {
-        this.category = category;
-        this.amount = amount;
+    public Transaction(Date date, String category, boolean isExpense, double amount, String comment) {
         this.date = date;
+        this.category = category;
+        this.isExpense = isExpense;
+        this.amount = amount;
         this.comment = comment;
     }
 
@@ -24,6 +26,14 @@ public class Transaction {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public boolean isExpense() {
+        return isExpense;
+    }
+
+    public void setExpense(boolean expense) {
+        isExpense = expense;
     }
 
     public double getAmount() {
@@ -53,9 +63,10 @@ public class Transaction {
     @Override
     public String toString() {
         return "Transaction{" +
-                "category='" + category + '\'' +
+                "date=" + date +
+                ", category='" + category + '\'' +
+                ", isExpense=" + isExpense +
                 ", amount=" + amount +
-                ", date=" + date +
                 ", comment='" + comment + '\'' +
                 '}';
     }

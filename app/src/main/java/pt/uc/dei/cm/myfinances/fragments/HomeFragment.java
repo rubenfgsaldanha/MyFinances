@@ -2,6 +2,7 @@ package pt.uc.dei.cm.myfinances.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +15,9 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,6 +49,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     private TransactionAdapter adapter;
 
     MyFinancesApplication app;
+    DecimalFormat df2 = new DecimalFormat(".##");
 
     public HomeFragment() {
         // Required empty public constructor
@@ -68,6 +72,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         if(app.getWallets().size() == 0){
             defaultWallet();
         }
+
+        loadCategories();
 
         return rootView;
     }
@@ -97,6 +103,29 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         app.setCurrentWallet(wallet1);
     }
 
+    //this is temporary, until we have a DB
+    private void loadCategories(){
+        HashMap<String, Integer> map = new HashMap<>();
+
+        String[] categories = getResources().getStringArray(R.array.categories);
+        map.put(categories[0],Color.BLACK);
+        map.put(categories[1],Color.BLUE);
+        map.put(categories[2],Color.CYAN);
+        map.put(categories[3],Color.DKGRAY);
+        map.put(categories[4],Color.GRAY);
+        map.put(categories[5],Color.GREEN);
+        map.put(categories[6],Color.LTGRAY);
+        map.put(categories[7],Color.MAGENTA);
+        map.put(categories[8],Color.RED);
+        map.put(categories[9],Color.YELLOW);
+        map.put(categories[10],getResources().getColor(R.color.purple));   //purple
+        map.put(categories[11],getResources().getColor(R.color.orange));   //orange
+        map.put(categories[12],getResources().getColor(R.color.brown));   //brown
+        map.put(categories[13],getResources().getColor(R.color.pink));   //pink
+
+        app.setCategories(map);
+    }
+
     @OnClick(R.id.fab_add_transaction)
     public void addItem(){
         Intent startAddTransaction =  new Intent(getActivity(), AddTransactionActivity.class);
@@ -107,7 +136,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     public void onResume() {
         super.onResume();
         adapter.notifyDataSetChanged();
-        balance.setText(getString(R.string.balance)+" "+app.getCurrentWallet().getBalance());
+        String value = df2.format(app.getCurrentWallet().getBalance());
+        balance.setText(getString(R.string.balance)+" "+value);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

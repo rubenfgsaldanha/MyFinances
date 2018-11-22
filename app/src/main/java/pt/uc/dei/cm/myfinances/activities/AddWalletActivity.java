@@ -38,7 +38,7 @@ public class AddWalletActivity extends AppCompatActivity {
         MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
         app.getWallets().add(w);
         app.setCurrentWallet(w);
-        Snackbar.make(mRootView, getString(R.string.add_wallet_suc), Snackbar.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
         finish();
     }
 }
