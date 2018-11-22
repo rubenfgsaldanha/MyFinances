@@ -8,9 +8,13 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.general.Wallet;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
@@ -23,20 +27,16 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView walletText;
-        private TextView walletBalance;
-        private ImageView walletImage;
+        @BindView(R.id.wallet_item_text) TextView walletText;
+        @BindView(R.id.wallet_balance) TextView walletBalance;
+        @BindView(R.id.wallet_item_image) ImageView walletImage;
 
         public ViewHolder(View v)  {
             super(v);
-
-            walletText = v.findViewById(R.id.wallet_item_text);
-            walletBalance = v.findViewById(R.id.wallet_balance);
-            walletImage = v.findViewById(R.id.wallet_item_image);
-
-            walletText.setOnClickListener(this::onClick);
+            ButterKnife.bind(this,v);
         }
 
+        @OnClick(R.id.wallet_item_text)
         public void onClick(View view) {
             //passing the clicked position to the parent class
             onItemClickListener.onItemClick(null, view, getAdapterPosition(), view.getId());
@@ -64,8 +64,9 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //set the data to be displayed
+        DecimalFormat df2 = new DecimalFormat(".##");
         holder.walletText.setText(wallets.get(position).getName());
-        holder.walletBalance.setText(String.valueOf(wallets.get(position).getBalance()));
+        holder.walletBalance.setText(df2.format(wallets.get(position).getBalance()));
     }
 
     @Override

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import pt.uc.dei.cm.myfinances.fragments.CategoriesFragment;
+import pt.uc.dei.cm.myfinances.fragments.GraphsFragment;
 import pt.uc.dei.cm.myfinances.fragments.HomeFragment;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
@@ -37,7 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignedInActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
-        CategoriesFragment.OnFragmentInteractionListener{
+        CategoriesFragment.OnFragmentInteractionListener, GraphsFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "SignedInActivity";
 
@@ -165,14 +166,12 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         switch (item.getItemId()) {
             case R.id.navigation_home:
                 home();
-                Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.navigation_graphs:
-                Toast.makeText(getApplicationContext(), "Graphs", Toast.LENGTH_SHORT).show();
+                graphs();
                 return true;
             case R.id.navigation_categories:
                 categories();
-                Toast.makeText(getApplicationContext(), "Categories", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return false;
@@ -183,6 +182,14 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.activity_signed_in,homeFragment);
         ft.addToBackStack("ToHome");
+        ft.commit();
+    }
+
+    private void graphs(){
+        GraphsFragment graphs = new GraphsFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.activity_signed_in,graphs);
+        ft.addToBackStack("ToGraphs");
         ft.commit();
     }
 

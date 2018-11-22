@@ -8,11 +8,17 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.myfinances.R;
+
+import static java.lang.Math.round;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolder> {
     private ArrayList<Transaction> transactions;
@@ -23,20 +29,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView transactionText;
-        private TextView transactionBalance;
-        private ImageView transactionImage;
+        @BindView(R.id.transaction_item_text) TextView transactionText;
+        @BindView(R.id.transaction_balance) TextView transactionBalance;
+        @BindView(R.id.transaction_item_image) ImageView transactionImage;
 
         public ViewHolder(View v)  {
             super(v);
-
-            transactionText = v.findViewById(R.id.transaction_item_text);
-            transactionBalance = v.findViewById(R.id.transaction_balance);
-            transactionImage = v.findViewById(R.id.transaction_item_image);
-
-            transactionText.setOnClickListener(this::onClick);
+            ButterKnife.bind(this,v);
         }
 
+        @OnClick(R.id.transaction_item_text)
         public void onClick(View view) {
             //passing the clicked position to the parent class
             onItemClickListener.onItemClick(null, view, getAdapterPosition(), view.getId());
@@ -70,7 +72,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         else{
             holder.transactionText.setText(transactions.get(position).getCategory());
         }
-        holder.transactionBalance.setText(String.valueOf(transactions.get(position).getAmount()));
+        DecimalFormat df2 = new DecimalFormat(".##");
+        holder.transactionBalance.setText(df2.format(transactions.get(position).getAmount()));
     }
 
     @Override

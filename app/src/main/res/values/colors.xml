@@ -9,4 +9,12 @@
     <color name="colorSecondaryLight">#8e99f3</color>
 
     <color name="colorAccent">#D81B60</color>
+
+
+
+
+    <color name="purple">#6e26ba</color>
+    <color name="orange">#db7e0c</color>
+    <color name="brown">#563307</color>
+    <color name="pink">#e1369d</color>
 </resources>

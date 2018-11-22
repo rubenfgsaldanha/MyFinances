@@ -60,11 +60,8 @@ public class AddTransactionActivity extends AppCompatActivity {
             Transaction t;
             if(expense){
                 transactionAmount = 0 - transactionAmount;
-                t = new Transaction(category,transactionAmount,null,strComment);
             }
-            else{
-                t = new Transaction(category,transactionAmount,null,strComment);
-            }
+            t = new Transaction(null, category, expense, transactionAmount, strComment);
 
             MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
             app.getCurrentWallet().getTransactions().add(t);

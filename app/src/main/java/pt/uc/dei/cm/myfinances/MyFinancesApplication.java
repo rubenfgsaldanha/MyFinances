@@ -3,13 +3,14 @@ package pt.uc.dei.cm.myfinances;
 import android.app.Application;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.general.Wallet;
 
 public class MyFinancesApplication extends Application {
     private ArrayList<Wallet> wallets =  new ArrayList<>();
-    private ArrayList<Transaction> transactions =  new ArrayList<>();
+    private HashMap<String,Integer> categories = new HashMap<>();
+    //private ArrayList<Transaction> transactions =  new ArrayList<>();
     private Wallet currentWallet;
 
     public ArrayList<Wallet> getWallets() {
@@ -20,13 +21,21 @@ public class MyFinancesApplication extends Application {
         this.wallets = wallets;
     }
 
-    public ArrayList<Transaction> getTransactions() {
+    public HashMap<String, Integer> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(HashMap<String, Integer> categories) {
+        this.categories = categories;
+    }
+
+    /*public ArrayList<Transaction> getTransactions() {
         return transactions;
     }
 
     public void setTransactions(ArrayList<Transaction> transactions) {
         this.transactions = transactions;
-    }
+    }*/
 
     public Wallet getCurrentWallet() {
         return currentWallet;
