@@ -60,7 +60,6 @@ public class WalletsActivity extends AppCompatActivity implements AdapterView.On
     @Override
     protected void onResume() {
         super.onResume();
-
         adapter.notifyDataSetChanged();
     }
 
