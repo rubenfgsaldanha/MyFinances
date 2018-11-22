@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        //Check if it's possible to login with google and facebook. at this moment facebook isn't working
         if (ConfigurationUtils.isGoogleMisconfigured(this)) {
             useGoogle = false;
             showSnackbar(R.string.configuration_required);
@@ -60,6 +61,9 @@ public class LoginActivity extends AppCompatActivity {
         signIn();
     }
 
+    //This is taken care of by FirebaseAuthUI
+    /*basically it takes the providers (function addProviders()) with which you can login.
+    For now it's only google or email*/
     private void signIn() {
         AuthUI.SignInIntentBuilder builder =  AuthUI.getInstance().createSignInIntentBuilder()
                 .setAvailableProviders(addProviders())
@@ -87,6 +91,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+    //If all went well, we logged in, otherwise it presents an error message
     private void handleSignInResponse(int resultCode, @Nullable Intent data) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
 
@@ -117,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Function that gets the providers with which you can login
     private List<IdpConfig> addProviders() {
         List<IdpConfig> addProviders = new ArrayList<>();
 

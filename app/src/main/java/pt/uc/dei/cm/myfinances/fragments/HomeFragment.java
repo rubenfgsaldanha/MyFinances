@@ -49,7 +49,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     private TransactionAdapter adapter;
 
     MyFinancesApplication app;
-    DecimalFormat df2 = new DecimalFormat(".##");
+    DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
 
     public HomeFragment() {
         // Required empty public constructor
@@ -68,6 +68,10 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, rootView);
 
+        /*
+        * For now we create a default Wallet and load the categories to the MyFinancesApplication class
+        * This need to be changed when we have a DB
+        */
         app = (MyFinancesApplication) getActivity().getApplicationContext();
         if(app.getWallets().size() == 0){
             defaultWallet();
@@ -103,11 +107,14 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         app.setCurrentWallet(wallet1);
     }
 
-    //this is temporary, until we have a DB
+    //loads the categories to an hashmap<String,Integer>.
+    //In the hasmap we save the name of the category and a color
     private void loadCategories(){
         HashMap<String, Integer> map = new HashMap<>();
 
+        //creates an array from the categories.xml file
         String[] categories = getResources().getStringArray(R.array.categories);
+
         map.put(categories[0],Color.BLACK);
         map.put(categories[1],Color.BLUE);
         map.put(categories[2],Color.CYAN);
@@ -126,6 +133,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         app.setCategories(map);
     }
 
+    //starts activity to add a transaction
     @OnClick(R.id.fab_add_transaction)
     public void addItem(){
         Intent startAddTransaction =  new Intent(getActivity(), AddTransactionActivity.class);
@@ -135,7 +143,9 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     @Override
     public void onResume() {
         super.onResume();
+        //notify the recycler view that some data has changed
         adapter.notifyDataSetChanged();
+
         String value = df2.format(app.getCurrentWallet().getBalance());
         balance.setText(getString(R.string.balance)+" "+value);
     }

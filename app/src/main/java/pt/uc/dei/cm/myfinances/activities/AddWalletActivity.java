@@ -35,6 +35,11 @@ public class AddWalletActivity extends AppCompatActivity {
         String strInitBalance = initialBalance.getText().toString();
 
         Wallet w = new Wallet(name,Double.parseDouble(strInitBalance));
+
+        /*
+        * For now we store the wallets in the MyFinancesApplication class
+        * This needs to be changed when we add a DB
+        */
         MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
         app.getWallets().add(w);
         app.setCurrentWallet(w);

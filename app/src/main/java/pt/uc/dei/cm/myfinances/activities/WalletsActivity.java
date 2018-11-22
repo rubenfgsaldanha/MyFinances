@@ -36,6 +36,10 @@ public class WalletsActivity extends AppCompatActivity implements AdapterView.On
     private WalletAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    /**
+     * We use a recycler view to list the wallets
+     **/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +64,12 @@ public class WalletsActivity extends AppCompatActivity implements AdapterView.On
     @Override
     protected void onResume() {
         super.onResume();
+
+        //notifies the recycler list hat some data has changed
         adapter.notifyDataSetChanged();
     }
 
+    //starts Activity to add a wallet
     @OnClick(R.id.fab_add_wallet)
     public void addWallet(){
         Intent addWallet = new Intent(this,AddWalletActivity.class);

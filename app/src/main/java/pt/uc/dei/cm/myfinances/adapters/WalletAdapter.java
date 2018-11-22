@@ -64,7 +64,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //set the data to be displayed
-        DecimalFormat df2 = new DecimalFormat(".##");
+        DecimalFormat df2 = new DecimalFormat(".##");       //this is to only have 2 decimal numbers
         holder.walletText.setText(wallets.get(position).getName());
         holder.walletBalance.setText(df2.format(wallets.get(position).getBalance()));
     }

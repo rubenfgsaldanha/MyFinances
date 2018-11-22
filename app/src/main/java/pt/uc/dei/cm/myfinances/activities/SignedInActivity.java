@@ -47,6 +47,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
 
     private FirebaseUser currentUser;
 
+    //Only used to send back to LoginActivity
     @NonNull
     public static Intent createIntent(@NonNull Context context, @Nullable IdpResponse response) {
         return new Intent().setClass(context, SignedInActivity.class)
@@ -68,6 +69,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        //put the first fragment
         Fragment aux = getSupportFragmentManager().findFragmentById(R.id.activity_signed_in);
 
         if(aux == null){
@@ -98,6 +100,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         return super.onCreateOptionsMenu(menu);
     }
 
+    //options for action bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -108,7 +111,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
                 Toast.makeText(getApplicationContext(),"Drive sync",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.wallets:
-                addWallet();
+                Wallets();
                 return true;
             case R.id.action_bar_export:
                 Toast.makeText(getApplicationContext(),"Export",Toast.LENGTH_SHORT).show();
@@ -127,11 +130,13 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         }
     }
 
-    private void addWallet(){
+    //starts wallets activity
+    private void Wallets(){
         Intent startWalletsActivity =  new Intent(this, WalletsActivity.class);
         startActivity(startWalletsActivity);
     }
 
+    //alert dialog to ask if user wants to log out
     private void askSignOut(){
         new AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to log out?")
@@ -145,6 +150,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
                 .show();
     }
 
+    //log the user out
     private void signOut() {
         AuthUI.getInstance()
                 .signOut(this)
@@ -161,6 +167,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
     }
 
 
+    //options for bottom navigation bar
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
         switch (item.getItemId()) {
@@ -177,6 +184,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         return false;
     };
 
+    //fragment home
     private void home(){
         HomeFragment homeFragment = new HomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -185,6 +193,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         ft.commit();
     }
 
+    //fragment graph
     private void graphs(){
         GraphsFragment graphs = new GraphsFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -193,6 +202,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         ft.commit();
     }
 
+    //fragment categories
     private void categories(){
         CategoriesFragment categoriesFragment = new CategoriesFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

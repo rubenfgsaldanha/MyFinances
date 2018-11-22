@@ -72,7 +72,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         else{
             holder.transactionText.setText(transactions.get(position).getCategory());
         }
-        DecimalFormat df2 = new DecimalFormat(".##");
+        DecimalFormat df2 = new DecimalFormat(".##");       //this is to only have 2 decimal numbers
         holder.transactionBalance.setText(df2.format(transactions.get(position).getAmount()));
     }
 
