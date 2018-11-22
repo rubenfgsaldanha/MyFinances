@@ -22,15 +22,16 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        // each data item is just a string in this case
 
         private TextView walletText;
+        private TextView walletBalance;
         private ImageView walletImage;
 
         public ViewHolder(View v)  {
             super(v);
 
             walletText = v.findViewById(R.id.wallet_item_text);
+            walletBalance = v.findViewById(R.id.wallet_balance);
             walletImage = v.findViewById(R.id.wallet_item_image);
 
             walletText.setOnClickListener(this::onClick);
@@ -64,6 +65,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         //set the data to be displayed
         holder.walletText.setText(wallets.get(position).getName());
+        holder.walletBalance.setText(String.valueOf(wallets.get(position).getBalance()));
     }
 
     @Override

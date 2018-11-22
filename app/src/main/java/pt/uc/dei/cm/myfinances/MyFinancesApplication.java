@@ -10,6 +10,7 @@ import pt.uc.dei.cm.myfinances.general.Wallet;
 public class MyFinancesApplication extends Application {
     private ArrayList<Wallet> wallets =  new ArrayList<>();
     private ArrayList<Transaction> transactions =  new ArrayList<>();
+    private Wallet currentWallet;
 
     public ArrayList<Wallet> getWallets() {
         return wallets;
@@ -25,5 +26,13 @@ public class MyFinancesApplication extends Application {
 
     public void setTransactions(ArrayList<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public Wallet getCurrentWallet() {
+        return currentWallet;
+    }
+
+    public void setCurrentWallet(Wallet currentWallet) {
+        this.currentWallet = currentWallet;
     }
 }

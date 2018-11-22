@@ -6,6 +6,7 @@ public class Wallet {
     private String name;
     private ArrayList<Transaction> transactions;
     private double balance;
+    private boolean isCurrentWallet;
 
     public Wallet() {
     }
@@ -14,12 +15,14 @@ public class Wallet {
         this.name = name;
         this.balance = balance;
         transactions = new ArrayList<>();
+        isCurrentWallet = true;
     }
 
     public Wallet(String name, ArrayList<Transaction> transactions, double balance) {
         this.name = name;
         this.transactions = transactions;
         this.balance = balance;
+        isCurrentWallet = true;
     }
 
     public ArrayList<Transaction> getTransactions() {
@@ -44,6 +47,18 @@ public class Wallet {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isCurrentWallet() {
+        return isCurrentWallet;
+    }
+
+    public void setCurrentWallet(boolean currentWallet) {
+        isCurrentWallet = currentWallet;
+    }
+
+    public void updateBalance(double transaction){
+        balance += transaction;
     }
 
     @Override

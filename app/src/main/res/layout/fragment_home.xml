@@ -7,10 +7,19 @@
     android:id="@+id/fragmentHome"
     tools:context="pt.uc.dei.cm.myfinances.fragments.HomeFragment">
 
+    <TextView
+        android:id="@+id/balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:layout_alignParentRight="true"
+        android:text="@string/balance"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view_transactions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/balance"
         android:scrollbars="vertical">
     </androidx.recyclerview.widget.RecyclerView>
 

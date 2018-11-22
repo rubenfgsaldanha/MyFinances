@@ -15,12 +15,29 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="unknown_error">An unknown error occurred</string>
 
+    <!-- Fragment Home -->
+    <string name="balance">Balance:</string>
 
     <!-- Auth UI - Signed in -->
     <string name="home">Home</string>
     <string name="categories">Categories</string>
     <string name="graphs">Graphs</string>
     <string name="sign_out_failed">"Sign out Failed"</string>
+
+    <string name="save">Save</string>
+
+    <!-- AddTransactionActivity -->
+    <string name="amount">Amount</string>
+    <string name="comment">Comment</string>
+    <string name="expense">Expense</string>
+    <string name="income">Income</string>
+    <string name="add_trans_suc">Transaction added successfully</string>
+
+
+    <!-- AddWalletActivity -->
+    <string name="name">Name</string>
+    <string name="initial_balance">Initial Balance</string>
+    <string name="add_wallet_suc">Wallet added successfully</string>
 
 
     <!-- Action bar -->

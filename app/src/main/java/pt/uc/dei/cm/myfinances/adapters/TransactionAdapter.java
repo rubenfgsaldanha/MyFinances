@@ -22,15 +22,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        // each data item is just a string in this case
 
         private TextView transactionText;
+        private TextView transactionBalance;
         private ImageView transactionImage;
 
         public ViewHolder(View v)  {
             super(v);
 
             transactionText = v.findViewById(R.id.transaction_item_text);
+            transactionBalance = v.findViewById(R.id.transaction_balance);
             transactionImage = v.findViewById(R.id.transaction_item_image);
 
             transactionText.setOnClickListener(this::onClick);
@@ -69,6 +70,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         else{
             holder.transactionText.setText(transactions.get(position).getCategory());
         }
+        holder.transactionBalance.setText(String.valueOf(transactions.get(position).getAmount()));
     }
 
     @Override

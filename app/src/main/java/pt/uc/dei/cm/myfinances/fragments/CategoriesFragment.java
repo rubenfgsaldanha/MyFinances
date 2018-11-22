@@ -11,7 +11,10 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
@@ -20,8 +23,7 @@ public class CategoriesFragment extends androidx.fragment.app.Fragment {
     private final String TAG = "CategoriesFragment";
     private OnFragmentInteractionListener mListener;
 
-    @BindView(R.id.fab_add_category)
-    FloatingActionButton fab_add_category;
+    @BindView(R.id.fab_add_category) FloatingActionButton fab_add_category;
 
     public CategoriesFragment() {
         // Required empty public constructor
@@ -37,7 +39,16 @@ public class CategoriesFragment extends androidx.fragment.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_categories, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
+        ButterKnife.bind(this,rootView);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //
     }
 
     @OnClick(R.id.fab_add_category)
