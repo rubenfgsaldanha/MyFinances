@@ -100,8 +100,14 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.calendar:
+                Toast.makeText(getApplicationContext(),"Calendar",Toast.LENGTH_SHORT).show();
+                return true;
             case R.id.drive_sync:
                 Toast.makeText(getApplicationContext(),"Drive sync",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.wallets:
+                addWallet();
                 return true;
             case R.id.action_bar_export:
                 Toast.makeText(getApplicationContext(),"Export",Toast.LENGTH_SHORT).show();
@@ -120,27 +126,9 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         }
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = item -> {
-        switch (item.getItemId()) {
-            case R.id.navigation_home:
-                home();
-                Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.navigation_categories:
-                categories();
-                Toast.makeText(getApplicationContext(), "Categories", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.navigation_graphics:
-                Toast.makeText(getApplicationContext(), "Graphics", Toast.LENGTH_SHORT).show();
-                return true;
-        }
-        return false;
-    };
-
-
-    private void showSnackbar(@StringRes int errorMessageRes) {
-        Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
+    private void addWallet(){
+        Intent startWalletsActivity =  new Intent(this, WalletsActivity.class);
+        startActivity(startWalletsActivity);
     }
 
     private void askSignOut(){
@@ -172,6 +160,24 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
     }
 
 
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = item -> {
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                home();
+                Toast.makeText(getApplicationContext(), "Home", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.navigation_graphs:
+                Toast.makeText(getApplicationContext(), "Graphs", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.navigation_categories:
+                categories();
+                Toast.makeText(getApplicationContext(), "Categories", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return false;
+    };
+
     private void home(){
         HomeFragment homeFragment = new HomeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -187,6 +193,12 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         ft.addToBackStack("ToCategories");
         ft.commit();
     }
+
+
+    private void showSnackbar(@StringRes int errorMessageRes) {
+        Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
+    }
+
 
     @Override
     public void onFragmentInteraction(Uri uri){}
