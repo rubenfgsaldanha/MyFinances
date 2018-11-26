@@ -104,9 +104,6 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.calendar:
-                Toast.makeText(getApplicationContext(),"Calendar",Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.drive_sync:
                 Toast.makeText(getApplicationContext(),"Drive sync",Toast.LENGTH_SHORT).show();
                 return true;

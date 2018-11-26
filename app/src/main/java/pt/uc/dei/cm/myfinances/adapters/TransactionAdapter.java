@@ -29,6 +29,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @BindView(R.id.textDate) TextView transactionDate;
         @BindView(R.id.transaction_item_text) TextView transactionText;
         @BindView(R.id.transaction_balance) TextView transactionBalance;
         @BindView(R.id.transaction_item_image) ImageView transactionImage;
@@ -72,6 +73,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         else{
             holder.transactionText.setText(transactions.get(position).getCategory());
         }
+
+        holder.transactionDate.setText(transactions.get(position).getDateString());
+
         DecimalFormat df2 = new DecimalFormat(".##");       //this is to only have 2 decimal numbers
         holder.transactionBalance.setText(df2.format(transactions.get(position).getAmount()));
     }
