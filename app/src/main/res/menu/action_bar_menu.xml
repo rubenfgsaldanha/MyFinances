@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/calendar"
-        android:icon="@drawable/ic_action_calendar"
-        app:showAsAction="always"
-        android:title="@string/calendar"/>
-
-    <item
         android:id="@+id/drive_sync"
         android:icon="@drawable/ic_action_drive_sync"
         app:showAsAction="always"

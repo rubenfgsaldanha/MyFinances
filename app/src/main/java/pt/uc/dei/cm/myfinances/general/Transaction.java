@@ -1,9 +1,9 @@
 package pt.uc.dei.cm.myfinances.general;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class Transaction {
-    private Date date;
+    private Calendar date;
     private String category;
     private boolean isExpense;
     private double amount;
@@ -12,7 +12,7 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Date date, String category, boolean isExpense, double amount, String comment) {
+    public Transaction(Calendar date, String category, boolean isExpense, double amount, String comment) {
         this.date = date;
         this.category = category;
         this.isExpense = isExpense;
@@ -44,11 +44,15 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public String getDateString(){
+        return ""+date.get(Calendar.DAY_OF_MONTH)+"/"+(date.get(Calendar.MONTH)+1)+"/"+date.get(Calendar.YEAR);
+    }
+
+    public void setDate(Calendar date) {
         this.date = date;
     }
 

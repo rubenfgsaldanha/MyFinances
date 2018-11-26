@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
@@ -45,8 +47,13 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     @BindView(R.id.recycle_view_transactions) RecyclerView transactionsList;
     @BindView(R.id.fab_add_transaction) FloatingActionButton fabAddTransaction;
     @BindView(R.id.balance) TextView balance;
+    @BindView(R.id.previous_month) ImageButton previousMonth;
+    @BindView(R.id.next_month) ImageButton nextMonth;
+    @BindView(R.id.current_month) TextView currentMonth;
     private RecyclerView.LayoutManager mLayoutManager;
     private TransactionAdapter adapter;
+    private int currentMonthNum;
+    private int currentYearNum;
 
     MyFinancesApplication app;
     DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
@@ -86,8 +93,11 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        currentMonthNum = Calendar.getInstance().get(Calendar.MONTH);
+        currentYearNum = Calendar.getInstance().get(Calendar.YEAR);
+
         // specify an adapter (see also next example)
-        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactions());
+        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
         transactionsList.setAdapter(adapter);
 
         // use this setting to improve performance if you know that changes
@@ -97,6 +107,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         transactionsList.setLayoutManager(mLayoutManager);
+
+        currentMonth.setText(getCurrentMonth());
     }
 
     //TODO Comunicar com BD para saber as wallets existentes
@@ -133,6 +145,39 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         app.setCategories(map);
     }
 
+    private String getCurrentMonth(){
+        Calendar c = Calendar.getInstance();
+        return ""+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR);
+    }
+
+    @OnClick(R.id.previous_month)
+    public void goToPreviousMonth(){
+        if(currentMonthNum > 0){
+            currentMonthNum--;
+        }
+        else{
+            currentMonthNum = 11;
+            currentYearNum--;
+        }
+        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
+        transactionsList.setAdapter(adapter);
+        currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+    }
+
+    @OnClick(R.id.next_month)
+    public void goToNextMonth(){
+        if(currentMonthNum < 11){
+            currentMonthNum++;
+        }
+        else{
+            currentMonthNum = 0;
+            currentYearNum++;
+        }
+        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
+        transactionsList.setAdapter(adapter);
+        currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+    }
+
     //starts activity to add a transaction
     @OnClick(R.id.fab_add_transaction)
     public void addItem(){
@@ -144,7 +189,9 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     public void onResume() {
         super.onResume();
         //notify the recycler view that some data has changed
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
+        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
+        transactionsList.setAdapter(adapter);
 
         String value = df2.format(app.getCurrentWallet().getBalance());
         balance.setText(getString(R.string.balance)+" "+value);

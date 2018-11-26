@@ -8,19 +8,18 @@
     android:id="@+id/add_transaction_layout"
     tools:context="pt.uc.dei.cm.myfinances.activities.AddTransactionActivity">
 
-    <TextView
-        android:id="@+id/aux"
+    <Button
+        android:id="@+id/btn_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dimen16"
-        android:text="calendar here"/>
+        android:layout_marginBottom="@dimen/dimen16"/>
 
     <Spinner
         android:id="@+id/spinner_categories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen16"
-        android:layout_below="@id/aux"></Spinner>
+        android:layout_below="@id/btn_date"></Spinner>
 
     <RadioGroup
         android:id="@+id/radioGroup"

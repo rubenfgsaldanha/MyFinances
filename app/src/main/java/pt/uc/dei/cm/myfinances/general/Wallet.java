@@ -1,6 +1,7 @@
 package pt.uc.dei.cm.myfinances.general;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Wallet {
     private String name;
@@ -27,6 +28,16 @@ public class Wallet {
 
     public ArrayList<Transaction> getTransactions() {
         return transactions;
+    }
+
+    public ArrayList<Transaction> getTransactionsWithMonth(int month) {
+        ArrayList<Transaction> t = new ArrayList<>();
+        for(int i=0; i<transactions.size(); i++){
+            if(transactions.get(i).getDate().get(Calendar.MONTH) == month){
+                t.add(transactions.get(i));
+            }
+        }
+        return t;
     }
 
     public void setTransactions(ArrayList<Transaction> transactions) {
