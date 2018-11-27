@@ -149,7 +149,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         Calendar c = Calendar.getInstance();
         return ""+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR);
     }
-
+    
     @OnClick(R.id.previous_month)
     public void goToPreviousMonth(){
         if(currentMonthNum > 0){
@@ -181,8 +181,10 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     //starts activity to add a transaction
     @OnClick(R.id.fab_add_transaction)
     public void addItem(){
-        Intent startAddTransaction =  new Intent(getActivity(), AddTransactionActivity.class);
-        startActivityForResult(startAddTransaction, START_ACT_CODE);
+        //Intent startAddTransaction =  new Intent(getActivity(), AddTransactionActivity.class);
+        //startActivityForResult(startAddTransaction, START_ACT_CODE);
+
+
     }
 
     @Override
