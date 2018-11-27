@@ -12,6 +12,12 @@
         android:roundIcon="@drawable/ic_financeslogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <provider
+            android:name="pt.uc.dei.cm.myfinances.db.Provider"
+            android:authorities="pt.uc.dei.cm.myfinances.db.Provider"
+            android:exported="false"/>
+
         <activity android:name="pt.uc.dei.cm.myfinances.activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,12 +25,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
+
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.WalletsActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
+
         <activity android:name="pt.uc.dei.cm.myfinances.activities.AddTransactionActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
+
         <activity android:name="pt.uc.dei.cm.myfinances.activities.AddWalletActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.WalletsActivity"></activity>
     </application>

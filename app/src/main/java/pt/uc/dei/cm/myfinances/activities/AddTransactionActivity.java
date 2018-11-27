@@ -8,11 +8,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
+import pt.uc.dei.cm.myfinances.db.DataBaseHelper;
 import pt.uc.dei.cm.myfinances.fragments.DatePickerFragment;
 import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -106,11 +108,22 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
             }
             t = new Transaction(transactionDate, category, expense, transactionAmount, strComment);
 
+            MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
+            //insert values into DB
+            ContentValues cv = new ContentValues();
+            cv.put(DataBaseHelper.WALLET_NAME,app.getCurrentWallet().getName());
+            cv.put(DataBaseHelper.TRANSACTION_DATE, btnDate.getText().toString());
+            cv.put(DataBaseHelper.TRANSACTION_CATEGORY, category);
+            cv.put(DataBaseHelper.TRANSACTION_COMMENT, strComment);
+            cv.put(DataBaseHelper.TRANSACTION_AMOUNT, transactionAmount);
+
+            //TODO: call an insert method
+
             /*
             * Again, for now this is being stored in MyFinancesApplication class
             * When we have a DB, this needs to be changed
             */
-            MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
+
             app.getCurrentWallet().getTransactions().add(t);
             app.getCurrentWallet().updateBalance(transactionAmount);
 

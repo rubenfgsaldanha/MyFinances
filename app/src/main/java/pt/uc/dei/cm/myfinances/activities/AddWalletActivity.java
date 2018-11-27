@@ -5,9 +5,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
+import pt.uc.dei.cm.myfinances.db.DataBaseHelper;
 import pt.uc.dei.cm.myfinances.general.Wallet;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,11 +38,21 @@ public class AddWalletActivity extends AppCompatActivity {
 
         Wallet w = new Wallet(name,Double.parseDouble(strInitBalance));
 
+
+        MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
+        //insert values into DB
+        ContentValues cv = new ContentValues();
+        cv.put(DataBaseHelper.WALLET_NAME, app.getCurrentWallet().getName());
+        cv.put(DataBaseHelper.WALLET_BALANCE, strInitBalance);
+
+        //TODO: call an insert method
+
+
         /*
         * For now we store the wallets in the MyFinancesApplication class
         * This needs to be changed when we add a DB
         */
-        MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
+
         app.getWallets().add(w);
         app.setCurrentWallet(w);
         setResult(RESULT_OK);
