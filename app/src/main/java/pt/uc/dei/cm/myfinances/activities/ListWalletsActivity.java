@@ -23,7 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public class WalletsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ListWalletsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private final String TAG = this.getClass().getSimpleName();
     private static final int STARTACT_CODE = 1001;
 

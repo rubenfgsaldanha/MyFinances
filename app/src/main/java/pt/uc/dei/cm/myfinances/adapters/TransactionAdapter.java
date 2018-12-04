@@ -30,7 +30,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.textDate) TextView transactionDate;
-        @BindView(R.id.transaction_item_text) TextView transactionText;
+        @BindView(R.id.transaction_item_text_Comment) TextView transactionText;
         @BindView(R.id.transaction_balance) TextView transactionBalance;
         @BindView(R.id.transaction_item_image) ImageView transactionImage;
 
@@ -39,7 +39,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             ButterKnife.bind(this,v);
         }
 
-        @OnClick(R.id.transaction_item_text)
+        @OnClick(R.id.transaction_item_text_Comment)
         public void onClick(View view) {
             //passing the clicked position to the parent class
             onItemClickListener.onItemClick(null, view, getAdapterPosition(), view.getId());

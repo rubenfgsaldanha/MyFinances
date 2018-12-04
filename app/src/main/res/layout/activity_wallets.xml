@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/dimen16"
     android:id="@+id/act_wallet_layout"
-    tools:context="pt.uc.dei.cm.myfinances.activities.WalletsActivity">
+    tools:context="pt.uc.dei.cm.myfinances.activities.ListWalletsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view_wallets"

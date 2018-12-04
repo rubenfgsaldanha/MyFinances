@@ -17,13 +17,16 @@ import android.util.Log;
 public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DataBaseHelper";
     private static final String DATABASE_NAME = "MyFinances.db";
+    //public static final String ROWID_WALLET = "_id_wallet";
+    //public static final String ROWID_TRANSACTION = "_id_transaction";
     public static final String ROWID = "_id";
-    public static final String WALLET_NAME = "wallet_name";
 
     public static final String TABLE_WALLET = "wallets";
+    public static final String WALLET_NAME = "wallet_name";
     public static final String WALLET_BALANCE = "wallet_balance";
 
     public static final String TABLE_TRANSACTION = "transactions";
+    public static final String TRANSACTION_WALLET_NAME = "transaction_wallet_name";
     public static final String TRANSACTION_DATE = "transaction_date";
     public static final String TRANSACTION_CATEGORY = "transaction_category";
     public static final String TRANSACTION_COMMENT = "transaction_comment";
@@ -44,7 +47,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
 
             if(c2.getCount() == 0){
-                db.execSQL("CREATE TABLE "+TABLE_TRANSACTION+" (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+WALLET_NAME+" TEXT, "+TRANSACTION_DATE+" TEXT, " +
+                db.execSQL("CREATE TABLE "+TABLE_TRANSACTION+" (_id INTEGER PRIMARY KEY AUTOINCREMENT, "+TRANSACTION_WALLET_NAME+" TEXT, "+TRANSACTION_DATE+" TEXT, " +
                         ""+TRANSACTION_CATEGORY+" TEXT, "+TRANSACTION_COMMENT+" TEXT, "+TRANSACTION_AMOUNT+" REAL);");
             }
         }catch (Exception e){

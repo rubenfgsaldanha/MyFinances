@@ -15,6 +15,7 @@ import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -100,6 +101,9 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
         else{
             Double transactionAmount = Double.parseDouble(amount.getText().toString());
             String strComment = comment.getText().toString();
+            if(!strComment.isEmpty()){
+                strComment = " -> "+strComment;
+            }
 
             //checks if it's an expense or income
             Transaction t;
@@ -109,15 +113,13 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
             t = new Transaction(transactionDate, category, expense, transactionAmount, strComment);
 
             MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
-            //insert values into DB
-            ContentValues cv = new ContentValues();
-            cv.put(DataBaseHelper.WALLET_NAME,app.getCurrentWallet().getName());
-            cv.put(DataBaseHelper.TRANSACTION_DATE, btnDate.getText().toString());
-            cv.put(DataBaseHelper.TRANSACTION_CATEGORY, category);
-            cv.put(DataBaseHelper.TRANSACTION_COMMENT, strComment);
-            cv.put(DataBaseHelper.TRANSACTION_AMOUNT, transactionAmount);
 
-            //TODO: call an insert method
+            Intent intent = new Intent();
+            intent.putExtra("wallet_name",app.getCurrentWallet().getName());
+            intent.putExtra("transaction_date",btnDate.getText().toString());
+            intent.putExtra("transaction_category", category);
+            intent.putExtra("transaction_comment",strComment);
+            intent.putExtra("transaction_amount",transactionAmount);
 
             /*
             * Again, for now this is being stored in MyFinancesApplication class
@@ -127,7 +129,7 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
             app.getCurrentWallet().getTransactions().add(t);
             app.getCurrentWallet().updateBalance(transactionAmount);
 
-            setResult(RESULT_OK);
+            setResult(RESULT_OK,intent);
             finish();
         }
     }

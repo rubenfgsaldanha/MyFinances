@@ -29,14 +29,14 @@
         <activity android:name="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
 
         <activity
-            android:name="pt.uc.dei.cm.myfinances.activities.WalletsActivity"
+            android:name="pt.uc.dei.cm.myfinances.activities.ListWalletsActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
 
         <activity android:name="pt.uc.dei.cm.myfinances.activities.AddTransactionActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
 
         <activity android:name="pt.uc.dei.cm.myfinances.activities.AddWalletActivity"
-            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.WalletsActivity"></activity>
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.ListWalletsActivity"></activity>
     </application>
 
 </manifest>

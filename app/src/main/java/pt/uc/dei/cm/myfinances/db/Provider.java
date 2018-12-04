@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,9 +32,9 @@ public class Provider extends ContentProvider {
     //Contract Class
     public static final class Constants implements BaseColumns {
         public static final Uri CONTENT_URI_WALLET =
-                Uri.parse("content://pt.uc.dei.cm.myfinances.Provider/wallets");
+                Uri.parse("content://pt.uc.dei.cm.myfinances.db.Provider/wallets");
         public static final Uri CONTENT_URI_TRANSACTION =
-                Uri.parse("content://pt.uc.dei.cm.myfinances.Provider/transactions");
+                Uri.parse("content://pt.uc.dei.cm.myfinances.db.Provider/transactions");
 
         public static final String DEFAULT_SORT_ORDER = "wallet_name";       /////////////////////////////////not final yet
 
@@ -41,6 +42,7 @@ public class Provider extends ContentProvider {
         public static final String WALLET_BALANCE = "wallet_balance";
 
         public static final String TRANSACTION_DATE = "transaction_date";
+        public static final String TRANSACTION_WALLET_NAME = "transaction_wallet_name";
         public static final String TRANSACTION_CATEGORY = "transaction_category";
         public static final String TRANSACTION_COMMENT = "transaction_comment";
         public static final String TRANSACTION_AMOUNT = "transaction_amount";
@@ -48,19 +50,20 @@ public class Provider extends ContentProvider {
 
     static {                                                //Para eu perceber o que me está a ser pedido
         MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-        MATCHER.addURI("pt.uc.dei.cm.myfinances.Provider",
+        MATCHER.addURI("pt.uc.dei.cm.myfinances.db.Provider",
                 "wallets", CONSTANTS_WALLET);
-        MATCHER.addURI("com.commonsware.android.constants.Provider",
+        MATCHER.addURI("pt.uc.dei.cm.myfinances.db.Provider",
                 "wallets/#", CONSTANT_WALLET_ID);
 
-        MATCHER.addURI("pt.uc.dei.cm.myfinances.Provider",
+        MATCHER.addURI("pt.uc.dei.cm.myfinances.db.Provider",
                 "transactions", CONSTANTS_TRANSACTION);
-        MATCHER.addURI("com.commonsware.android.constants.Provider",
+        MATCHER.addURI("pt.uc.dei.cm.myfinances.db.Provider",
                 "transactions/#", CONSTANT_TRANSACTION_ID);
     }
 
     @Override
     public boolean onCreate() {
+        Log.d(TAG,"OnCreate");
         db = new DataBaseHelper(getContext());
 
         return (!(db == null));
@@ -68,16 +71,28 @@ public class Provider extends ContentProvider {
 
     @Override
     public Cursor query(Uri url, String[] projection, String selection, String[] selectionArgs, String sort) {
+        Log.d(TAG,"Query");
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        qb.setTables(""+TABLE_WALLET+","+TABLE_TRANSACTION);
+        String orderBy="";
 
-        String orderBy = Constants.DEFAULT_SORT_ORDER;
-        selection = selection + "_ID = " + url.getLastPathSegment();
+        int uriType = MATCHER.match(url);
+        switch(uriType){
+            case CONSTANTS_WALLET:
+                qb.setTables(TABLE_WALLET);
+                orderBy = Constants.DEFAULT_SORT_ORDER;
+                break;
+            case CONSTANTS_TRANSACTION:
+                qb.setTables(TABLE_TRANSACTION);
+                orderBy = "transaction_wallet_name";
+                break;
+        }
+
+        //selection = selection + "_ID = " + url.getLastPathSegment();
 
         Cursor c =
                 qb.query(db.getReadableDatabase(), projection, selection,
-                        selectionArgs, null, null, orderBy);
+                        selectionArgs, null, null, null);
 
         //Cursor adaptor receives notifications, watching the content URI for changes - register observer
         c.setNotificationUri(getContext().getContentResolver(), url);

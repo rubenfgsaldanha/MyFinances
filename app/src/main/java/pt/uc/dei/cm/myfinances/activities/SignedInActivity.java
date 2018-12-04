@@ -23,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -70,11 +69,11 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //put the first fragment
-        Fragment aux = getSupportFragmentManager().findFragmentById(R.id.activity_signed_in);
+        Fragment aux = getSupportFragmentManager().findFragmentById(android.R.id.content);
 
         if(aux == null){
             HomeFragment homeFragment = new HomeFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.activity_signed_in, homeFragment,"HomeFragment").commit();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, homeFragment,"HomeFragment").commit();
         }
         else{
             System.out.println("Fragment exists");
@@ -129,7 +128,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
 
     //starts wallets activity
     private void Wallets(){
-        Intent startWalletsActivity =  new Intent(this, WalletsActivity.class);
+        Intent startWalletsActivity =  new Intent(this, ListWalletsActivity.class);
         startActivity(startWalletsActivity);
     }
 
