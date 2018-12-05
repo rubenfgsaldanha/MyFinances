@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddTransactionActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class AddOrEditTransactionActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.btn_date) Button btnDate;
     @BindView(R.id.spinner_categories) Spinner categories;
@@ -53,7 +53,7 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_transaction);
+        setContentView(R.layout.activity_add_or_edit_transaction);
         ButterKnife.bind(this);
 
         radioGroup = findViewById(R.id.radioGroup);

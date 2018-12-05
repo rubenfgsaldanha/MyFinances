@@ -29,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
-import pt.uc.dei.cm.myfinances.activities.AddTransactionActivity;
+import pt.uc.dei.cm.myfinances.activities.AddOrEditTransactionActivity;
 import pt.uc.dei.cm.myfinances.adapters.TransactionAdapter;
 import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.general.Wallet;
@@ -181,7 +181,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     //starts activity to add a transaction
     @OnClick(R.id.fab_add_transaction)
     public void addItem(){
-        Intent startAddTransaction =  new Intent(getActivity(), AddTransactionActivity.class);
+        Intent startAddTransaction =  new Intent(getActivity(), AddOrEditTransactionActivity.class);
         startActivityForResult(startAddTransaction, START_ACT_CODE);
     }
 
