@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:paddingRight="@dimen/dimen8"
             android:paddingLeft="@dimen/dimen8"
-            android:text="loles"
+            android:text=""
             android:gravity="center"
             android:textSize="18sp"
             android:layout_toRightOf="@id/previous_month"/>
@@ -58,6 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/second_bar"
+        android:layout_above="@id/bottom"
         android:scrollbars="vertical">
     </androidx.recyclerview.widget.RecyclerView>
 

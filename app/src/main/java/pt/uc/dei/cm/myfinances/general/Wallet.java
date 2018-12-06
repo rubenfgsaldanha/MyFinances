@@ -33,7 +33,7 @@ public class Wallet {
     public ArrayList<Transaction> getTransactionsWithMonth(int month) {
         ArrayList<Transaction> t = new ArrayList<>();
         for(int i=0; i<transactions.size(); i++){
-            if(transactions.get(i).getDate().get(Calendar.MONTH) == month){
+            if(transactions.get(i).getMonth() == month){
                 t.add(transactions.get(i));
             }
         }

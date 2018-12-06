@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import pt.uc.dei.cm.myfinances.MyFinancesApplication;
 import pt.uc.dei.cm.myfinances.fragments.CategoriesFragment;
 import pt.uc.dei.cm.myfinances.fragments.GraphsFragment;
 import pt.uc.dei.cm.myfinances.fragments.HomeFragment;
@@ -216,4 +217,12 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
 
     @Override
     public void onFragmentInteraction(Uri uri){}
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy");
+        MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
+        app.getDb().close();
+    }
 }

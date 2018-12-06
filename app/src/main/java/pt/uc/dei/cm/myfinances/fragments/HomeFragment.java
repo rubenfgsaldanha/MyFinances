@@ -20,6 +20,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemLongClick;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
 import pt.uc.dei.cm.myfinances.activities.AddOrEditTransactionActivity;
 import pt.uc.dei.cm.myfinances.adapters.TransactionAdapter;
@@ -57,6 +59,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
 
     MyFinancesApplication app;
     DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
+
+    List<Transaction> transactions;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -95,10 +99,6 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
 
         currentMonthNum = Calendar.getInstance().get(Calendar.MONTH);
         currentYearNum = Calendar.getInstance().get(Calendar.YEAR);
-
-        // specify an adapter (see also next example)
-        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
-        transactionsList.setAdapter(adapter);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -159,7 +159,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
             currentMonthNum = 11;
             currentYearNum--;
         }
-        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum);
+        adapter = new TransactionAdapter(getContext(),this, transactions);
         transactionsList.setAdapter(adapter);
         currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
     }
@@ -173,7 +174,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
             currentMonthNum = 0;
             currentYearNum++;
         }
-        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum);
+        adapter = new TransactionAdapter(getContext(),this, transactions);
         transactionsList.setAdapter(adapter);
         currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
     }
@@ -189,8 +191,13 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     public void onResume() {
         super.onResume();
         //notify the recycler view that some data has changed
-        //adapter.notifyDataSetChanged();
-        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
+
+        if(adapter != null){
+            adapter.notifyDataSetChanged();
+        }
+
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum);
+        adapter = new TransactionAdapter(getContext(),this, transactions);
         transactionsList.setAdapter(adapter);
 
         String value = df2.format(app.getCurrentWallet().getBalance());
@@ -221,9 +228,16 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         mListener = null;
     }
 
+    @OnItemLongClick(R.id.recycle_view_transactions)
+    public void deleteTransaction(){
+        //TODO: delete transaction
+        //
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getActivity().getApplicationContext(),"Item "+position+" clicked",Toast.LENGTH_SHORT).show();
+        TextView t = view.findViewById(R.id.transaction_item_text);
+        //TODO: edit transaction
     }
 
     @Override

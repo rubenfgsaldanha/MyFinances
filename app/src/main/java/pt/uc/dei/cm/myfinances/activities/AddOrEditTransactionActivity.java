@@ -44,7 +44,9 @@ public class AddOrEditTransactionActivity extends AppCompatActivity implements D
     private String category;
     private ArrayAdapter<CharSequence> adapter;
     private boolean expense;
-    private Calendar transactionDate;
+    private int[] transactionDate;
+
+    MyFinancesApplication app;
 
     /*
     * We use a recycler view to list the transactions
@@ -62,6 +64,8 @@ public class AddOrEditTransactionActivity extends AppCompatActivity implements D
         adapter = ArrayAdapter.createFromResource(this,R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categories.setAdapter(adapter);
+
+        app = (MyFinancesApplication) getApplicationContext();
     }
 
     @Override
@@ -78,7 +82,7 @@ public class AddOrEditTransactionActivity extends AppCompatActivity implements D
         int month = c.get(Calendar.MONTH) + 1;
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        transactionDate = c;
+        transactionDate = new int[]{day,month,year};
 
         return day+"/"+month+"/"+year;
     }
@@ -104,15 +108,13 @@ public class AddOrEditTransactionActivity extends AppCompatActivity implements D
             if(expense){
                 transactionAmount = 0 - transactionAmount;
             }
-            t = new Transaction(transactionDate, category, expense, transactionAmount, strComment);
+            t = new Transaction(transactionDate[0], transactionDate[1], transactionDate[2],
+                    category, strComment, transactionAmount, expense, app.getCurrentWallet().getName());
 
-            /*
-            * Again, for now this is being stored in MyFinancesApplication class
-            * When we have a DB, this needs to be changed
-            */
-            MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
-            app.getCurrentWallet().getTransactions().add(t);
-            app.getCurrentWallet().updateBalance(transactionAmount);
+            new Thread(() -> {
+                app.getDb().databaseDao().insertAll(t);
+                Thread.currentThread().interrupt();
+            }).start();
 
             setResult(RESULT_OK);
             finish();
@@ -145,11 +147,8 @@ public class AddOrEditTransactionActivity extends AppCompatActivity implements D
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        transactionDate = c;
+        transactionDate = new int[]{dayOfMonth, month+1, year};
 
         btnDate.setText(dayOfMonth+"/"+(month+1)+"/"+year);
     }
