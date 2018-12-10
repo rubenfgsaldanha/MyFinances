@@ -32,6 +32,8 @@ public class EditWalletActivity extends AppCompatActivity {
 
     private boolean makeCurrent = false;
     MyFinancesApplication app;
+    private String nameWallet;
+    private Wallet aux;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +44,13 @@ public class EditWalletActivity extends AppCompatActivity {
         app = (MyFinancesApplication) getApplicationContext();
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra("wallet_name");
+        nameWallet = intent.getStringExtra("wallet_name");
 
-        Wallet aux = app.getDb().databaseDao().getWalletByName(name);
-        walletName.setText(name);
+        aux = app.getDb().databaseDao().getWalletByName(nameWallet);
+        walletName.setText(nameWallet);
         initialBalance.setText(String.valueOf(aux.getBalance()));
 
-        if(name.equals(app.getCurrentWallet().getName())){
+        if(nameWallet.equals(app.getCurrentWallet().getName())){
             radioGroup.setVisibility(View.GONE);
         }
     }
@@ -60,17 +62,23 @@ public class EditWalletActivity extends AppCompatActivity {
         String strInitBalance = initialBalance.getText().toString();
 
         Wallet w = new Wallet(name, Double.parseDouble(strInitBalance));
-        w.setCurrentWallet(false);
+        w.setId(aux.getId());
+        if(!nameWallet.equals(app.getCurrentWallet().getName())){
+            w.setCurrentWallet(false);
 
-        if(makeCurrent){
-            w.setCurrentWallet(true);
-            //agora vai colocar a current wallet a false e atualizar na base de dados
-            app.getCurrentWallet().setCurrentWallet(false);
-            app.getDb().databaseDao().updateWalletStatus(app.getCurrentWallet().isCurrentWallet(), app.getCurrentWallet().getName());
+            if(makeCurrent){
+                w.setCurrentWallet(true);
+                //agora vai colocar a current wallet a false e atualizar na base de dados
+                app.getCurrentWallet().setCurrentWallet(false);
+                app.getDb().databaseDao().updateWalletStatus(app.getCurrentWallet().isCurrentWallet(), app.getCurrentWallet().getName());
+            }
         }
 
         app.getDb().databaseDao().updateWallet(w);
-        app.setCurrentWallet(w);
+
+        if(w.isCurrentWallet()){
+            app.setCurrentWallet(w);
+        }
 
         setResult(RESULT_OK);
         finish();
@@ -78,10 +86,8 @@ public class EditWalletActivity extends AppCompatActivity {
 
     @OnClick(R.id.delete)
     public void deleteWallet(){
-        String name = walletName.getText().toString();
-
         //Verifica se é a current Wallet
-        if(name.equals(app.getCurrentWallet().getName())){
+        if(nameWallet.equals(app.getCurrentWallet().getName())){
             Toast.makeText(this, "You can't delete your current wallet!", Toast.LENGTH_LONG).show();
         }
         else{
@@ -90,8 +96,8 @@ public class EditWalletActivity extends AppCompatActivity {
                     .setMessage(getString(R.string.delete_wallet_question))
                     .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
 
-                        app.getDb().databaseDao().deleteWallet(name);
-                        app.getDb().databaseDao().deleteAllTransactionsFromWallet(name);
+                        app.getDb().databaseDao().deleteWallet(aux);
+                        app.getDb().databaseDao().deleteAllTransactionsFromWallet(aux.getName());
 
                         dialog.dismiss();
                         finish();

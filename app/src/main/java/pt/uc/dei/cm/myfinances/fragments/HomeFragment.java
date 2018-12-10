@@ -211,7 +211,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         adapter = new TransactionAdapter(getContext(),this::onItemClick, this::onItemLongClick, transactions);
         transactionsList.setAdapter(adapter);
 
-        String value = df2.format(app.getCurrentWallet().getBalance());
+        String value = df2.format(app.getDb().databaseDao().getCurrentWallet().getBalance());
         balance.setText(getString(R.string.balance)+" "+value);
     }
 
