@@ -11,7 +11,7 @@ import pt.uc.dei.cm.myfinances.database.MyFinancesDatabase;
 import pt.uc.dei.cm.myfinances.general.Wallet;
 
 public class MyFinancesApplication extends Application {
-    private ArrayList<Wallet> wallets =  new ArrayList<>();
+    //private ArrayList<Wallet> wallets =  new ArrayList<>();
     private HashMap<String,Integer> categories = new HashMap<>();
     //private ArrayList<Transaction> transactions =  new ArrayList<>();
     private Wallet currentWallet;
@@ -29,13 +29,13 @@ public class MyFinancesApplication extends Application {
         Log.d("MyFinancesApplication", "OnCreate");
     }
 
-    public ArrayList<Wallet> getWallets() {
+    /*public ArrayList<Wallet> getWallets() {
         return wallets;
     }
 
     public void setWallets(ArrayList<Wallet> wallets) {
         this.wallets = wallets;
-    }
+    }*/
 
     public HashMap<String, Integer> getCategories() {
         return categories;

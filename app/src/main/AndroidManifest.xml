@@ -23,10 +23,13 @@
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.WalletsActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
-        <activity android:name="pt.uc.dei.cm.myfinances.activities.AddOrEditTransactionActivity"
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.AddOrEditTransactionActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
-        <activity android:name="pt.uc.dei.cm.myfinances.activities.AddWalletActivity"
-            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.WalletsActivity"></activity>
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.AddWalletActivity"
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.WalletsActivity" />
+        <activity android:name="pt.uc.dei.cm.myfinances.activities.EditWalletActivity"></activity>
     </application>
 
 </manifest>

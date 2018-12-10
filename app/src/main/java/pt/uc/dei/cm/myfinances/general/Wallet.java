@@ -3,45 +3,31 @@ package pt.uc.dei.cm.myfinances.general;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Wallet {
-    private String name;
-    private ArrayList<Transaction> transactions;
-    private double balance;
-    private boolean isCurrentWallet;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    public Wallet() {
-    }
+@Entity
+public class Wallet {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name = "wallet_name")
+    private String name;
+
+    @ColumnInfo(name = "wallet_balance")
+    private double balance;
+
+    @ColumnInfo(name = "is_current")
+    private boolean isCurrentWallet;        //in the database, it convert to an int: 1 is true and 0 is false
+
 
     public Wallet(String name, double balance) {
         this.name = name;
         this.balance = balance;
-        transactions = new ArrayList<>();
+        //transactions = new ArrayList<>();
         isCurrentWallet = true;
-    }
-
-    public Wallet(String name, ArrayList<Transaction> transactions, double balance) {
-        this.name = name;
-        this.transactions = transactions;
-        this.balance = balance;
-        isCurrentWallet = true;
-    }
-
-    public ArrayList<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public ArrayList<Transaction> getTransactionsWithMonth(int month) {
-        ArrayList<Transaction> t = new ArrayList<>();
-        for(int i=0; i<transactions.size(); i++){
-            if(transactions.get(i).getMonth() == month){
-                t.add(transactions.get(i));
-            }
-        }
-        return t;
-    }
-
-    public void setTransactions(ArrayList<Transaction> transactions) {
-        this.transactions = transactions;
     }
 
     public double getBalance() {
@@ -68,16 +54,24 @@ public class Wallet {
         isCurrentWallet = currentWallet;
     }
 
-    public void updateBalance(double transaction){
-        balance += transaction;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void updateWalletBalance(double amount){
+        balance += amount;
     }
 
     @Override
     public String toString() {
         return "Wallet{" +
                 "name='" + name + '\'' +
-                ", transactions=" + transactions +
                 ", balance=" + balance +
+                ", isCurrentWallet=" + isCurrentWallet +
                 '}';
     }
 }

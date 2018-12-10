@@ -101,7 +101,7 @@ public class AddOrEditTransactionActivity extends AppCompatActivity implements D
         }
         else{
             Double transactionAmount = Double.parseDouble(amount.getText().toString());
-            String strComment = comment.getText().toString();
+            String strComment = " -> "+comment.getText().toString();
 
             //checks if it's an expense or income
             Transaction t;
@@ -111,10 +111,9 @@ public class AddOrEditTransactionActivity extends AppCompatActivity implements D
             t = new Transaction(transactionDate[0], transactionDate[1], transactionDate[2],
                     category, strComment, transactionAmount, expense, app.getCurrentWallet().getName());
 
-            new Thread(() -> {
-                app.getDb().databaseDao().insertAll(t);
-                Thread.currentThread().interrupt();
-            }).start();
+            app.getDb().databaseDao().insertTransaction(t);
+            app.getCurrentWallet().updateWalletBalance(t.getAmount());
+            app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
 
             setResult(RESULT_OK);
             finish();

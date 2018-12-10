@@ -36,14 +36,27 @@ public class AddWalletActivity extends AppCompatActivity {
 
         Wallet w = new Wallet(name,Double.parseDouble(strInitBalance));
 
+
+        MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
+
+        //agora vai colocar a current wallet a false e atualizar na base de dados
+        app.getCurrentWallet().setCurrentWallet(false);
+        app.getDb().databaseDao().updateWalletStatus(app.getCurrentWallet().isCurrentWallet(), app.getCurrentWallet().getName());
+
+        app.getDb().databaseDao().insertWallet(w);
+        app.setCurrentWallet(w);
+        setResult(RESULT_OK);
+        finish();
+
+
+
         /*
         * For now we store the wallets in the MyFinancesApplication class
         * This needs to be changed when we add a DB
         */
-        MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
-        app.getWallets().add(w);
-        app.setCurrentWallet(w);
-        setResult(RESULT_OK);
-        finish();
+
+        //app.getWallets().add(w);
+        //app.setCurrentWallet(w);
+
     }
 }
