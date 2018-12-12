@@ -1,6 +1,7 @@
 package pt.uc.dei.cm.myfinances.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -20,16 +21,19 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemLongClick;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
-import pt.uc.dei.cm.myfinances.activities.AddTransactionActivity;
+import pt.uc.dei.cm.myfinances.activities.AddOrEditTransactionActivity;
 import pt.uc.dei.cm.myfinances.adapters.TransactionAdapter;
 import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.general.Wallet;
@@ -38,7 +42,8 @@ import pt.uc.dei.cm.myfinances.myfinances.R;
 import static android.app.Activity.RESULT_OK;
 
 
-public class HomeFragment extends androidx.fragment.app.Fragment implements AdapterView.OnItemClickListener {
+public class HomeFragment extends androidx.fragment.app.Fragment implements AdapterView.OnItemClickListener,
+        AdapterView.OnItemLongClickListener {
     private static final String TAG = "HomeFragment";
     private static final int START_ACT_CODE = 1000;
     private OnFragmentInteractionListener mListener;
@@ -58,6 +63,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     MyFinancesApplication app;
     DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
 
+    List<Transaction> transactions;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -75,12 +82,20 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, rootView);
 
+        app = (MyFinancesApplication) getActivity().getApplicationContext();
+
+
+        app.setCurrentWallet(app.getDb().databaseDao().getCurrentWallet());
+
+
+
         /*
         * For now we create a default Wallet and load the categories to the MyFinancesApplication class
         * This need to be changed when we have a DB
         */
-        app = (MyFinancesApplication) getActivity().getApplicationContext();
-        if(app.getWallets().size() == 0){
+
+        if(app.getCurrentWallet() == null){
+            System.out.println("looooooooooooooooooooooooooooooooooooooooooooooooooooooooooles");
             defaultWallet();
         }
 
@@ -95,10 +110,6 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
 
         currentMonthNum = Calendar.getInstance().get(Calendar.MONTH);
         currentYearNum = Calendar.getInstance().get(Calendar.YEAR);
-
-        // specify an adapter (see also next example)
-        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
-        transactionsList.setAdapter(adapter);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -115,12 +126,17 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     //for now create a default wallets
     private void defaultWallet(){
         Wallet wallet1 =  new Wallet("Wallet1",0);
-        app.getWallets().add(wallet1);
+
+
+
+        app.getDb().databaseDao().insertWallet(wallet1);
         app.setCurrentWallet(wallet1);
+
+
     }
 
     //loads the categories to an hashmap<String,Integer>.
-    //In the hasmap we save the name of the category and a color
+    //In the hashmap we save the name of the category and a color
     private void loadCategories(){
         HashMap<String, Integer> map = new HashMap<>();
 
@@ -159,7 +175,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
             currentMonthNum = 11;
             currentYearNum--;
         }
-        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
+        adapter = new TransactionAdapter(getContext(),this, this, transactions);
         transactionsList.setAdapter(adapter);
         currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
     }
@@ -173,7 +190,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
             currentMonthNum = 0;
             currentYearNum++;
         }
-        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
+        adapter = new TransactionAdapter(getContext(),this, this, transactions);
         transactionsList.setAdapter(adapter);
         currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
     }
@@ -181,19 +199,19 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     //starts activity to add a transaction
     @OnClick(R.id.fab_add_transaction)
     public void addItem(){
-        Intent startAddTransaction =  new Intent(getActivity(), AddTransactionActivity.class);
+        Intent startAddTransaction =  new Intent(getActivity(), AddOrEditTransactionActivity.class);
         startActivityForResult(startAddTransaction, START_ACT_CODE);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //notify the recycler view that some data has changed
-        //adapter.notifyDataSetChanged();
-        adapter = new TransactionAdapter(getContext(),this, app.getCurrentWallet().getTransactionsWithMonth(currentMonthNum));
+
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
+        adapter = new TransactionAdapter(getContext(),this::onItemClick, this::onItemLongClick, transactions);
         transactionsList.setAdapter(adapter);
 
-        String value = df2.format(app.getCurrentWallet().getBalance());
+        String value = df2.format(app.getDb().databaseDao().getCurrentWallet().getBalance());
         balance.setText(getString(R.string.balance)+" "+value);
     }
 
@@ -223,7 +241,51 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getActivity().getApplicationContext(),"Item "+position+" clicked",Toast.LENGTH_SHORT).show();
+        TextView t = view.findViewById(R.id.transaction_item_category);
+        //TODO: edit transaction
+        //this is delete transaction
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.warning))
+                .setMessage(getString(R.string.delete_trans_ques))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                    TextView date = view.findViewById(R.id.textDate);
+                    TextView category = view.findViewById(R.id.transaction_item_category);
+                    TextView comment = view.findViewById(R.id.transaction_item_comment);
+                    TextView amount = view.findViewById(R.id.transaction_balance);
+
+                    amount.getText().toString();
+                    String[] auxDate = date.getText().toString().split("/");
+
+                    boolean isExpense = false;
+                    if(Double.parseDouble(amount.getText().toString()) < 0){
+                        isExpense = true;
+                    }
+
+                    deleteTransaction(auxDate[0], auxDate[1], auxDate[2], category.getText().toString(),
+                            comment.getText().toString(), Double.parseDouble(amount.getText().toString()),
+                            isExpense, app.getCurrentWallet().getName());
+                    dialog.dismiss();
+                }).setNegativeButton(getString(R.string.cancel),null);
+
+        AlertDialog alertDialog1 = alertDialog.create();
+        alertDialog1.show();
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        //TODO: delete transaction
+        System.out.println("************************************************************************");
+        TextView t = view.findViewById(R.id.transaction_item_category);
+        Toast.makeText(getActivity().getApplicationContext(), "Item: "+t.getText().toString()+" ---",Toast.LENGTH_LONG).show();
+        return true;
+    }
+
+    private void deleteTransaction(String day, String month, String year, String category,
+                                   String comment, Double amount, boolean isExpense, String walletName){
+        Transaction t = new Transaction(Integer.parseInt(day),Integer.parseInt(month),
+                Integer.parseInt(year),category,comment,amount,isExpense,walletName);
+        app.getDb().databaseDao().deleteTransaction(t);
     }
 
     @Override

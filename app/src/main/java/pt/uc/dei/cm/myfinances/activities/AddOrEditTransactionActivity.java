@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddTransactionActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class AddOrEditTransactionActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.btn_date) Button btnDate;
     @BindView(R.id.spinner_categories) Spinner categories;
@@ -44,7 +44,9 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
     private String category;
     private ArrayAdapter<CharSequence> adapter;
     private boolean expense;
-    private Calendar transactionDate;
+    private int[] transactionDate;
+
+    MyFinancesApplication app;
 
     /*
     * We use a recycler view to list the transactions
@@ -53,7 +55,7 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_transaction);
+        setContentView(R.layout.activity_add_or_edit_transaction);
         ButterKnife.bind(this);
 
         radioGroup = findViewById(R.id.radioGroup);
@@ -62,6 +64,8 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
         adapter = ArrayAdapter.createFromResource(this,R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categories.setAdapter(adapter);
+
+        app = (MyFinancesApplication) getApplicationContext();
     }
 
     @Override
@@ -78,7 +82,7 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
         int month = c.get(Calendar.MONTH) + 1;
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        transactionDate = c;
+        transactionDate = new int[]{day,month,year};
 
         return day+"/"+month+"/"+year;
     }
@@ -97,22 +101,19 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
         }
         else{
             Double transactionAmount = Double.parseDouble(amount.getText().toString());
-            String strComment = comment.getText().toString();
+            String strComment = " -> "+comment.getText().toString();
 
             //checks if it's an expense or income
             Transaction t;
             if(expense){
                 transactionAmount = 0 - transactionAmount;
             }
-            t = new Transaction(transactionDate, category, expense, transactionAmount, strComment);
+            t = new Transaction(transactionDate[0], transactionDate[1], transactionDate[2],
+                    category, strComment, transactionAmount, expense, app.getCurrentWallet().getName());
 
-            /*
-            * Again, for now this is being stored in MyFinancesApplication class
-            * When we have a DB, this needs to be changed
-            */
-            MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
-            app.getCurrentWallet().getTransactions().add(t);
-            app.getCurrentWallet().updateBalance(transactionAmount);
+            app.getDb().databaseDao().insertTransaction(t);
+            app.getCurrentWallet().updateWalletBalance(t.getAmount());
+            app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
 
             setResult(RESULT_OK);
             finish();
@@ -145,11 +146,8 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        transactionDate = c;
+        transactionDate = new int[]{dayOfMonth, month+1, year};
 
         btnDate.setText(dayOfMonth+"/"+(month+1)+"/"+year);
     }

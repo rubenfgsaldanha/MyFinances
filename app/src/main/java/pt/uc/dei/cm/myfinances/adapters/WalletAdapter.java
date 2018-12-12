@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -19,13 +20,14 @@ import pt.uc.dei.cm.myfinances.general.Wallet;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder> {
-    private ArrayList<Wallet> wallets;
+    private List<Wallet> wallets;
     private AdapterView.OnItemClickListener onItemClickListener;
+    private AdapterView.OnItemLongClickListener onItemLongClickListener;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         @BindView(R.id.wallet_item_text) TextView walletText;
         @BindView(R.id.wallet_balance) TextView walletBalance;
@@ -41,12 +43,20 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
             //passing the clicked position to the parent class
             onItemClickListener.onItemClick(null, view, getAdapterPosition(), view.getId());
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            onItemLongClickListener.onItemLongClick(null, v, getAdapterPosition(), v.getId());
+            return true;
+        }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public WalletAdapter(Context context, AdapterView.OnItemClickListener onItemClickListener, ArrayList<Wallet> wallets) {
+    public WalletAdapter(Context context, AdapterView.OnItemClickListener onItemClickListener,
+                         AdapterView.OnItemLongClickListener onItemLongClickListener, List<Wallet> wallets) {
         this.wallets = wallets;
         this.onItemClickListener = onItemClickListener;
+        this.onItemLongClickListener = onItemLongClickListener;
     }
 
     // Create new views (invoked by the layout manager)

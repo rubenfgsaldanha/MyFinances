@@ -1,6 +1,7 @@
 package pt.uc.dei.cm.myfinances.activities;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,14 +17,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class WalletsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class WalletsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private final String TAG = this.getClass().getSimpleName();
     private static final int STARTACT_CODE = 1001;
 
@@ -56,17 +59,18 @@ public class WalletsActivity extends AppCompatActivity implements AdapterView.On
         mLayoutManager = new LinearLayoutManager(this);
         walletsList.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
-        adapter = new WalletAdapter(getApplicationContext(),this,app.getWallets());
-        walletsList.setAdapter(adapter);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        //notifies the recycler list hat some data has changed
-        adapter.notifyDataSetChanged();
+        List<Wallet> wallets = app.getDb().databaseDao().getWallets();
+
+        // specify an adapter (see also next example)
+        adapter = new WalletAdapter(getApplicationContext(),this::onItemClick, this::onItemLongClick,wallets);
+        walletsList.setAdapter(adapter);
     }
 
     //starts Activity to add a wallet
@@ -88,6 +92,17 @@ public class WalletsActivity extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplicationContext(),"Item "+position+" clicked", Toast.LENGTH_SHORT).show();
+        TextView text = view.findViewById(R.id.wallet_item_text);
+        String name = text.getText().toString();
+        Intent editWallet = new Intent(this, EditWalletActivity.class);
+        editWallet.putExtra("wallet_name", name);
+        startActivity(editWallet);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        //
+
+        return true;
     }
 }

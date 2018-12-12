@@ -46,6 +46,11 @@ dependencies {
 
     //pie chart
     implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
+
+    //room database
+    def room_version = "2.1.0-alpha03"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 }
 
 apply plugin: 'com.google.gms.google-services'

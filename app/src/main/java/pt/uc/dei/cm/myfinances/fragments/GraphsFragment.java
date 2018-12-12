@@ -33,6 +33,9 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
     private final String TAG = "GraphsFragment";
     private OnFragmentInteractionListener mListener;
 
+    MyFinancesApplication app;
+    List<Transaction> transactions;
+
     @BindView(R.id.pie_chart) PieChartView pieChart;
 
     public GraphsFragment() {
@@ -42,7 +45,10 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //
+
+        app = (MyFinancesApplication) getActivity().getApplicationContext();
+
+        transactions = app.getDb().databaseDao().getAllTransactions(app.getCurrentWallet().getName());
     }
 
     @Override
@@ -57,15 +63,10 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        drawPiwChart();
     }
 
     //Here we draw the pie chart
-    private void drawPiwChart(){
-        //get the transactions from the current wallet
-        MyFinancesApplication app = (MyFinancesApplication) getActivity().getApplicationContext();
-        ArrayList<Transaction> transactions = app.getCurrentWallet().getTransactions();
+    private void drawPieChart(){
 
         /*Now we create a hashmap with the name of the category and the value of the transaction
         * We use a hashmap because it has instant access
@@ -102,6 +103,13 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
             pieChartData.setHasCenterCircle(true).setCenterCircleScale(0.42f);
             pieChart.setPieChartData(pieChartData);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        drawPieChart();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
