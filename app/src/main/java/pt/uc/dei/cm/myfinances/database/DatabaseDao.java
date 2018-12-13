@@ -46,14 +46,19 @@ public interface DatabaseDao {
     @Query("SELECT * FROM `transaction` WHERE wallet_name = :walletName")
     List<Transaction> getAllTransactions(String walletName);
 
+    @Query("SELECT * FROM `transaction` WHERE id = :id")
+    Transaction getTransactionByID(int id);
+
     @Insert
     void insertTransaction(Transaction... transactions);
 
-    @Update
-    void updateTransaction(Transaction... t);
+    @Query("UPDATE `transaction` SET transaction_day = :day, transaction_month = :month, transaction_year = :year, " +
+            "transaction_category = :category, transaction_comment = :comment, transaction_amount = :amount, " +
+            "expense = :isExpense, wallet_name = :wallet_name WHERE id = :id")
+    void updateTransaction(int id, int day, int month, int year, String category, String comment, double amount, boolean isExpense, String wallet_name);
 
-    @Delete
-    void deleteTransaction(Transaction t);
+    @Query("DELETE FROM `transaction` WHERE id = :id")
+    void deleteTransaction(int id);
 
     @Query("DELETE FROM `transaction` WHERE wallet_name = :wallet_name")
     void deleteAllTransactionsFromWallet(String wallet_name);
