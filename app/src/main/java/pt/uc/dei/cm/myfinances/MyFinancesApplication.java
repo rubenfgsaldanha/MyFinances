@@ -3,6 +3,7 @@ package pt.uc.dei.cm.myfinances;
 import android.app.Application;
 import android.util.Log;
 
+import java.io.File;
 import java.util.HashMap;
 
 import androidx.room.Room;
@@ -14,6 +15,7 @@ public class MyFinancesApplication extends Application {
     private Wallet currentWallet;
 
     private MyFinancesDatabase db;
+    public static final String DATABASE_NAME = "MyFinances.db";
 
     @Override
     public void onCreate() {
@@ -27,7 +29,7 @@ public class MyFinancesApplication extends Application {
     public void openDB(){
         //TODO: put on a background thread
         db = Room.databaseBuilder(getApplicationContext(), MyFinancesDatabase.class,
-                "MyFinances").allowMainThreadQueries().build();
+                DATABASE_NAME).allowMainThreadQueries().build();
         Log.d("MyFinancesApplication", "Database opened!");
     }
 

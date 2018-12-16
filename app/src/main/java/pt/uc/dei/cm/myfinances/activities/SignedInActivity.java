@@ -106,7 +106,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.drive_sync:
-                Toast.makeText(getApplicationContext(),"Drive sync",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, BackupOrRestoreActivity.class));
                 return true;
             case R.id.wallets:
                 Wallets();
