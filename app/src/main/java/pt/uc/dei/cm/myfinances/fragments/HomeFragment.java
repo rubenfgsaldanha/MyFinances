@@ -1,7 +1,6 @@
 package pt.uc.dei.cm.myfinances.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -12,28 +11,25 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemLongClick;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
-import pt.uc.dei.cm.myfinances.activities.AddOrEditTransactionActivity;
+import pt.uc.dei.cm.myfinances.activities.AddTransactionActivity;
+import pt.uc.dei.cm.myfinances.activities.EditTransactionActivity;
 import pt.uc.dei.cm.myfinances.adapters.TransactionAdapter;
 import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.general.Wallet;
@@ -42,10 +38,10 @@ import pt.uc.dei.cm.myfinances.myfinances.R;
 import static android.app.Activity.RESULT_OK;
 
 
-public class HomeFragment extends androidx.fragment.app.Fragment implements AdapterView.OnItemClickListener,
-        AdapterView.OnItemLongClickListener {
+public class HomeFragment extends androidx.fragment.app.Fragment implements AdapterView.OnItemClickListener{
     private static final String TAG = "HomeFragment";
-    private static final int START_ACT_CODE = 1000;
+    private static final int START_ACT_ADD_CODE = 1000;
+    private static final int START_ACT_EDIT_CODE = 1001;
     private OnFragmentInteractionListener mListener;
 
     @BindView(R.id.fragmentHome) View mRootView;
@@ -95,7 +91,6 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         */
 
         if(app.getCurrentWallet() == null){
-            System.out.println("looooooooooooooooooooooooooooooooooooooooooooooooooooooooooles");
             defaultWallet();
         }
 
@@ -176,7 +171,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
             currentYearNum--;
         }
         transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
-        adapter = new TransactionAdapter(getContext(),this, this, transactions);
+        adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
         currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
     }
@@ -191,7 +186,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
             currentYearNum++;
         }
         transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
-        adapter = new TransactionAdapter(getContext(),this, this, transactions);
+        adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
         currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
     }
@@ -199,8 +194,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     //starts activity to add a transaction
     @OnClick(R.id.fab_add_transaction)
     public void addItem(){
-        Intent startAddTransaction =  new Intent(getActivity(), AddOrEditTransactionActivity.class);
-        startActivityForResult(startAddTransaction, START_ACT_CODE);
+        Intent startAddTransaction =  new Intent(getActivity(), AddTransactionActivity.class);
+        startActivityForResult(startAddTransaction, START_ACT_ADD_CODE);
     }
 
     @Override
@@ -208,7 +203,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         super.onResume();
 
         transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
-        adapter = new TransactionAdapter(getContext(),this::onItemClick, this::onItemLongClick, transactions);
+        adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
 
         String value = df2.format(app.getDb().databaseDao().getCurrentWallet().getBalance());
@@ -241,59 +236,24 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TextView t = view.findViewById(R.id.transaction_item_category);
-        //TODO: edit transaction
-        //this is delete transaction
+        TextView t = view.findViewById(R.id.transaction_id);
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-                .setTitle(getString(R.string.warning))
-                .setMessage(getString(R.string.delete_trans_ques))
-                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-                    TextView date = view.findViewById(R.id.textDate);
-                    TextView category = view.findViewById(R.id.transaction_item_category);
-                    TextView comment = view.findViewById(R.id.transaction_item_comment);
-                    TextView amount = view.findViewById(R.id.transaction_balance);
-
-                    amount.getText().toString();
-                    String[] auxDate = date.getText().toString().split("/");
-
-                    boolean isExpense = false;
-                    if(Double.parseDouble(amount.getText().toString()) < 0){
-                        isExpense = true;
-                    }
-
-                    deleteTransaction(auxDate[0], auxDate[1], auxDate[2], category.getText().toString(),
-                            comment.getText().toString(), Double.parseDouble(amount.getText().toString()),
-                            isExpense, app.getCurrentWallet().getName());
-                    dialog.dismiss();
-                }).setNegativeButton(getString(R.string.cancel),null);
-
-        AlertDialog alertDialog1 = alertDialog.create();
-        alertDialog1.show();
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        //TODO: delete transaction
-        System.out.println("************************************************************************");
-        TextView t = view.findViewById(R.id.transaction_item_category);
-        Toast.makeText(getActivity().getApplicationContext(), "Item: "+t.getText().toString()+" ---",Toast.LENGTH_LONG).show();
-        return true;
-    }
-
-    private void deleteTransaction(String day, String month, String year, String category,
-                                   String comment, Double amount, boolean isExpense, String walletName){
-        Transaction t = new Transaction(Integer.parseInt(day),Integer.parseInt(month),
-                Integer.parseInt(year),category,comment,amount,isExpense,walletName);
-        app.getDb().databaseDao().deleteTransaction(t);
+        Intent editTransaction = new Intent(getActivity(), EditTransactionActivity.class);
+        editTransaction.putExtra("id",t.getText().toString());
+        startActivityForResult(editTransaction,START_ACT_EDIT_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK){
-            if(requestCode == START_ACT_CODE){
-                Snackbar.make(mRootView, R.string.add_trans_suc, Snackbar.LENGTH_SHORT).show();
+            switch (requestCode){
+                case START_ACT_ADD_CODE:
+                    Snackbar.make(mRootView, R.string.add_trans_suc, Snackbar.LENGTH_SHORT).show();
+                    break;
+                case START_ACT_EDIT_CODE:
+                    //Snackbar.make(mRootView, R.string.add_trans_suc, Snackbar.LENGTH_SHORT).show();
+                    break;
             }
         }
     }

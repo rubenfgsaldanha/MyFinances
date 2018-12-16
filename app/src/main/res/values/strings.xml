@@ -34,7 +34,7 @@
     <string name="save">Save</string>
 
 
-    <!-- AddOrEditTransactionActivity -->
+    <!-- AddTransactionActivity -->
     <string name="amount">Amount</string>
     <string name="comment">Comment</string>
     <string name="expense">Expense</string>

@@ -1,6 +1,5 @@
 package pt.uc.dei.cm.myfinances.activities;
 
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import butterknife.BindView;
@@ -25,40 +24,32 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
-public class AddOrEditTransactionActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class AddTransactionActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.btn_date) Button btnDate;
     @BindView(R.id.spinner_categories) Spinner categories;
     @BindView(R.id.amount) EditText amount;
     @BindView(R.id.comment) EditText comment;
     @BindView(R.id.button_save_transaction) Button btnSaveTransaction;
+    @BindView(R.id.radioGroup) RadioGroup radioGroup;
 
-    private RadioGroup radioGroup;
     private String category;
     private ArrayAdapter<CharSequence> adapter;
     private boolean expense;
     private int[] transactionDate;
 
-    MyFinancesApplication app;
+    private MyFinancesApplication app;
 
     /*
     * We use a recycler view to list the transactions
     */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_or_edit_transaction);
+        setContentView(R.layout.activity_add_transaction);
         ButterKnife.bind(this);
-
-        radioGroup = findViewById(R.id.radioGroup);
 
         //create a spinner with the categories defined in the categories.xml file
         adapter = ArrayAdapter.createFromResource(this,R.array.categories, android.R.layout.simple_spinner_item);
@@ -66,14 +57,6 @@ public class AddOrEditTransactionActivity extends AppCompatActivity implements D
         categories.setAdapter(adapter);
 
         app = (MyFinancesApplication) getApplicationContext();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        String date = getCurrentDate();
-
-        btnDate.setText(date);
     }
 
     private String getCurrentDate(){
@@ -85,6 +68,14 @@ public class AddOrEditTransactionActivity extends AppCompatActivity implements D
         transactionDate = new int[]{day,month,year};
 
         return day+"/"+month+"/"+year;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        String date = getCurrentDate();
+        btnDate.setText(date);
     }
 
     @OnClick(R.id.btn_date)
@@ -101,7 +92,7 @@ public class AddOrEditTransactionActivity extends AppCompatActivity implements D
         }
         else{
             Double transactionAmount = Double.parseDouble(amount.getText().toString());
-            String strComment = " -> "+comment.getText().toString();
+            String strComment = comment.getText().toString();
 
             //checks if it's an expense or income
             Transaction t;

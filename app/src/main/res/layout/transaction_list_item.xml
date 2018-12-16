@@ -50,6 +50,14 @@
             android:paddingRight="@dimen/dimen16"
             android:layout_alignParentRight="true"
             android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/transaction_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:layout_toRightOf="@id/transaction_item_image"
+            android:alpha="0"/>
     </RelativeLayout>
 
 </RelativeLayout>
