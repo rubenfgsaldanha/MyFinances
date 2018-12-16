@@ -110,13 +110,57 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnRestoreFile)
     public void restoreFromFile(){
-        doRestore();
+        app.closeDB();
+
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.warning))
+                .setMessage(getString(R.string.alertDialogRestore))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                    if(verifyFile()){
+                        BackupOrRestoreActivityPermissionsDispatcher.doRestoreWithPermissionCheck(this);
+                        dialog.dismiss();
+                        showSnackbar(R.string.restore_success);
+                    }
+                    else{
+                        showSnackbar(R.string.file_not_found);
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
+                .show();
+
+        app.openDB();
     }
 
 
+    public boolean verifyFile(){
+        //gets the file to restore path
+        String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String fileToRestore = internalPath + "/MyFinancesBackup/MyFinances.db";
+        File file = new File(fileToRestore);
+
+        return file.exists() ? true : false;
+    }
+
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void doRestore(){
-        //
+        //gets Database path
+        String dbPath = getDatabasePath(DATABASE_NAME).getAbsolutePath();
+
+        //gets the file to restore path
+        String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String fileToRestore = internalPath + "/MyFinancesBackup/MyFinances.db";
+        File fileRestore = new File(fileToRestore);
+
+        //delete current DB file
+        File dbFile = new File(dbPath);
+        dbFile.delete();
+
+        //copy the backup file to the DB directory
+        try {
+            FileUtils.copyFile(fileRestore, dbFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
