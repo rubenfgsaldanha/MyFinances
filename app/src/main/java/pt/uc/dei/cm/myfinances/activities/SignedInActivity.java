@@ -223,6 +223,6 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         super.onDestroy();
         Log.d(TAG, "onDestroy");
         MyFinancesApplication app = (MyFinancesApplication) getApplicationContext();
-        app.getDb().close();
+        app.closeDB();
     }
 }
