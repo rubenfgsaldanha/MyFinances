@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pt.uc.dei.cm.myfinances.myfinances">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="pt.uc.dei.cm.myfinances.MyFinancesApplication"
@@ -14,7 +14,9 @@
         android:roundIcon="@drawable/ic_financeslogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="pt.uc.dei.cm.myfinances.activities.LoginActivity">
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.LoginActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,7 +41,10 @@
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.BackupOrRestoreActivity"
-            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity"/>
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.DriveActivity"
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.BackupOrRestoreActivity"/>
     </application>
 
 </manifest>
