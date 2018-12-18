@@ -67,6 +67,16 @@
     <string name="file_not_found">There is no backup file.</string>
 
 
+    <!-- DriveActivity -->
+    <string name="backupDrive">Backup to Google Drive</string>
+    <string name="restoreDrive">Restore from Google Drive</string>
+    <string name="backup_drive_success">File backed up to Google Drive successfully!</string>
+    <string name="alertDialogDriveRestore">This will override your current data on Google Drive. Are you sure you want to do this?</string>
+    <string name="restore_drive_success">File restored from Google Drive successfully!</string>
+    <string name="drive_file_not_found">There is no backup file on Google Drive.</string>
+    <string name="choose_Account">Choose Account</string>
+
+
     <!-- Action bar -->
     <string name="settings">Settings</string>
     <string name="log_off">Log Off</string>
@@ -79,5 +89,49 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <string name="disp_text">
+      \n\n
+      1/ UPLOAD (upload icon) uploads a text file to Google Drive, creating a simple tree
+         directory structure in the process.\n
+         The createTree() method allows for testing of different CRUD primitives (search,
+         create folder, etc…) in the process.\n\n
+      2/ DOWNLOAD (download icon) scans the tree created by the createTree() method. If the
+         object is a file, it\'s metadata is updated (description field), the content is
+         downloaded.\n\n
+      3/ DELETE (X - delete icon) scans the tree created by the createTree() method and deletes
+         all the files and folders in the process\n
+    </string>
+
+    <!-- menu -->
+    <string name="action_scan">UPLOAD file</string>
+    <string name="action_list">DOWNLOAD all files</string>
+    <string name="action_delete">DELETE all files</string>
+    <string name="action_account">Select Google Account…</string>
+
+    <string name="err_auth_sha">CHECK PackageName / SHA1\nin Developers Console!</string>
+    <string name="err_auth_dono">UNSPECIFIED GOOGLE DRIVE\nACCESS FAILURE!</string>
+    <string name="err_auth_accpick">NO ACCOUNT SELECTED!</string>
+    <string name="err_auth_nogo">ACCESS NOT AUTHORIZED!</string>
 
 </resources>

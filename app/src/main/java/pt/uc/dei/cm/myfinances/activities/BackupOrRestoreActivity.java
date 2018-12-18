@@ -16,6 +16,7 @@ import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -58,7 +59,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnConnectGoogleDrive)
     public void connectToGoogleDrive(){
-        //
+        startActivity(new Intent(this, DriveActivity.class));
     }
 
 
@@ -141,6 +142,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
         return file.exists() ? true : false;
     }
 
+
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void doRestore(){
         //gets Database path
@@ -180,6 +182,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         BackupOrRestoreActivityPermissionsDispatcher.onRequestPermissionsResult(this,requestCode,grantResults);
     }
+
 
     private void showSnackbar(@StringRes int errorMessageRes) {
         Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
