@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragmentHome"
+    tools:context="pt.uc.dei.cm.myfinances.fragments.HomeFragment">
+
+    <RelativeLayout
+        android:id="@+id/second_bar"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/dimen8"
+        android:layout_height="40dp"
+
+        android:background="@color/colorPrimaryLight">
+        <ImageButton
+            android:id="@+id/previous_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_back"
+            android:layout_centerVertical="true"
+            android:background="@color/colorPrimary"
+            />
+
+        <TextView
+            android:id="@+id/current_month"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="@dimen/dimen8"
+            android:paddingLeft="@dimen/dimen8"
+            android:text=""
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_toRightOf="@id/previous_month"/>
+
+        <ImageButton
+            android:id="@+id/next_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/current_month"
+            android:src="@drawable/ic_action_forward"
+            android:background="@color/colorPrimary"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/balance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingRight="@dimen/dimen16"
+            android:textAlignment="textEnd"
+            android:gravity="center"
+            android:text="@string/balance"
+            android:textSize="18sp"/>
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_view_transactions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/second_bar"
+        android:layout_above="@id/bottom"
+        android:scrollbars="vertical">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom"
+        android:padding="@dimen/dimen16">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_fab_add"/>
+    </RelativeLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:id="@+id/bottom"
+        android:layout_alignParentBottom="true"
+        ></com.google.android.material.bottomnavigation.BottomNavigationView>
+
+</RelativeLayout>

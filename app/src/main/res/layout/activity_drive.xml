@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_drive"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dimen16"
+    android:orientation="vertical"
+    tools:context="pt.uc.dei.cm.myfinances.activities.DriveActivity">
+
+    <CheckBox
+        android:id="@+id/checkboxBackupDrive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dimen16"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/checkboxBackup"/>
+
+    <Button
+        android:id="@+id/btnDriveBackup"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="@dimen/dimen16"
+        android:text="@string/backupDrive"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/btnRestoreDrive"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:text="@string/restoreDrive"
+        android:textAllCaps="false"/>
+
+    <TextView
+        android:id="@+id/connected_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="17sp"/>
+
+</LinearLayout>
