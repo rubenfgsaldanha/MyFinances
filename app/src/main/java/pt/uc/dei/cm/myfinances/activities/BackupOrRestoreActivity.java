@@ -78,15 +78,13 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
                     BackupOrRestoreActivityPermissionsDispatcher.doBackUpWithPermissionCheck(this);
                     dialog.dismiss();
-                    showSnackbar(R.string.backup_success);
                 })
                 .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
                 .show();
 
         app.openDB();
     }
-
-
+    
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void doBackUp(){
         //gets Database path
@@ -108,6 +106,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
         try {
             FileUtils.copyFile(currentDB, backupBD);
+            showSnackbar(R.string.backup_success);
         } catch (IOException e) {
             e.printStackTrace();
         }
