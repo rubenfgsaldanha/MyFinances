@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="78dp">
+
+    <TextView
+        android:id="@+id/loanDate"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:paddingLeft="@dimen/dimen8"
+        android:textSize="18sp"
+        android:background="@color/colorPrimaryLightest"
+        android:textColor="@color/colorPrimaryDark"
+        />
+    <TextView
+        android:id="@+id/limit"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:paddingLeft="@dimen/dimen8"
+        android:layout_alignParentLeft="true"
+        android:textSize="18sp"
+        android:background="@color/colorPrimaryLightest"
+        android:textColor="@color/colorAccent"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/textDate"
+        android:layout_marginTop="@dimen/dimen8"
+        android:paddingLeft="@dimen/dimen8">
+
+        <ImageView
+            android:id="@+id/transaction_item_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_log_off"/>
+
+        <TextView
+            android:id="@+id/person"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:layout_toRightOf="@id/transaction_item_image"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/loan_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/dimen16"
+            android:layout_alignParentRight="true"
+            android:textSize="20sp"/>
+    </RelativeLayout>
+
+</RelativeLayout>

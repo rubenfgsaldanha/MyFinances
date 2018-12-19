@@ -7,6 +7,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+import pt.uc.dei.cm.myfinances.general.Loan;
 import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.general.Wallet;
 
@@ -62,4 +63,36 @@ public interface DatabaseDao {
 
     @Query("DELETE FROM `transaction` WHERE wallet_name = :wallet_name")
     void deleteAllTransactionsFromWallet(String wallet_name);
+
+
+
+
+    /***** operations for Loans *****/
+
+    @Query("SELECT * FROM loan WHERE month(due_date)=:currentMonth or month(loan_date)= :currentMonth  ORDER BY due_date, loan_date ASC")
+    List<Loan> getLoansPerMonth(int currentMonth);
+
+    @Query("UPDATE loan SET payed='True' WHERE loanId= :id")  //PODERA HAVER PORBLEMAS COM TRUE ENTRE ''
+    void isPayed(long id);
+    /*@Query("SELECT * FROM wallet WHERE is_current = 1")
+    Wallet getCurrentWallet();
+
+    @Query("SELECT * FROM wallet WHERE wallet_name = :name")
+    Wallet getWalletByName(String name);
+
+    @Insert
+    void insertWallet(Wallet... wallets);
+
+    @Update
+    void updateWallet(Wallet... w);
+
+    @Query("UPDATE wallet SET wallet_balance = :balance WHERE wallet_name = :walletName")
+    void updateWalletBalance(double balance, String walletName);
+
+    @Query("UPDATE wallet SET is_current = :isCurrent WHERE wallet_name = :walletName")
+    void updateWalletStatus(boolean isCurrent, String walletName);
+
+    @Delete
+    void deleteWallet(Wallet... wallets);*/
 }
+
