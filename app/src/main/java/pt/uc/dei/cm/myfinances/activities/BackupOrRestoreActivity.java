@@ -59,6 +59,11 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnConnectGoogleDrive)
     public void connectToGoogleDrive(){
+        BackupOrRestoreActivityPermissionsDispatcher.startDriveActivityWithPermissionCheck(this);
+    }
+
+    @NeedsPermission(Manifest.permission.GET_ACCOUNTS)
+    public void startDriveActivity(){
         startActivity(new Intent(this, DriveActivity.class));
     }
 
@@ -120,7 +125,6 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
                     if(verifyFile()){
                         BackupOrRestoreActivityPermissionsDispatcher.doRestoreWithPermissionCheck(this);
                         dialog.dismiss();
-                        showSnackbar(R.string.restore_success);
                     }
                     else{
                         showSnackbar(R.string.file_not_found);
@@ -160,6 +164,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
         //copy the backup file to the DB directory
         try {
             FileUtils.copyFile(fileRestore, dbFile);
+            showSnackbar(R.string.restore_success);
         } catch (IOException e) {
             e.printStackTrace();
         }

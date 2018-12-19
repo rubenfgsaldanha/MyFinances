@@ -199,7 +199,7 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
                             if (fl != null) {
                                 String mime = MimeUtils.guessMimeTypeFromExtension("odb");
                                 id = REST.createFile(rsid, titl, mime, fl);
-                                fl.delete();
+                                //fl.delete();
                             }
                             if (id != null)
                                 publishProgress("created " + titl);
