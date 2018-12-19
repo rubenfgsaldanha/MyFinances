@@ -84,7 +84,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
         app.openDB();
     }
-    
+
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void doBackUp(){
         //gets Database path

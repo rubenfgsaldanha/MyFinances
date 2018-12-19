@@ -30,7 +30,9 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -212,12 +214,20 @@ final public class REST {
      * @param resId  file driveId
      * @return file's content  / null on fail
      */
-    static byte[] read(String resId) {
+    public static byte[] read(String resId) {
         if (mGOOSvc != null && mConnected && resId != null) try {
             File gFl = mGOOSvc.files().get(resId).setFields("downloadUrl").execute();
+
+            OutputStream outputStream = new ByteArrayOutputStream();
+            mGOOSvc.files();
+
+
             if (gFl != null) {
                 String strUrl = gFl.getDownloadUrl();
-                return UT.is2Bytes(mGOOSvc.getRequestFactory().buildGetRequest(new GenericUrl(strUrl)).execute().getContent());
+                System.out.println("-----------------------------------------------------------------------");
+                System.out.println(strUrl);
+                System.out.println("-----------------------------------------------------------------------");
+                return /*UT.is2Bytes(mGOOSvc.getRequestFactory().buildGetRequest(new GenericUrl(strUrl)).execute().getContent());*/ null;
             }
         } catch (Exception e) {
             UT.le(e);
