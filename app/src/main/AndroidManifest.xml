@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:name="pt.uc.dei.cm.myfinances.MyFinancesApplication"
@@ -45,7 +45,8 @@
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.DriveActivity"
-            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.BackupOrRestoreActivity"/>
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.BackupOrRestoreActivity" />
+        <activity android:name="pt.uc.dei.cm.myfinances.activities.SettingsActivity"></activity>
     </application>
 
 </manifest>

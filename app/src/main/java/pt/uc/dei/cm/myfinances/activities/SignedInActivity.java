@@ -118,7 +118,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
                 Toast.makeText(getApplicationContext(),"About",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_settings:
-                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_log_off:
                 askSignOut();

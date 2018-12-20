@@ -16,6 +16,7 @@ import android.accounts.AccountManager;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,7 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
     @BindView(R.id.btnDriveBackup) Button btnDriveBackup;
     @BindView(R.id.btnRestoreDrive) Button btnDriveRestore;
     @BindView(R.id.connected_user) TextView connectedUser;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
 
     private MyFinancesApplication app;
     private SharedPreferences mPreferences;
@@ -193,7 +196,7 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
 
 
 
-    abstract private class BaseTask<T> extends AsyncTask<T, Void, Integer>{
+    abstract private class BaseTask<T> extends AsyncTask<T, Integer, Integer>{
         final String titl;
 
         BaseTask(String title){
@@ -201,15 +204,18 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
             titl = title;
         }
 
-        /*@Override
+        @Override
         protected void onPreExecute() {
-            super.onPreExecute();
-            //show progress bar here
-        }*/
+            /*Drawable progressDraw = getResources().getDrawable(R.drawable.custom_progress_bar);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setProgressDrawable(progressDraw);
+            progressBar.setProgress(0);*/
+        }
 
         @Override
         protected void onPostExecute(Integer integer) {
             mBusy = false;
+            //progressBar.setVisibility(View.GONE);
             showSnackbar(integer);
         }
 
@@ -264,6 +270,11 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
 
             return R.string.backup_drive_fail;
         }
+
+        /*@Override
+        protected void onProgressUpdate(Integer... values) {
+            progressBar.setProgress(values[0]);
+        }*/
     }
 
     private class DriveRestore extends BaseTask<Void>{
@@ -302,5 +313,10 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
             app.openDB();
             return res;
         }
+
+        /*@Override
+        protected void onProgressUpdate(Integer... values) {
+            progressBar.setProgress(values[0]);
+        }*/
     }
 }
