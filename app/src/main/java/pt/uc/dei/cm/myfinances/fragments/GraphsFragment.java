@@ -7,8 +7,12 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,10 +21,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
+import pt.uc.dei.cm.myfinances.adapters.TransactionAdapter;
 import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
@@ -33,10 +39,20 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
     private final String TAG = "GraphsFragment";
     private OnFragmentInteractionListener mListener;
 
-    MyFinancesApplication app;
-    List<Transaction> transactions;
+    private MyFinancesApplication app;
+    private List<Transaction> transactions;
+    private int currentMonthNum;
+    private int currentYearNum;
+    private double totalAmount;
+
+    private DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
 
     @BindView(R.id.pie_chart) PieChartView pieChart;
+    @BindView(R.id.overall) TextView overallValue;
+    @BindView(R.id.previous_month) ImageButton previousMonth;
+    @BindView(R.id.next_month) ImageButton nextMonth;
+    @BindView(R.id.current_month) TextView currentMonth;
+    @BindView(R.id.noRecords) TextView noDataFound;
 
     public GraphsFragment() {
         // Required empty public constructor
@@ -47,8 +63,6 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
         super.onCreate(savedInstanceState);
 
         app = (MyFinancesApplication) getActivity().getApplicationContext();
-
-        transactions = app.getDb().databaseDao().getAllTransactions(app.getCurrentWallet().getName());
     }
 
     @Override
@@ -63,10 +77,50 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        currentMonthNum = Calendar.getInstance().get(Calendar.MONTH);
+        currentYearNum = Calendar.getInstance().get(Calendar.YEAR);
+
+        currentMonth.setText(getCurrentMonth());
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
+    }
+
+    private String getCurrentMonth(){
+        Calendar c = Calendar.getInstance();
+        return ""+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR);
+    }
+
+    @OnClick(R.id.previous_month)
+    public void goToPreviousMonth(){
+        if(currentMonthNum > 0){
+            currentMonthNum--;
+        }
+        else{
+            currentMonthNum = 11;
+            currentYearNum--;
+        }
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
+        currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+        drawPieChart();
+    }
+
+    @OnClick(R.id.next_month)
+    public void goToNextMonth(){
+        if(currentMonthNum < 11){
+            currentMonthNum++;
+        }
+        else{
+            currentMonthNum = 0;
+            currentYearNum++;
+        }
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
+        currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+        drawPieChart();
     }
 
     //Here we draw the pie chart
     private void drawPieChart(){
+        totalAmount = 0;
 
         /*Now we create a hashmap with the name of the category and the value of the transaction
         * We use a hashmap because it has instant access
@@ -76,6 +130,7 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
 
             for (int i=0; i<transactions.size(); i++){
                 Transaction t = transactions.get(i);
+                totalAmount += t.getAmount();
                 //if there's already a transaction of a certain category,
                 // we calculate the sum of the values of those transactions
                 // and update the value in the hashmap
@@ -102,6 +157,18 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
             pieChartData.setHasLabels(true).setValueLabelTextSize(14);
             pieChartData.setHasCenterCircle(true).setCenterCircleScale(0.42f);
             pieChart.setPieChartData(pieChartData);
+            noDataFound.setText("");
+
+            String value = df2.format(totalAmount);
+            overallValue.setText(value);
+        }
+        else{
+            PieChartData pieChartData = new PieChartData();
+            pieChartData.setHasLabels(true).setValueLabelTextSize(14);
+            pieChartData.setHasCenterCircle(true).setCenterCircleScale(0.42f);
+            pieChart.setPieChartData(pieChartData);
+            noDataFound.setText(getString(R.string.no_data_found));
+            overallValue.setText("");
         }
     }
 

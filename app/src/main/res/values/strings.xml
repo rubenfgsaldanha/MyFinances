@@ -25,6 +25,10 @@
     <string name="delete_trans_ques">Are you sure you want to delete this transaction?</string>
 
 
+    <!-- Fragment Graphs -->
+    <string name="no_data_found">No data found for this month</string>
+
+
     <!-- Auth UI - Signed in -->
     <string name="home">Home</string>
     <string name="categories">Categories</string>

@@ -51,15 +51,17 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     @BindView(R.id.previous_month) ImageButton previousMonth;
     @BindView(R.id.next_month) ImageButton nextMonth;
     @BindView(R.id.current_month) TextView currentMonth;
+    @BindView(R.id.noRecords) TextView noDataFound;
+
     private RecyclerView.LayoutManager mLayoutManager;
     private TransactionAdapter adapter;
     private int currentMonthNum;
     private int currentYearNum;
 
-    MyFinancesApplication app;
-    DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
+    private MyFinancesApplication app;
+    private DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
 
-    List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -174,6 +176,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
         currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+        verifyData();
     }
 
     @OnClick(R.id.next_month)
@@ -189,6 +192,17 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
         currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+        verifyData();
+    }
+
+    //Verifies if exists transaction on the selected month
+    private void verifyData(){
+        if(transactions.size() == 0){
+            noDataFound.setText(R.string.no_data_found);
+        }
+        else{
+            noDataFound.setText("");
+        }
     }
 
     //starts activity to add a transaction
@@ -205,6 +219,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
         adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
+
+        verifyData();
 
         String value = df2.format(app.getDb().databaseDao().getCurrentWallet().getBalance());
         balance.setText(getString(R.string.balance)+" "+value);
