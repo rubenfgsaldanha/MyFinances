@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/loanFragment"
-    tools:context="pt.uc.dei.cm.myfinances.fragments.LoanFragment">
+    tools:context="pt.uc.dei.cm.myfinances.fragments.HomeFragment">
 
     <RelativeLayout
         android:id="@+id/second_loan_bar"
@@ -41,6 +42,7 @@
             android:src="@drawable/ic_action_forward"
             android:background="@color/colorPrimary"
             android:layout_centerVertical="true"/>
+
 
     </RelativeLayout>
 

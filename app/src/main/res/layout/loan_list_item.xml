@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="78dp">
+    android:layout_height="match_parent">
+
 
     <TextView
         android:id="@+id/loanDate"
@@ -26,12 +26,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/textDate"
+        android:layout_below="@id/loanDate"
         android:layout_marginTop="@dimen/dimen8"
         android:paddingLeft="@dimen/dimen8">
 
         <ImageView
-            android:id="@+id/transaction_item_image"
+            android:id="@+id/loan_item_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_log_off"/>
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-            android:layout_toRightOf="@id/transaction_item_image"
+            android:layout_toRightOf="@id/loan_item_image"
             android:textSize="20sp"/>
 
         <TextView
@@ -51,6 +51,21 @@
             android:paddingRight="@dimen/dimen16"
             android:layout_alignParentRight="true"
             android:textSize="20sp"/>
-    </RelativeLayout>
 
+        <TextView
+            android:id="@+id/loan_isLender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/dimen16"
+            android:layout_alignParentRight="true"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/loan_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:layout_toRightOf="@id/transaction_item_image"
+            android:alpha="0"/>
+    </RelativeLayout>
 </RelativeLayout>

@@ -11,7 +11,7 @@
         android:title="@string/graphs" />
 
     <item
-        android:id="@+id/navigation_categories"
+        android:id="@+id/navigation_loans"
         android:icon="@drawable/ic_action_categories"
         android:title="@string/categories" />
 </menu>

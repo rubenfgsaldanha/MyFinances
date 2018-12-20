@@ -95,5 +95,20 @@ public class Loan {
         this.payed = payed;
 
     }
+    public String getDateString(Calendar date){
+        return ""+date.get(Calendar.DAY_OF_MONTH)+"/"+(date.get(Calendar.MONTH)+1)+"/"+date.get(Calendar.YEAR);
+    }
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "date=" + loanDate +
+                ", paymentLimit='" + dueDate + '\'' +
+                ", isLender=" + isLender +
+                ", amount=" + loanAmount +
+                ", thirdParty='" + thirdParty + '\'' +
+                ", payed='" + payed + '\'' +
+                '}';
+    }
+
 
 }

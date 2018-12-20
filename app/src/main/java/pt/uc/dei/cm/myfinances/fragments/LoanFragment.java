@@ -13,9 +13,15 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.DecimalFormat;
+import java.util.List;
+
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import pt.uc.dei.cm.myfinances.MyFinancesApplication;
 import pt.uc.dei.cm.myfinances.adapters.LoanAdapter;
+import pt.uc.dei.cm.myfinances.general.Loan;
+import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 
@@ -37,6 +43,10 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
 
     private OnFragmentInteractionListener mListener;
 
+    MyFinancesApplication app;
+    DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
+
+    List<Loan> loans;
     public LoanFragment() {
         // Required empty public constructor
 
