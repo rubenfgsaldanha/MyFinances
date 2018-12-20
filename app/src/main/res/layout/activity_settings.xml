@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dimen8"
+    android:orientation="vertical"
+    tools:context="pt.uc.dei.cm.myfinances.activities.SettingsActivity">
+
+    <Switch
+        android:id="@+id/local_backup_auto"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:layout_gravity="left"
+        android:text="Backup automatically to local storage"/>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:background="@color/color_light_gray"/>
+
+    <Switch
+        android:id="@+id/drive_backup_auto"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:layout_gravity="left"
+        android:text="Backup automatically to Google Drive"/>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:background="@color/color_light_gray"/>
+
+    <Switch
+        android:id="@+id/show_percentages"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:layout_gravity="left"
+        android:text="Show percentages on the pie chart"/>
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:background="@color/color_light_gray"/>
+
+    <Switch
+        android:id="@+id/show_subtitles"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:layout_gravity="left"
+        android:text="Show subtitles on the pie chart"/>
+    
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:background="@color/color_light_gray"/>
+
+</LinearLayout>
