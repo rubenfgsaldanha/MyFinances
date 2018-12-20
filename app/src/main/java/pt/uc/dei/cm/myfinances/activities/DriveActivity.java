@@ -58,6 +58,7 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
     private MyFinancesApplication app;
     private SharedPreferences mPreferences;
     private String id="";
+    AsyncTask task = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,111 +163,13 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
 
     @OnClick(R.id.btnDriveBackup)
     public void driveBackup(){
-        //startActivity(new Intent(this,MainActivity.class));
-        createTree(DATABASE_NAME);
+        task = new DriveBackup(DATABASE_NAME).execute();
     }
 
 
     @OnClick(R.id.btnRestoreDrive)
     public void restoreDrive(){
-        new Thread(() -> {
-            String id = mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID, null);
-
-            app.closeDB();
-            if(id!=null){
-                REST.read(id);
-                System.out.println("looooooooooooooooooooooooooooooooooooooooooooooooool");
-                System.out.println(id);
-                String dbPath = getDatabasePath(DATABASE_NAME).getAbsolutePath();
-                //gets Internal Storage path
-                String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-
-                String drivePath = internalPath + "/MyFinances/DriveBackup";
-                String driveDBPath = drivePath + "/MyFinances.db";
-
-                File driveBD = new File(driveDBPath);
-                File currentDB = new File(dbPath);
-                currentDB.delete();
-
-                try {
-                    FileUtils.copyFile(driveBD, currentDB);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            else{
-                System.out.println("NNNNNNNNNNNNNUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLL");
-            }
-            app.openDB();
-        }).start();
-    }
-
-
-    private void createTree(final String titl) {
-        if (titl != null && !mBusy) {
-
-            new AsyncTask<Void, String, Void>() {
-                private String findOrCreateFolder(String prnt, String titl) {
-                    ArrayList<ContentValues> cvs = REST.search(prnt, titl, UT.MIME_FLDR);
-                    String id, txt;
-                    if (cvs.size() > 0) {
-                        txt = "found ";
-                        id = cvs.get(0).getAsString(UT.GDID);
-                    } else {
-                        id = REST.createFolder(prnt, titl);
-                        txt = "created ";
-                    }
-                    if (id != null)
-                        txt += titl;
-                    else
-                        txt = "failed " + titl;
-                    publishProgress(txt);
-                    return id;
-                }
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    mBusy = true;
-                    String rsid = findOrCreateFolder("root", UT.MYROOT);
-                    if (rsid != null) {
-                        rsid = findOrCreateFolder(rsid, "Backups");
-                        if (rsid != null) {
-                            //File fl = UT.str2File("This is a teste", "tmp");
-                            File fl = new File(getDatabasePath(DATABASE_NAME).getAbsolutePath());
-                            id = null;
-                            String id_ = mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID, null);
-                            System.out.println("------------------------------------------------------------");
-                            System.out.println(id_);
-                            if(id_ !=null){
-                                REST.trash(id_);
-                            }
-                            if (fl != null) {
-                                String mime = MimeUtils.guessMimeTypeFromExtension("odb");
-                                id = REST.createFile(rsid, titl, mime, fl);
-                                System.out.println(id);
-                                SharedPreferences.Editor editor = mPreferences.edit();
-                                editor.putString(SharedPreferencesHelper.DRIVE_FILE_ID, id);
-                                editor.apply();
-                                System.out.println(mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID,null));
-                                System.out.println("------------------------------------------------------------");
-                            }
-                            if (id != null)
-                                publishProgress("created " + titl);
-                            else
-                                publishProgress("failed " + titl);
-                        }
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void nada) {
-                    super.onPostExecute(nada);
-                    mBusy = false;
-                    showSnackbar(R.string.backup_drive_success);
-                }
-            }.execute();
-        }
+        task = new DriveRestore().execute();
     }
 
 
@@ -286,5 +189,118 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
 
     private void showSnackbar(@StringRes int errorMessageRes) {
         Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
+    }
+
+
+
+    abstract private class BaseTask<T> extends AsyncTask<T, Void, Integer>{
+        final String titl;
+
+        BaseTask(String title){
+            super();
+            titl = title;
+        }
+
+        /*@Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //show progress bar here
+        }*/
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            mBusy = false;
+            showSnackbar(integer);
+        }
+
+        protected String findOrCreateFolder(String prnt, String titl) {
+            ArrayList<ContentValues> cvs = REST.search(prnt, titl, UT.MIME_FLDR);
+            String id, txt;
+            if (cvs.size() > 0) {
+                id = cvs.get(0).getAsString(UT.GDID);
+            } else {
+                id = REST.createFolder(prnt, titl);
+            }
+            return id;
+        }
+    }
+
+    private class DriveBackup extends BaseTask<Void>{
+        DriveBackup(String title){
+            super(title);
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            mBusy = true;
+            String rsid = findOrCreateFolder("root", UT.MYROOT);
+            if (rsid != null) {
+                rsid = findOrCreateFolder(rsid, "Backups");
+                if (rsid != null) {
+                    app.closeDB();
+                    File fl = new File(getDatabasePath(DATABASE_NAME).getAbsolutePath());
+                    id = null;
+                    String id_ = mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID, null);
+                    System.out.println("------------------------------------------------------------");
+                    System.out.println(id_);
+                    if(id_ !=null){
+                        REST.trash(id_);
+                    }
+                    if (fl != null) {
+                        String mime = MimeUtils.guessMimeTypeFromExtension("odb");
+                        id = REST.createFile(rsid, titl, mime, fl);
+                        System.out.println(id);
+                        SharedPreferences.Editor editor = mPreferences.edit();
+                        editor.putString(SharedPreferencesHelper.DRIVE_FILE_ID, id);
+                        editor.apply();
+                        System.out.println(mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID,null));
+                        System.out.println("------------------------------------------------------------");
+                        app.openDB();
+                        return R.string.backup_drive_success;
+                    }
+                }
+                app.openDB();
+            }
+
+            return R.string.backup_drive_fail;
+        }
+    }
+
+    private class DriveRestore extends BaseTask<Void>{
+        DriveRestore(){
+            super(null);
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            String id = mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID, null);
+            int res=0;
+            app.closeDB();
+            if(id!=null){
+                REST.read(id);
+                String dbPath = getDatabasePath(DATABASE_NAME).getAbsolutePath();
+                //gets Internal Storage path
+                String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+                String drivePath = internalPath + "/MyFinances/DriveBackup";
+                String driveDBPath = drivePath + "/MyFinances.db";
+
+                File driveBD = new File(driveDBPath);
+                File currentDB = new File(dbPath);
+                currentDB.delete();
+
+                try {
+                    FileUtils.copyFile(driveBD, currentDB);
+                    res = R.string.restore_drive_success;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                res = R.string.restore_drive_fail;
+            }
+            app.openDB();
+            return res;
+        }
     }
 }
