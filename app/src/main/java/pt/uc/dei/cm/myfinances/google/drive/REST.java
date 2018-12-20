@@ -244,6 +244,8 @@ final public class REST {
                     System.out.println("//////////////////////////////////////////////");
                 }
                 java.io.File driveBD = new java.io.File(driveDBPath);
+                driveBD.delete();
+                driveBD = new java.io.File(driveDBPath);
 
 
                 OutputStream outputStream2 = new FileOutputStream(driveBD);

@@ -175,6 +175,8 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
             app.closeDB();
             if(id!=null){
                 REST.read(id);
+                System.out.println("looooooooooooooooooooooooooooooooooooooooooooooooool");
+                System.out.println(id);
                 String dbPath = getDatabasePath(DATABASE_NAME).getAbsolutePath();
                 //gets Internal Storage path
                 String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
