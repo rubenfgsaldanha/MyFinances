@@ -15,6 +15,7 @@ package pt.uc.dei.cm.myfinances.google.drive;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.os.AsyncTask;
+import android.os.Environment;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -31,6 +32,7 @@ import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -224,10 +226,31 @@ final public class REST {
 
             if (gFl != null) {
                 String strUrl = gFl.getDownloadUrl();
-                System.out.println("-----------------------------------------------------------------------");
                 System.out.println(strUrl);
-                System.out.println("-----------------------------------------------------------------------");
-                return /*UT.is2Bytes(mGOOSvc.getRequestFactory().buildGetRequest(new GenericUrl(strUrl)).execute().getContent());*/ null;
+
+
+                //gets Internal Storage path
+                String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+                String drivePath = internalPath + "/MyFinances/DriveBackup";
+                String driveDBPath = drivePath + "/MyFinances.db";
+
+                java.io.File drive = new java.io.File(drivePath);
+
+                System.out.println("**********************************************");
+                if(!drive.exists()){
+                    System.out.println("-------------------------------------------------");
+                    drive.mkdir();
+                    System.out.println("//////////////////////////////////////////////");
+                }
+                java.io.File driveBD = new java.io.File(driveDBPath);
+
+
+                OutputStream outputStream2 = new FileOutputStream(driveBD);
+                mGOOSvc.getRequestFactory().buildGetRequest(new GenericUrl(strUrl)).execute().download(outputStream2);
+                outputStream2.close();
+
+                return null;
             }
         } catch (Exception e) {
             UT.le(e);
@@ -268,13 +291,12 @@ final public class REST {
      * @param resId  file  id
      * @return success status
      */
-    static boolean trash(String resId) {
+    public static void trash(String resId) {
         if (mGOOSvc != null && mConnected && resId != null) try {
-            return null != mGOOSvc.files().trash(resId).execute();
+            mGOOSvc.files().trash(resId).execute();
         } catch (Exception e) {
             UT.le(e);
         }
-        return false;
     }
 
     /**

@@ -62,7 +62,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
         BackupOrRestoreActivityPermissionsDispatcher.startDriveActivityWithPermissionCheck(this);
     }
 
-    @NeedsPermission(Manifest.permission.GET_ACCOUNTS)
+    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.GET_ACCOUNTS})
     public void startDriveActivity(){
         startActivity(new Intent(this, DriveActivity.class));
     }
@@ -93,7 +93,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
         //gets Internal Storage path
         String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-        String backupPath = internalPath + "/MyFinancesBackup";
+        String backupPath = internalPath + "/MyFinances/LocalBackup";
         String backupDBPath = backupPath + "/MyFinances.db";
 
         File backup = new File(backupPath);
@@ -153,7 +153,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
         //gets the file to restore path
         String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String fileToRestore = internalPath + "/MyFinancesBackup/MyFinances.db";
+        String fileToRestore = internalPath + "/MyFinances/LocalBackup/MyFinances.db";
         File fileRestore = new File(fileToRestore);
 
         //delete current DB file

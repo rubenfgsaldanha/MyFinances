@@ -6,6 +6,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
+import pt.uc.dei.cm.myfinances.SharedPreferencesHelper;
 import pt.uc.dei.cm.myfinances.google.drive.REST;
 import pt.uc.dei.cm.myfinances.google.drive.UT;
 import pt.uc.dei.cm.myfinances.myfinances.R;
@@ -14,9 +15,11 @@ import pt.uc.dei.cm.myfinances.util.MimeUtils;
 import android.accounts.AccountManager;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +35,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static pt.uc.dei.cm.myfinances.MyFinancesApplication.DATABASE_NAME;
@@ -50,6 +56,8 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
     @BindView(R.id.connected_user) TextView connectedUser;
 
     private MyFinancesApplication app;
+    private SharedPreferences mPreferences;
+    private String id="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,7 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
         ButterKnife.bind(this);
 
         app = (MyFinancesApplication) getApplicationContext();
+        mPreferences = getSharedPreferences(SharedPreferencesHelper.SHARED_PREFS, MODE_PRIVATE);
 
         if (savedInstanceState == null) {
             UT.init(this);
@@ -160,7 +169,34 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
 
     @OnClick(R.id.btnRestoreDrive)
     public void restoreDrive(){
-        Toast.makeText(this,"Drive Restore",Toast.LENGTH_SHORT).show();
+        new Thread(() -> {
+            String id = mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID, null);
+
+            app.closeDB();
+            if(id!=null){
+                REST.read(id);
+                String dbPath = getDatabasePath(DATABASE_NAME).getAbsolutePath();
+                //gets Internal Storage path
+                String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+                String drivePath = internalPath + "/MyFinances/DriveBackup";
+                String driveDBPath = drivePath + "/MyFinances.db";
+
+                File driveBD = new File(driveDBPath);
+                File currentDB = new File(dbPath);
+                currentDB.delete();
+
+                try {
+                    FileUtils.copyFile(driveBD, currentDB);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                System.out.println("NNNNNNNNNNNNNUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLLLLL");
+            }
+            app.openDB();
+        }).start();
     }
 
 
@@ -195,11 +231,22 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
                         if (rsid != null) {
                             //File fl = UT.str2File("This is a teste", "tmp");
                             File fl = new File(getDatabasePath(DATABASE_NAME).getAbsolutePath());
-                            String id = null;
+                            id = null;
+                            String id_ = mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID, null);
+                            System.out.println("------------------------------------------------------------");
+                            System.out.println(id_);
+                            if(id_ !=null){
+                                REST.trash(id_);
+                            }
                             if (fl != null) {
                                 String mime = MimeUtils.guessMimeTypeFromExtension("odb");
                                 id = REST.createFile(rsid, titl, mime, fl);
-                                //fl.delete();
+                                System.out.println(id);
+                                SharedPreferences.Editor editor = mPreferences.edit();
+                                editor.putString(SharedPreferencesHelper.DRIVE_FILE_ID, id);
+                                editor.apply();
+                                System.out.println(mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID,null));
+                                System.out.println("------------------------------------------------------------");
                             }
                             if (id != null)
                                 publishProgress("created " + titl);
