@@ -69,7 +69,7 @@ public interface DatabaseDao {
 
     /***** operations for Loans *****/
 
-    @Query("SELECT * FROM loan WHERE month(due_date)=:currentMonth or month(loan_date)= :currentMonth  ORDER BY due_date, loan_date ASC")
+    @Query("SELECT * FROM loan WHERE due_month=:currentMonth or loan_month= :currentMonth  ORDER BY due_day, loan_day ASC")
     List<Loan> getLoansPerMonth(int currentMonth);
 
     @Query("UPDATE loan SET payed='True' WHERE loanId= :id")  //PODERA HAVER PORBLEMAS COM TRUE ENTRE ''

@@ -114,5 +114,6 @@
     <string name="err_auth_dono">UNSPECIFIED GOOGLE DRIVE\nACCESS FAILURE!</string>
     <string name="err_auth_accpick">NO ACCOUNT SELECTED!</string>
     <string name="err_auth_nogo">ACCESS NOT AUTHORIZED!</string>
+    <string name="loans">Loans</string>
 
 </resources>

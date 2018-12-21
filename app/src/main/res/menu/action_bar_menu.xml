@@ -36,7 +36,7 @@
         android:id="@+id/categories"
         android:icon="@drawable/ic_action_settings"
         app:showAsAction="never"
-        android:title="@string/settings" />
+        android:title="@string/categories" />
 
     <item
         android:id="@+id/action_log_off"

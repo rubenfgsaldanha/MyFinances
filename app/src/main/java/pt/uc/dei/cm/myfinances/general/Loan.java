@@ -12,8 +12,14 @@ public class Loan {
     @PrimaryKey(autoGenerate = true)
     private int loanId;
 
-    @ColumnInfo(name = "loan_date")
-    private Calendar loanDate;
+    @ColumnInfo(name = "loan_day")
+    private int day;
+
+    @ColumnInfo(name = "loan_month")
+    private int month;
+
+    @ColumnInfo(name = "loan_year")
+    private int year;
 
     @ColumnInfo(name = "is_lender")
     private boolean isLender;
@@ -21,14 +27,35 @@ public class Loan {
     @ColumnInfo(name = "loan_amount")
     private double loanAmount;
 
-    @ColumnInfo(name = "thirdParty")
+    @ColumnInfo(name = "third_party")
     private String thirdParty;
 
-    @ColumnInfo(name = "due_date")
-    private Calendar dueDate;
+    @ColumnInfo(name = "due_day")
+    private int dueday;
+
+    @ColumnInfo(name = "due_month")
+    private int duemonth;
+
+    @ColumnInfo(name = "due_year")
+    private int dueyear;
 
     @ColumnInfo(name = "payed")
     private boolean payed;
+
+
+    public Loan(int day, int month, int year,int dueday, int duemonth, int dueyear, boolean isLender, double loanAmount, String thirdParty, boolean payed) {
+        this.day = day;
+        this.month = month;
+        this.year = year;
+        this.isLender = isLender;
+        this.loanAmount = loanAmount;
+        this.thirdParty = thirdParty;
+        this.payed = payed;
+        this.dueday = dueday;
+        this.duemonth = duemonth;
+        this.dueyear = dueyear;
+
+    }
 
     public int getLoanId() {
         return loanId;
@@ -38,13 +65,7 @@ public class Loan {
         this.loanId = loanId;
     }
 
-    public Calendar getLoanDate() {
-        return loanDate;
-    }
 
-    public void setLoanDate(Calendar loanDate) {
-        this.loanDate = loanDate;
-    }
 
     public boolean isLender() {
         return isLender;
@@ -70,12 +91,52 @@ public class Loan {
         this.thirdParty = thirdParty;
     }
 
-    public Calendar getDueDate() {
-        return dueDate;
+    public int getDay() {
+        return day;
     }
 
-    public void setDueDate(Calendar dueDate) {
-        this.dueDate = dueDate;
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getDueday() {
+        return dueday;
+    }
+
+    public void setDueday(int dueday) {
+        this.dueday = dueday;
+    }
+
+    public int getDuemonth() {
+        return duemonth;
+    }
+
+    public void setDuemonth(int duemonth) {
+        this.duemonth = duemonth;
+    }
+
+    public int getDueyear() {
+        return dueyear;
+    }
+
+    public void setDueyear(int dueyear) {
+        this.dueyear = dueyear;
     }
 
     public boolean isPayed() {
@@ -86,27 +147,24 @@ public class Loan {
         this.payed = payed;
     }
 
-    public Loan(Calendar date, boolean isLender, double amount, String thirdParty, Calendar paymentLimit, boolean payed) {
-        this.dueDate = date;
-        this.isLender = isLender;
-        this.loanAmount = amount;
-        this.thirdParty = thirdParty;
-        this.dueDate = paymentLimit;
-        this.payed = payed;
 
-    }
     public String getDateString(Calendar date){
         return ""+date.get(Calendar.DAY_OF_MONTH)+"/"+(date.get(Calendar.MONTH)+1)+"/"+date.get(Calendar.YEAR);
     }
     @Override
     public String toString() {
-        return "Transaction{" +
-                "date=" + loanDate +
-                ", paymentLimit='" + dueDate + '\'' +
-                ", isLender=" + isLender +
-                ", amount=" + loanAmount +
-                ", thirdParty='" + thirdParty + '\'' +
-                ", payed='" + payed + '\'' +
+        return "Loan{" +
+                "loan_id=" + loanId +
+                ", loan_day=" + day +
+                ", loan_month=" + month +
+                ", loan_year=" + year +
+                ", third_party='" + thirdParty +
+                ", is_lender='" + isLender  +
+                ", loan_amount=" + loanAmount +
+                ", payed=" + payed +
+                ", due_day=" + dueday +
+                ", due_month=" + duemonth +
+                ", due_year=" + dueyear +
                 '}';
     }
 
