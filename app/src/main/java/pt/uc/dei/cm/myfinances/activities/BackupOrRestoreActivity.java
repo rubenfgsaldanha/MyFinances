@@ -139,7 +139,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
     public boolean verifyFile(){
         //gets the file to restore path
         String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String fileToRestore = internalPath + "/MyFinancesBackup/MyFinances.db";
+        String fileToRestore = internalPath + "/MyFinances/LocalBackup/MyFinances.db";
         File file = new File(fileToRestore);
 
         return file.exists() ? true : false;

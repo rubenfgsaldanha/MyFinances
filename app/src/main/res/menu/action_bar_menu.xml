@@ -32,10 +32,4 @@
         android:icon="@drawable/ic_action_settings"
         app:showAsAction="never"
         android:title="@string/settings" />
-
-    <item
-        android:id="@+id/action_log_off"
-        android:icon="@drawable/ic_action_log_off"
-        app:showAsAction="never"
-        android:title="@string/log_off" />
 </menu>

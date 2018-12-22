@@ -16,15 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="pt.uc.dei.cm.myfinances.activities.LoginActivity"
-            android:noHistory="true">
+            android:name="pt.uc.dei.cm.myfinances.activities.SignedInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.WalletsActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
@@ -46,7 +44,9 @@
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.DriveActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.BackupOrRestoreActivity" />
-        <activity android:name="pt.uc.dei.cm.myfinances.activities.SettingsActivity"></activity>
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.SettingsActivity"
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity"/>
     </application>
 
 </manifest>

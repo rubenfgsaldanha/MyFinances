@@ -3,17 +3,6 @@
 
     <string name="launch_title">Welcome to MyFinances</string>
 
-    <string name="providers_header">Auth providers</string>
-    <string name="providers_google">Google</string>
-    <string name="providers_email">Email</string>
-
-    <string name="configuration_required">Configuration required - see README.md</string>
-    <string name="google_label_missing_config">Google configuration missing</string>
-
-    <string name="sign_in_cancelled">Sign in cancelled</string>
-    <string name="no_internet_connection">No internet connection</string>
-    <string name="unknown_error">An unknown error occurred</string>
-
     <string name="warning">Warning</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -33,7 +22,6 @@
     <string name="home">Home</string>
     <string name="categories">Categories</string>
     <string name="graphs">Graphs</string>
-    <string name="sign_out_failed">"Sign out Failed"</string>
 
     <string name="save">Save</string>
 
@@ -84,9 +72,15 @@
     <string name="choose_Account">Choose Account</string>
 
 
+    <!-- Settings activity -->
+    <string name="auto_local_backup">Backup automatically to local storage</string>
+    <string name="auto_drive_backup">Backup automatically to Google Drive</string>
+    <string name="show_perc_graph">Show percentages on the pie chart</string>
+    <string name="show_subt_graph">Show subtitles on the pie chart</string>
+
+
     <!-- Action bar -->
     <string name="settings">Settings</string>
-    <string name="log_off">Log Off</string>
     <string name="about">About</string>
     <string name="export">Export</string>
     <string name="drive_sync">Backup/Restore</string>
@@ -96,7 +90,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    
+
 
     <!-- menu -->
     <string name="action_scan">UPLOAD file</string>

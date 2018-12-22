@@ -11,10 +11,10 @@ import android.widget.Switch;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    @BindView(R.id.local_backup_auto) Switch localBackupAuto;
-    @BindView(R.id.drive_backup_auto) Switch driveBackupAuto;
-    @BindView(R.id.show_percentages) Switch showPercentages;
-    @BindView(R.id.show_subtitles) Switch showSubtitles;
+    private Switch localBackupAuto;
+    private Switch driveBackupAuto;
+    private Switch showPercentages;
+    private Switch showSubtitles;
 
     private SharedPreferences sharedPreferences;
 
@@ -23,7 +23,17 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        localBackupAuto = findViewById(R.id.local_backup_auto);
+        driveBackupAuto = findViewById(R.id.drive_backup_auto);
+        showPercentages = findViewById(R.id.show_percentages);
+        showSubtitles = findViewById(R.id.show_subtitles);
+
         sharedPreferences = getSharedPreferences(SharedPreferencesHelper.SHARED_PREFS, MODE_PRIVATE);
+
+        localBackupAuto.setChecked(sharedPreferences.getBoolean(SharedPreferencesHelper.LOCAL_BACKUP,false));
+        driveBackupAuto.setChecked(sharedPreferences.getBoolean(SharedPreferencesHelper.DRIVE_BACKUP, false));
+        showPercentages.setChecked(sharedPreferences.getBoolean(SharedPreferencesHelper.SHOW_PERCENTAGES, false));
+        showSubtitles.setChecked(sharedPreferences.getBoolean(SharedPreferencesHelper.SHOW_SUBTITLES, false));
     }
 
     @Override
@@ -35,5 +45,6 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putBoolean(SharedPreferencesHelper.DRIVE_BACKUP, driveBackupAuto.isChecked());
         editor.putBoolean(SharedPreferencesHelper.SHOW_PERCENTAGES, showPercentages.isChecked());
         editor.putBoolean(SharedPreferencesHelper.SHOW_SUBTITLES, showSubtitles.isChecked());
+        editor.apply();
     }
 }

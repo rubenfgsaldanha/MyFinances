@@ -5,9 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/dimen8"
+    android:padding="@dimen/dimen16"
     android:orientation="vertical"
     tools:context="pt.uc.dei.cm.myfinances.activities.SettingsActivity">
+
+    <Spinner
+        android:id="@+id/spinner_categories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dimen8"/>
 
     <Switch
         android:id="@+id/local_backup_auto"
@@ -15,7 +21,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="@dimen/dimen8"
         android:layout_gravity="left"
-        android:text="Backup automatically to local storage"/>
+        android:text="@string/auto_local_backup"/>
 
     <View
         android:id="@+id/view1"
@@ -30,7 +36,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="@dimen/dimen8"
         android:layout_gravity="left"
-        android:text="Backup automatically to Google Drive"/>
+        android:text="@string/auto_drive_backup"/>
 
     <View
         android:id="@+id/view2"
@@ -45,7 +51,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="@dimen/dimen8"
         android:layout_gravity="left"
-        android:text="Show percentages on the pie chart"/>
+        android:text="@string/show_perc_graph"/>
 
     <View
         android:id="@+id/view3"
@@ -60,7 +66,7 @@
         android:layout_height="50dp"
         android:layout_marginBottom="@dimen/dimen8"
         android:layout_gravity="left"
-        android:text="Show subtitles on the pie chart"/>
+        android:text="@string/show_subt_graph"/>
     
     <View
         android:id="@+id/view4"
