@@ -2,9 +2,11 @@ package pt.uc.dei.cm.myfinances.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
+import pt.uc.dei.cm.myfinances.SharedPreferencesHelper;
 import pt.uc.dei.cm.myfinances.activities.AddTransactionActivity;
 import pt.uc.dei.cm.myfinances.activities.EditTransactionActivity;
 import pt.uc.dei.cm.myfinances.adapters.TransactionAdapter;
@@ -215,6 +218,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "OnResume");
 
         transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
         adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
@@ -223,7 +227,18 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         verifyData();
 
         String value = df2.format(app.getDb().databaseDao().getCurrentWallet().getBalance());
-        balance.setText(getString(R.string.balance)+" "+value);
+
+        SharedPreferences preferences = getActivity().getSharedPreferences(SharedPreferencesHelper.SHARED_PREFS, Context.MODE_PRIVATE);
+        String currency = preferences.getString(SharedPreferencesHelper.CURRENCY, null);
+
+        if(currency != null){
+            balance.setText(getString(R.string.balance)+ " " +value+ currency);
+        }
+        else{
+            balance.setText(getString(R.string.balance)+" "+value);
+        }
+
+        Log.d(TAG, "Still onResume");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

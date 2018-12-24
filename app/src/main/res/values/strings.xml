@@ -79,6 +79,12 @@
     <string name="show_subt_graph">Show subtitles on the pie chart</string>
 
 
+    <!-- About Activity-->
+    <string name="about_text">This application was developed in the scope of the Mobile computing course of 2018 by 2 students:\n\n
+    - Adriana Cunha\n
+    - Rúben Saldanha</string>
+
+
     <!-- Action bar -->
     <string name="settings">Settings</string>
     <string name="about">About</string>

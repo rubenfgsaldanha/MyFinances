@@ -15,8 +15,7 @@
         android:roundIcon="@drawable/ic_financeslogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name="pt.uc.dei.cm.myfinances.activities.SignedInActivity">
+        <activity android:name="pt.uc.dei.cm.myfinances.activities.SignedInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,6 +45,9 @@
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.BackupOrRestoreActivity" />
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.SettingsActivity"
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.AboutActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity"/>
     </application>
 

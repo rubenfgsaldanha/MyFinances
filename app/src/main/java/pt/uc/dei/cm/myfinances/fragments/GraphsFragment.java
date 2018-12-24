@@ -50,19 +50,14 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
     private SharedPreferences sharedPreferences;
     private boolean showPercentage = false;
     private boolean showSubtitle = false;
+    private String currency;
 
-    @BindView(R.id.pie_chart)
-    PieChartView pieChart;
-    @BindView(R.id.overall)
-    TextView overallValue;
-    @BindView(R.id.previous_month)
-    ImageButton previousMonth;
-    @BindView(R.id.next_month)
-    ImageButton nextMonth;
-    @BindView(R.id.current_month)
-    TextView currentMonth;
-    @BindView(R.id.noRecords)
-    TextView noDataFound;
+    @BindView(R.id.pie_chart) PieChartView pieChart;
+    @BindView(R.id.overall) TextView overallValue;
+    @BindView(R.id.previous_month) ImageButton previousMonth;
+    @BindView(R.id.next_month) ImageButton nextMonth;
+    @BindView(R.id.current_month) TextView currentMonth;
+    @BindView(R.id.noRecords) TextView noDataFound;
 
     public GraphsFragment() {
         // Required empty public constructor
@@ -75,6 +70,8 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
         app = (MyFinancesApplication) getActivity().getApplicationContext();
 
         sharedPreferences = getActivity().getSharedPreferences(SharedPreferencesHelper.SHARED_PREFS, Context.MODE_PRIVATE);
+
+        currency = sharedPreferences.getString(SharedPreferencesHelper.CURRENCY, null);
     }
 
     @Override
@@ -188,7 +185,12 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
             noDataFound.setText("");
 
             String value = df2.format(totalAmount);
-            overallValue.setText(value);
+            if(currency != null){
+                overallValue.setText(value+currency);
+            }
+            else{
+                overallValue.setText(value);
+            }
         } else {
             PieChartData pieChartData = new PieChartData();
             pieChartData.setHasLabels(true).setValueLabelTextSize(14);
@@ -202,8 +204,6 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        System.out.println("-------------------------------------------------------------------------------");
 
         showPercentage = sharedPreferences.getBoolean(SharedPreferencesHelper.SHOW_PERCENTAGES, false);
         showSubtitle = sharedPreferences.getBoolean(SharedPreferencesHelper.SHOW_SUBTITLES, false);

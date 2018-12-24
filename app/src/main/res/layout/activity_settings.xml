@@ -10,7 +10,7 @@
     tools:context="pt.uc.dei.cm.myfinances.activities.SettingsActivity">
 
     <Spinner
-        android:id="@+id/spinner_categories"
+        android:id="@+id/spinner_currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen8"/>
