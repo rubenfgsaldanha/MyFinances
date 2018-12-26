@@ -30,7 +30,7 @@
         android:id="@+id/editlenderRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_edit_loan_date"
+        android:layout_below="@id/payed"
         android:layout_marginBottom="@dimen/dimen16"
         android:orientation="horizontal">
 
@@ -49,6 +49,17 @@
             android:onClick="onRadioButtonClicked"
             android:text="@string/lendee" />
     </RadioGroup>
+
+
+    <RadioButton
+        android:id="@+id/payed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dimen16"
+        android:onClick="onRadioButtonClicked"
+        android:text="@string/payed"
+        tools:layout_below="@+id/btn_edit_loan_date" />
+
 
     <EditText
         android:id="@+id/edit_loan_amount"

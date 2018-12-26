@@ -47,7 +47,8 @@
             android:name="pt.uc.dei.cm.myfinances.activities.DriveActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.BackupOrRestoreActivity" />
         <activity android:name="pt.uc.dei.cm.myfinances.activities.AddLoanActivity" />
-        <activity android:name="pt.uc.dei.cm.myfinances.activities.EditLoanActivity"></activity>
+        <activity android:name="pt.uc.dei.cm.myfinances.activities.EditLoanActivity" />
+        <activity android:name="pt.uc.dei.cm.myfinances.activities.AddCategoryActivity"></activity>
     </application>
 
 </manifest>

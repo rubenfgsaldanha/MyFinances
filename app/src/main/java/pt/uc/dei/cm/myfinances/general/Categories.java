@@ -18,6 +18,13 @@ public class Categories {
     @ColumnInfo(name = "color")
     private int color;
 
+
+    public Categories(int catId, String label, int color){
+        this.catId=catId;
+        this.color=color;
+        this.label=label;
+    }
+
     public int getCatId() {
         return catId;
     }

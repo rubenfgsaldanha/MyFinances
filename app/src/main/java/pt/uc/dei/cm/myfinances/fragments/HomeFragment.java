@@ -94,7 +94,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
             defaultWallet();
         }
 
-        loadCategories();
+        //loadCategories();
 
         return rootView;
     }
@@ -132,7 +132,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
 
     //loads the categories to an hashmap<String,Integer>.
     //In the hashmap we save the name of the category and a color
-    private void loadCategories(){
+   /* private void loadCategories(){
         HashMap<String, Integer> map = new HashMap<>();
 
         //creates an array from the categories.xml file
@@ -154,7 +154,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         map.put(categories[13],getResources().getColor(R.color.pink));   //pink
 
         app.setCategories(map);
-    }
+    }*/
 
     private String getCurrentMonth(){
         Calendar c = Calendar.getInstance();

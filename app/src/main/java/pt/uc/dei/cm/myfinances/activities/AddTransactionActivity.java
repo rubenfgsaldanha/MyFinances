@@ -12,7 +12,9 @@ import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.app.DatePickerDialog;
+import android.media.browse.MediaBrowser;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,11 +27,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class AddTransactionActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.btn_date) Button btnDate;
-    @BindView(R.id.spinner_categories) Spinner categories;
+    @BindView(R.id.spinner_add_categories) Spinner cats;
     @BindView(R.id.amount) EditText amount;
     @BindView(R.id.comment) EditText comment;
     @BindView(R.id.button_save_transaction) Button btnSaveTransaction;
@@ -41,6 +44,7 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
     private int[] transactionDate;
 
     private MyFinancesApplication app;
+    private ArrayAdapter<String> dataAdapter;
 
     /*
     * We use a recycler view to list the transactions
@@ -51,12 +55,29 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
         setContentView(R.layout.activity_add_transaction);
         ButterKnife.bind(this);
 
-        //create a spinner with the categories defined in the categories.xml file
+
+
+        /*//create a spinner with the categories defined in the categories.xml file
         adapter = ArrayAdapter.createFromResource(this,R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categories.setAdapter(adapter);
+        categories.setAdapter(adapter);*/
+
+        //create a spinner with the categories in the db
+        // database handler
+
+
 
         app = (MyFinancesApplication) getApplicationContext();
+        // Spinner Drop down elements
+        List<String> labels =  app.getDb().databaseDao().getAllLabels();
+        //Log.d("smthg", "onCreate: ----------------------------------------------------"+labels);
+        // Creating adapter for spinner
+        dataAdapter = new ArrayAdapter (this, android.R.layout.simple_spinner_item, labels);
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        cats.setAdapter(dataAdapter);
     }
 
     private String getCurrentDate(){
@@ -112,9 +133,9 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
     }
 
     //when the user clicks a category from the spinner we save it
-    @OnItemSelected(R.id.spinner_categories)
+    @OnItemSelected(R.id.spinner_add_categories)
     public void selectedCategory(AdapterView<?> parent, View view, final int position, long id){
-        category = adapter.getItem(position).toString();
+        category = dataAdapter.getItem(position).toString();
     }
 
     public void onRadioButtonClicked(View v){

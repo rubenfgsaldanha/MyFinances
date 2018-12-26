@@ -26,6 +26,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class EditTransactionActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -53,10 +54,20 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
         setContentView(R.layout.activity_edit_transaction);
         ButterKnife.bind(this);
 
-        //create a spinner with the categories defined in the categories.xml file
+        /*//create a spinner with the categories defined in the categories.xml file
         adapter = ArrayAdapter.createFromResource(this,R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categories.setAdapter(adapter);
+        categories.setAdapter(adapter);*/
+
+        List<String> lables =  app.getDb().databaseDao().getAllLabels();
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter (this, android.R.layout.simple_spinner_item, lables);
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        categories.setAdapter(dataAdapter);
 
         app = (MyFinancesApplication) getApplicationContext();
 

@@ -122,8 +122,8 @@
     <string name="thirdP">third party</string>
     <string name="lender">im the lender</string>
     <string name="lendee">im the lendee</string>
-    <string name="date">Date</string>
-    <string name="due_date">Due Date:</string>
+    <string name="date">Due Date</string>
     <string name="delete_loan_ques">Are you sure you want to delete this loan?</string>
+    <string name="payed">payed</string>
 
 </resources>

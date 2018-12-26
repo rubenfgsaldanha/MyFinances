@@ -13,6 +13,7 @@ import pt.uc.dei.cm.myfinances.fragments.CategoriesFragment;
 import pt.uc.dei.cm.myfinances.fragments.GraphsFragment;
 import pt.uc.dei.cm.myfinances.fragments.HomeFragment;
 import pt.uc.dei.cm.myfinances.fragments.LoanFragment;
+import pt.uc.dei.cm.myfinances.general.Categories;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.content.Context;
@@ -61,6 +62,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signed_in);
         ButterKnife.bind(this);
+
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {

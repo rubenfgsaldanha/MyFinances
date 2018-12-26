@@ -24,15 +24,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 
 import java.util.Calendar;
 
 public class EditLoanActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
+    @BindView(R.id.payed)
+    RadioButton payed;
     @BindView(R.id.btn_edit_loan_date)
     Button btnLoanDate;
-    /*@BindView(R.id.btn_due_date)
-    Button btnDueDate;*/
     @BindView(R.id.edit_loan_amount)
     EditText loanAmount;
     @BindView(R.id.editthirdP) EditText thirdP;
@@ -45,6 +46,7 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
     private ArrayAdapter<CharSequence> adapter;
     private boolean lender;
     private int[] loanDate;
+    private boolean pay;
     //private int[] dueDate;
 
     private MyFinancesApplication app;
@@ -66,6 +68,13 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
         //sets the date to the transaction date
         l = app.getDb().databaseDao().getLoanByID(id);
 
+        if (l.isPayed()){
+            payed.setChecked(true);
+            pay=true;
+        }
+        else{
+            pay=false;
+        }
         //sets the transaction amount and comment
         if(l.getLoanAmount() < 0){
             double auxAmount = l.getLoanAmount() * (-1);
@@ -135,7 +144,7 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
         String thirdParty = thirdP.getText().toString();
 
         Loan loan= new Loan(app.getCurrentWallet().getName(), loanDate[0], loanDate[1], loanDate[2],/*dueDate[0], dueDate[1], dueDate[2],*/
-                lender, amount, thirdParty, false);
+                lender, amount, thirdParty, pay);
 
         if(lender){
             amount = - amount;
@@ -144,6 +153,10 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
 
         //checks if the user edited the loan amount
         if(amount != l.getLoanAmount()){
+            app.getCurrentWallet().updateWalletBalance( (l.getLoanAmount()*(-1)) + amount);
+            app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
+        }
+        if (pay!=l.isPayed()){    ///CONFIRMAR QUE SAO ESTAS AS CONTAS!!
             app.getCurrentWallet().updateWalletBalance( (l.getLoanAmount()*(-1)) + amount);
             app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
         }
@@ -163,7 +176,7 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
                 .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
 
                     app.getDb().databaseDao().deleteLoan(l.getLoanId());
-                    app.getCurrentWallet().updateWalletBalance(app.getCurrentWallet().getBalance() - l.getLoanAmount());
+                    app.getCurrentWallet().updateWalletBalance(app.getCurrentWallet().getBalance() + l.getLoanAmount());
                     app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
 
                     dialog.dismiss();
@@ -190,6 +203,11 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
                     lender = false;
                 }
                 break;
+            case R.id.payed:
+                if(checked){
+                    pay=true;
+
+                }
         }
     }
 

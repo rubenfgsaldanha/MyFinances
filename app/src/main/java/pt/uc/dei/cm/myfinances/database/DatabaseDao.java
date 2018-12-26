@@ -7,6 +7,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+import pt.uc.dei.cm.myfinances.general.Categories;
 import pt.uc.dei.cm.myfinances.general.Loan;
 import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.general.Wallet;
@@ -94,6 +95,13 @@ public interface DatabaseDao {
     void deleteLoan(int id);
 
 
+
+    //categories
+    @Query("select label from categories")
+    List<String> getAllLabels();
+
+@Insert
+void insertinit(Categories... categories);
 
 
 
