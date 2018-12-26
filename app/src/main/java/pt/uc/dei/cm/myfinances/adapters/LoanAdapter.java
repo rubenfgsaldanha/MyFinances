@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -35,8 +36,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         TextView loanAmount;
         @BindView(R.id.person)
         TextView loanThirdParty;
-        @BindView(R.id.loan_isLender)
-        TextView loanIsLender;
+
         @BindView(R.id.loan_item_image)
         ImageView loanImage;
         @BindView(R.id.loan_id)
@@ -80,6 +80,16 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         }
         DecimalFormat df2 = new DecimalFormat(".##");       //this is to only have 2 decimal numbers
         holder.loanAmount.setText(df2.format(loans.get(position).getLoanAmount()));
+        holder.loanID.setText(String.valueOf(loans.get(position).getLoanId()));
+        /*if (loans.get(position).getDuemonth()== Calendar.getInstance().get(Calendar.MONTH)) {
+            holder.loanDate.setText(loans.get(position).getDateString(loans.get(position).getDueday(), loans.get(position).getDuemonth(),loans.get(position).getDueyear()));
+        }
+        else*/
+        if (loans.get(position).getMonth()== Calendar.getInstance().get(Calendar.MONTH)){
+            holder.loanDate.setText(loans.get(position).getDateString(loans.get(position).getDay(), loans.get(position).getMonth(),loans.get(position).getYear()));
+
+        }
+
     }
 
     @Override

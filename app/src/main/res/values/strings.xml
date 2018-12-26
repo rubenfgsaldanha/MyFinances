@@ -114,6 +114,16 @@
     <string name="err_auth_dono">UNSPECIFIED GOOGLE DRIVE\nACCESS FAILURE!</string>
     <string name="err_auth_accpick">NO ACCOUNT SELECTED!</string>
     <string name="err_auth_nogo">ACCESS NOT AUTHORIZED!</string>
+
+    <!--loans-->
     <string name="loans">Loans</string>
+    <string name="add_loan_suc">Loan added successfully</string>
+    <string name="edit_loan_suc">Loan edited successfully</string>
+    <string name="thirdP">third party</string>
+    <string name="lender">im the lender</string>
+    <string name="lendee">im the lendee</string>
+    <string name="date">Date</string>
+    <string name="due_date">Due Date:</string>
+    <string name="delete_loan_ques">Are you sure you want to delete this loan?</string>
 
 </resources>

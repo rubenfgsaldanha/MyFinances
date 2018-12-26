@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dimen16"
+    android:id="@+id/add_loan_layout"
+    tools:context="pt.uc.dei.cm.myfinances.activities.AddLoanActivity">
+
+    <Button
+        android:id="@+id/btn_loan_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/date_txt"
+        android:layout_marginBottom="@dimen/dimen16" />
+
+    <!--Button
+        android:id="@+id/btn_due_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btn_loan_date"
+        android:layout_marginStart="69dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginRight="@+id/btn_loan_date"
+        android:layout_toEndOf="@+id/btn_loan_date" /-->
+
+    <RadioGroup
+        android:id="@+id/lenderRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_loan_date"
+        android:layout_marginBottom="@dimen/dimen16"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/lender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dimen16"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/lender" />
+
+        <RadioButton
+            android:id="@+id/lendee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/lendee" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/add_loan_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lenderRadioGroup"
+        android:hint="@string/amount"
+        android:layout_marginBottom="@dimen/dimen16"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/thirdP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_loan_amount"
+        android:layout_marginBottom="@dimen/dimen16"
+
+        android:hint="@string/thirdP"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/button_save_loan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/thirdP"
+        android:text="@string/save" />
+
+    <TextView
+        android:id="@+id/date_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/date" />
+
+    <!--TextView
+        android:id="@+id/due_date_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_above="@+id/btn_loan_date"
+        android:layout_marginStart="131dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/date_txt"
+        android:text="@string/due_date" /-->
+</RelativeLayout>

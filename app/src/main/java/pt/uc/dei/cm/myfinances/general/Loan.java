@@ -1,6 +1,5 @@
 package pt.uc.dei.cm.myfinances.general;
 
-import java.util.Calendar;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -30,31 +29,44 @@ public class Loan {
     @ColumnInfo(name = "third_party")
     private String thirdParty;
 
-    @ColumnInfo(name = "due_day")
+    /*@ColumnInfo(name = "due_day")
     private int dueday;
 
     @ColumnInfo(name = "due_month")
     private int duemonth;
 
     @ColumnInfo(name = "due_year")
-    private int dueyear;
+    private int dueyear;*/
 
     @ColumnInfo(name = "payed")
     private boolean payed;
 
+    @ColumnInfo(name="wallet_name")
+    private String wallet;
 
-    public Loan(int day, int month, int year,int dueday, int duemonth, int dueyear, boolean isLender, double loanAmount, String thirdParty, boolean payed) {
+
+
+    public Loan(String wallet, int day, int month, int year,  boolean isLender, double loanAmount, String thirdParty, boolean payed) { //int dueday, int duemonth, int dueyear,
+        this.wallet=wallet;
         this.day = day;
         this.month = month;
         this.year = year;
+
         this.isLender = isLender;
         this.loanAmount = loanAmount;
         this.thirdParty = thirdParty;
         this.payed = payed;
-        this.dueday = dueday;
+        /*this.dueday = dueday;
         this.duemonth = duemonth;
-        this.dueyear = dueyear;
+        this.dueyear = dueyear;*/
 
+    }
+    public String getWallet() {    //BEING CALLED IN TRANS???
+        return wallet;
+    }
+
+    public void setWallet(String wallet) {
+        this.wallet = wallet;
     }
 
     public int getLoanId() {
@@ -115,7 +127,7 @@ public class Loan {
         this.year = year;
     }
 
-    public int getDueday() {
+    /*public int getDueday() {
         return dueday;
     }
 
@@ -137,7 +149,7 @@ public class Loan {
 
     public void setDueyear(int dueyear) {
         this.dueyear = dueyear;
-    }
+    }*/
 
     public boolean isPayed() {
         return payed;
@@ -148,8 +160,8 @@ public class Loan {
     }
 
 
-    public String getDateString(Calendar date){
-        return ""+date.get(Calendar.DAY_OF_MONTH)+"/"+(date.get(Calendar.MONTH)+1)+"/"+date.get(Calendar.YEAR);
+    public String getDateString(int day, int month, int year){
+        return ""+ day +"/"+month+"/"+year;
     }
     @Override
     public String toString() {
@@ -162,9 +174,9 @@ public class Loan {
                 ", is_lender='" + isLender  +
                 ", loan_amount=" + loanAmount +
                 ", payed=" + payed +
-                ", due_day=" + dueday +
+                /*", due_day=" + dueday +
                 ", due_month=" + duemonth +
-                ", due_year=" + dueyear +
+                ", due_year=" + dueyear +*/
                 '}';
     }
 

@@ -40,7 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignedInActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
-        CategoriesFragment.OnFragmentInteractionListener, GraphsFragment.OnFragmentInteractionListener{
+        LoanFragment.OnFragmentInteractionListener, GraphsFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "SignedInActivity";
 
