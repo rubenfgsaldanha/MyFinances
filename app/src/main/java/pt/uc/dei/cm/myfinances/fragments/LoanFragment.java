@@ -29,6 +29,7 @@ import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
 import pt.uc.dei.cm.myfinances.activities.AddLoanActivity;
 import pt.uc.dei.cm.myfinances.activities.AddTransactionActivity;
+import pt.uc.dei.cm.myfinances.activities.EditLoanActivity;
 import pt.uc.dei.cm.myfinances.activities.EditTransactionActivity;
 import pt.uc.dei.cm.myfinances.adapters.LoanAdapter;
 import pt.uc.dei.cm.myfinances.adapters.TransactionAdapter;
@@ -194,11 +195,11 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        /*TextView t = view.findViewById(R.id.loan_id);
+        TextView t = view.findViewById(R.id.loan_id);
 
         Intent editLoan = new Intent(getActivity(), EditLoanActivity.class);
         editLoan.putExtra("id",t.getText().toString());
-        startActivityForResult(editLoan,START_ACT_EDIT_CODE);*/
+        startActivityForResult(editLoan,START_ACT_EDIT_CODE);
     }
 
     ///por long click pa set as payed/ unpayed

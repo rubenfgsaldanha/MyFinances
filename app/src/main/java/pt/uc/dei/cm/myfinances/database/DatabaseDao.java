@@ -69,7 +69,7 @@ public interface DatabaseDao {
 
     /***** operations for Loans *****/
 
-    @Query("SELECT * FROM loan WHERE wallet_name = :walletName AND (loan_month= :currentMonth and loan_year= :currentYear)")//" //ORDER BY /*due_day,*/ loan_day ASC") /*(due_month=:currentMonth and due_year= :currentYear) or */
+    @Query("SELECT * FROM loan WHERE wallet_name = :walletName AND loan_month= :currentMonth and loan_year= :currentYear")//" //ORDER BY /*due_day,*/ loan_day ASC") /*(due_month=:currentMonth and due_year= :currentYear) or */
     List<Loan> getLoansPerMonth(int currentMonth, int currentYear, String walletName);
 
     @Query("UPDATE loan SET payed='True' WHERE loanId= :id")  //PODERA HAVER PORBLEMAS COM TRUE ENTRE ''

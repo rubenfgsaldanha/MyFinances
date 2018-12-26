@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
 
-    <TextView
+    <!--TextView
         android:id="@+id/loanDate"
         android:layout_width="match_parent"
         android:layout_height="30dp"
@@ -12,7 +12,7 @@
         android:textSize="18sp"
         android:background="@color/colorPrimaryLightest"
         android:textColor="@color/colorPrimaryDark"
-        />
+        /-->
     <TextView
         android:id="@+id/limit"
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/loanDate"
+        android:layout_below="@id/limit"
         android:layout_marginTop="@dimen/dimen8"
         android:paddingLeft="@dimen/dimen8">
 

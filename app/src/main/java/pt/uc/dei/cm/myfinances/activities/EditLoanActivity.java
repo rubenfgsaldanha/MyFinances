@@ -29,18 +29,18 @@ import java.util.Calendar;
 
 public class EditLoanActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    @BindView(R.id.btn_loan_date)
+    @BindView(R.id.btn_edit_loan_date)
     Button btnLoanDate;
     /*@BindView(R.id.btn_due_date)
     Button btnDueDate;*/
     @BindView(R.id.edit_loan_amount)
     EditText loanAmount;
-    @BindView(R.id.thirdP) EditText thirdP;
+    @BindView(R.id.editthirdP) EditText thirdP;
     @BindView(R.id.button_save_loan) Button btnSaveLoan;
-    @BindView(R.id.lenderRadioGroup)
+    @BindView(R.id.editlenderRadioGroup)
     RadioGroup lenderRadioGroup;
-    @BindView(R.id.lender) RadioButton radioLender;
-    @BindView(R.id.lendee) RadioButton radioLendee;
+    @BindView(R.id.editlender) RadioButton radioLender;
+    @BindView(R.id.editlendee) RadioButton radioLendee;
 
     private ArrayAdapter<CharSequence> adapter;
     private boolean lender;
@@ -118,16 +118,16 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
         btnDueDate.setText(dueDate);*/
     }
 
-    @OnClick(R.id.btn_loan_date)
+    @OnClick(R.id.btn_edit_loan_date)
     public void pickDate(){
         DialogFragment datePicker = new DatePickerFragment();
         datePicker.show(getSupportFragmentManager(),"date picker");
     }
-    @OnClick(R.id.btn_due_date)
+    /*@OnClick(R.id.btn_due_date)
     public void pickDueDate(){
         DialogFragment datePicker = new DatePickerFragment();
         datePicker.show(getSupportFragmentManager(),"date picker");
-    }
+    }*/
 
     @OnClick(R.id.button_save_loan)
     public void saveLoan(){
@@ -163,7 +163,7 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
                 .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
 
                     app.getDb().databaseDao().deleteLoan(l.getLoanId());
-                    app.getCurrentWallet().updateWalletBalance(0 - l.getLoanAmount());
+                    app.getCurrentWallet().updateWalletBalance(app.getCurrentWallet().getBalance() - l.getLoanAmount());
                     app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
 
                     dialog.dismiss();

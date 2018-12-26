@@ -30,7 +30,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.loanDate)   //eu dps vou querer uma so text view que podera la ter ou o limit ou o date
+        @BindView(R.id.limit)
                 TextView loanDate;
         @BindView(R.id.loan_amount)
         TextView loanAmount;
@@ -85,10 +85,10 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
             holder.loanDate.setText(loans.get(position).getDateString(loans.get(position).getDueday(), loans.get(position).getDuemonth(),loans.get(position).getDueyear()));
         }
         else*/
-        if (loans.get(position).getMonth()== Calendar.getInstance().get(Calendar.MONTH)){
-            holder.loanDate.setText(loans.get(position).getDateString(loans.get(position).getDay(), loans.get(position).getMonth(),loans.get(position).getYear()));
+        //if (loans.get(position).getMonth()== Calendar.getInstance().get(Calendar.MONTH)){
+        holder.loanDate.setText(loans.get(position).getDateString());
 
-        }
+        //}
 
     }
 

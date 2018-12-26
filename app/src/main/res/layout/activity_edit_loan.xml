@@ -9,14 +9,14 @@
 
 
     <Button
-        android:id="@+id/btn_loan_date"
+        android:id="@+id/btn_edit_loan_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/date_txt"
         android:layout_marginBottom="@dimen/dimen16" />
 
-    <Button
+    <!--Button
         android:id="@+id/btn_due_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,18 +24,18 @@
         android:layout_marginStart="69dp"
         android:layout_marginTop="1dp"
         android:layout_marginRight="@+id/btn_loan_date"
-        android:layout_toEndOf="@+id/btn_loan_date" />
+        android:layout_toEndOf="@+id/btn_loan_date" /-->
 
     <RadioGroup
-        android:id="@+id/lenderRadioGroup"
+        android:id="@+id/editlenderRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_loan_date"
+        android:layout_below="@id/btn_edit_loan_date"
         android:layout_marginBottom="@dimen/dimen16"
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/lender"
+            android:id="@+id/editlender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dimen16"
@@ -43,7 +43,7 @@
             android:text="@string/lender" />
 
         <RadioButton
-            android:id="@+id/lendee"
+            android:id="@+id/editlendee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onRadioButtonClicked"
@@ -54,13 +54,13 @@
         android:id="@+id/edit_loan_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lenderRadioGroup"
+        android:layout_below="@id/editlenderRadioGroup"
         android:hint="@string/amount"
         android:layout_marginBottom="@dimen/dimen16"
         android:inputType="numberDecimal" />
 
     <EditText
-        android:id="@+id/thirdP"
+        android:id="@+id/editthirdP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/edit_loan_amount"
@@ -73,7 +73,7 @@
         android:id="@+id/button_save_loan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/thirdP"
+        android:layout_below="@id/editthirdP"
         android:layout_alignParentEnd="true"
 
         android:text="@string/save" />
@@ -82,7 +82,7 @@
         android:id="@+id/button_delete_loan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/thirdP"
+        android:layout_below="@id/editthirdP"
         android:text="@string/delete"/>
 
     <TextView
@@ -92,7 +92,7 @@
         android:layout_alignParentTop="true"
         android:text="@string/date" />
 
-    <TextView
+    <!--TextView
         android:id="@+id/due_date_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -101,6 +101,6 @@
         android:layout_marginStart="131dp"
         android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/date_txt"
-        android:text="@string/due_date" />
+        android:text="@string/due_date" /-->
 
 </RelativeLayout>

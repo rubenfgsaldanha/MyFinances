@@ -160,9 +160,10 @@ public class Loan {
     }
 
 
-    public String getDateString(int day, int month, int year){
-        return ""+ day +"/"+month+"/"+year;
+    public String getDateString(){
+        return ""+day+"/"+month+"/"+year;
     }
+
     @Override
     public String toString() {
         return "Loan{" +
