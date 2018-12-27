@@ -100,33 +100,16 @@ public interface DatabaseDao {
     @Query("select label from categories")
     List<String> getAllLabels();
 
-@Insert
-void insertinit(Categories... categories);
+    @Insert
+    void insertinit(Categories... categories);
 
-@Query("select * from categories")
+    @Query("select * from categories")
     List<Categories> getCategories();
 
+    @Query("SELECT * FROM categories WHERE catId = :id")
+    Categories getCategoryByID(int id);
 
-
-    /*@Query("SELECT * FROM wallet WHERE is_current = 1")
-    Wallet getCurrentWallet();
-
-    @Query("SELECT * FROM wallet WHERE wallet_name = :name")
-    Wallet getWalletByName(String name);
-
-    @Insert
-    void insertWallet(Wallet... wallets);
-
-    @Update
-    void updateWallet(Wallet... w);
-
-    @Query("UPDATE wallet SET wallet_balance = :balance WHERE wallet_name = :walletName")
-    void updateWalletBalance(double balance, String walletName);
-
-    @Query("UPDATE wallet SET is_current = :isCurrent WHERE wallet_name = :walletName")
-    void updateWalletStatus(boolean isCurrent, String walletName);
-
-    @Delete
-    void deleteWallet(Wallet... wallets);*/
+    @Query("UPDATE categories set label=:myLabel, color=:newColor where catId=:id")
+    void updateCat(String myLabel, int newColor, int id);
 }
 
