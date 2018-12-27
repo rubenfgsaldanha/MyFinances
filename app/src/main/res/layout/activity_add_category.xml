@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/addCat"
+    tools:context="pt.uc.dei.cm.myfinances.activities.AddCategoryActivity">
+
+
+    <EditText
+        android:id="@+id/add_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/label" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtV"
+        android:text="@string/pick"
+        android:layout_below="@id/add_label"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="openColor"
+        android:layout_below="@id/txtV"
+        android:id="@+id/colorButton"
+        android:text="color"/>
+
+    <!--com.skydoves.colorpickerpreference.ColorPickerView
+        android:id="@+id/colorPickerView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_below="@id/txtV"
+        app:palette="@drawable/palette"
+        app:selector="@drawable/wheel"
+        /-->
+    <!--com.skydoves.multicolorpicker.MultiColorPickerView
+        android:id="@+id/multiColorPickerView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:palette="@drawable/palette"/-->
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/colorButton"
+        android:text="@string/save"
+        android:onClick="saveCategoty"/>
+</RelativeLayout>

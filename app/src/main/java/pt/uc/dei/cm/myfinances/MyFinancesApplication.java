@@ -8,10 +8,11 @@ import java.util.HashMap;
 
 import androidx.room.Room;
 import pt.uc.dei.cm.myfinances.database.MyFinancesDatabase;
+import pt.uc.dei.cm.myfinances.general.Categories;
 import pt.uc.dei.cm.myfinances.general.Wallet;
 
 public class MyFinancesApplication extends Application {
-    private HashMap<String,Integer> categories = new HashMap<>();
+    //private HashMap<String,Integer> categories = new HashMap<>();
     private Wallet currentWallet;
 
     private MyFinancesDatabase db;
@@ -31,6 +32,14 @@ public class MyFinancesApplication extends Application {
         db = Room.databaseBuilder(getApplicationContext(), MyFinancesDatabase.class,
                 DATABASE_NAME).allowMainThreadQueries().build();
         Log.d("MyFinancesApplication", "Database opened!");
+        Categories init = new Categories("comida", 2);
+        Categories sec = new Categories("bebida", 1);
+
+        db.databaseDao().insertinit(init);
+        db.databaseDao().insertinit(sec);
+
+        Log.d("MyFinancesApplication", "-----------------------------------------------------------------------HERE----------------------------------------");
+
     }
 
     public void closeDB(){
@@ -38,13 +47,13 @@ public class MyFinancesApplication extends Application {
         Log.d("MyFinancesApplication", "Database closed!");
     }
 
-    public HashMap<String, Integer> getCategories() {
+    /*public HashMap<String, Integer> getCategories() {
         return categories;
-    }
+    }*/
 
-    public void setCategories(HashMap<String, Integer> categories) {
+    /*public void setCategories(HashMap<String, Integer> categories) {
         this.categories = categories;
-    }
+    }*/
 
     public Wallet getCurrentWallet() {
         return currentWallet;

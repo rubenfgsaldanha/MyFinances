@@ -10,6 +10,8 @@ import pt.uc.dei.cm.myfinances.MyFinancesApplication;
 import pt.uc.dei.cm.myfinances.fragments.CategoriesFragment;
 import pt.uc.dei.cm.myfinances.fragments.GraphsFragment;
 import pt.uc.dei.cm.myfinances.fragments.HomeFragment;
+import pt.uc.dei.cm.myfinances.fragments.LoanFragment;
+import pt.uc.dei.cm.myfinances.general.Categories;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.content.Intent;
@@ -29,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignedInActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
-        CategoriesFragment.OnFragmentInteractionListener, GraphsFragment.OnFragmentInteractionListener{
+        LoanFragment.OnFragmentInteractionListener, GraphsFragment.OnFragmentInteractionListener, CategoriesFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "SignedInActivity";
 
@@ -94,6 +96,9 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
+            case R.id.categories:
+                categories();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -116,8 +121,8 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
             case R.id.navigation_graphs:
                 graphs();
                 return true;
-            case R.id.navigation_categories:
-                categories();
+            case R.id.navigation_loans:
+                loans();
                 return true;
         }
         return false;
@@ -149,7 +154,14 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         ft.addToBackStack("ToCategories");
         ft.commit();
     }
-
+    // fragment loans
+    private  void loans(){
+        LoanFragment loanFragment = new LoanFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.activity_signed_in,loanFragment);
+        ft.addToBackStack("ToHome");
+        ft.commit();
+    }
 
     private void showSnackbar(@StringRes int errorMessageRes) {
         Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
