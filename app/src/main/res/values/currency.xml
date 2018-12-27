@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="currency">
+        <item>No currency selected</item>
+        <item>Euro (€)</item>
+        <item>US Dollar ($)</item>
+        <item>British Pound (£)</item>
+    </string-array>
+</resources>

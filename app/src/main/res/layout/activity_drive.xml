@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,13 +15,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen16"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:text="@string/checkboxBackup"/>
 
     <Button
         android:id="@+id/btnDriveBackup"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_below="@id/checkboxBackupDrive"
         android:layout_marginBottom="@dimen/dimen16"
         android:text="@string/backupDrive"
         android:textAllCaps="false"/>
@@ -30,6 +31,7 @@
         android:id="@+id/btnRestoreDrive"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_below="@id/btnDriveBackup"
         android:layout_marginBottom="@dimen/dimen8"
         android:text="@string/restoreDrive"
         android:textAllCaps="false"/>
@@ -38,7 +40,16 @@
         android:id="@+id/connected_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/btnRestoreDrive"
         android:layout_gravity="center_horizontal"
         android:textSize="17sp"/>
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnDriveBackup"
+        android:progressDrawable="@drawable/custom_progress_bar"
+        android:visibility="gone"/>
+
+</RelativeLayout>
