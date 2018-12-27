@@ -23,7 +23,7 @@ public class EditCategoryactivity extends AppCompatActivity {
 
     private MyFinancesApplication app;
     Categories c;
-    int newColor=c.getColor();
+    int newColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,7 @@ public class EditCategoryactivity extends AppCompatActivity {
         c = app.getDb().databaseDao().getCategoryByID(id);
         colorButton.setBackgroundColor(c.getColor());
         label.setText(c.getLabel());
+        newColor=c.getColor();
     }
 
 

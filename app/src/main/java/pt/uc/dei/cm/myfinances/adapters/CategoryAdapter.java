@@ -80,6 +80,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         holder.label.setText(categories.get(position).getLabel());
         holder.dispC.setBackgroundColor(categories.get(position).getColor());
+        holder.catId.setText(String.valueOf(categories.get(position).getCatId()));
+
 
 
     }

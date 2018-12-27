@@ -89,9 +89,9 @@ public class CategoriesFragment extends androidx.fragment.app.Fragment {
     private void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
          TextView t = view.findViewById(R.id.category_id);
 
-                Intent editTransaction = new Intent(getActivity(), EditCategoryactivity.class);
-                editTransaction.putExtra("id",t.getText().toString());
-                startActivityForResult(editTransaction,START_ACT_EDIT_CODE);
+                Intent editCategory = new Intent(getActivity(), EditCategoryactivity.class);
+                editCategory.putExtra("id",t.getText().toString());
+                startActivityForResult(editCategory,START_ACT_EDIT_CODE);
     }
 
     @Override
