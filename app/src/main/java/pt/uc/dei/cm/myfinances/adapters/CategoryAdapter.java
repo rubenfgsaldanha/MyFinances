@@ -78,6 +78,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //set the data to be displayed
 
+
         holder.label.setText(categories.get(position).getLabel());
         holder.dispC.setBackgroundColor(categories.get(position).getColor());
         holder.catId.setText(String.valueOf(categories.get(position).getCatId()));
