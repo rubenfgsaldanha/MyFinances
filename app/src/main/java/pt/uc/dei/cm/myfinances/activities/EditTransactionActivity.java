@@ -44,6 +44,7 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
     private ArrayAdapter<CharSequence> adapter;
     private boolean expense;
     private int[] transactionDate;
+    private ArrayAdapter<String> dataAdapter;
 
     private MyFinancesApplication app;
     private Transaction t;
@@ -59,18 +60,19 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categories.setAdapter(adapter);*/
 
-        List<String> lables =  app.getDb().databaseDao().getAllLabels();
 
+        app = (MyFinancesApplication) getApplicationContext();
+
+        // Spinner Drop down elements
+        List<String> labels =  app.getDb().databaseDao().getAllLabels();
+        //Log.d("smthg", "onCreate: ----------------------------------------------------"+labels);
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter (this, android.R.layout.simple_spinner_item, lables);
+        dataAdapter = new ArrayAdapter (this, android.R.layout.simple_spinner_item, labels);
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
         categories.setAdapter(dataAdapter);
-
-        app = (MyFinancesApplication) getApplicationContext();
-
         //gets transaction id
         Intent intent = getIntent();
         int id = Integer.parseInt(intent.getStringExtra("id"));
