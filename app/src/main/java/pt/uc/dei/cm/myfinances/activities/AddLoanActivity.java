@@ -42,8 +42,7 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
     //private int[] dueDate;
 
     private MyFinancesApplication app;
-
-
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
