@@ -41,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignedInActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
-        LoanFragment.OnFragmentInteractionListener, GraphsFragment.OnFragmentInteractionListener{
+        LoanFragment.OnFragmentInteractionListener, GraphsFragment.OnFragmentInteractionListener, CategoriesFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "SignedInActivity";
 
@@ -125,6 +125,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
                 return true;
             case R.id.categories:
                 categories();
+                return true;
             case R.id.action_log_off:
                 askSignOut();
                 return true;

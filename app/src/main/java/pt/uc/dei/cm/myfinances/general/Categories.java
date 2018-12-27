@@ -19,8 +19,7 @@ public class Categories {
     private int color;
 
 
-    public Categories(int catId, String label, int color){
-        this.catId=catId;
+    public Categories( String label, int color){
         this.color=color;
         this.label=label;
     }

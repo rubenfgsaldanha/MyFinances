@@ -176,7 +176,7 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
                 .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
 
                     app.getDb().databaseDao().deleteLoan(l.getLoanId());
-                    app.getCurrentWallet().updateWalletBalance(app.getCurrentWallet().getBalance() + l.getLoanAmount());
+                    app.getCurrentWallet().updateWalletBalance(l.getLoanAmount()*(-1));
                     app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
 
                     dialog.dismiss();

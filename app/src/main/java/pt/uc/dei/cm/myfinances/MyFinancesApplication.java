@@ -32,8 +32,8 @@ public class MyFinancesApplication extends Application {
         db = Room.databaseBuilder(getApplicationContext(), MyFinancesDatabase.class,
                 DATABASE_NAME).allowMainThreadQueries().build();
         Log.d("MyFinancesApplication", "Database opened!");
-        Categories init = new Categories(1,"comida",1);
-        Categories sec = new Categories(2,"bebida",2);
+        Categories init = new Categories("comida", 2);
+        Categories sec = new Categories("bebida", 1);
 
         db.databaseDao().insertinit(init);
         db.databaseDao().insertinit(sec);

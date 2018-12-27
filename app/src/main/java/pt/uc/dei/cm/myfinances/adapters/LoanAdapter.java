@@ -73,9 +73,9 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {   //PARECE ME QUE VAI DAR MERDA!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!!!!!!!!!!!!1
+    public void onBindViewHolder(ViewHolder holder, int position) {
         //set the data to be displayed
-        if (!loans.get(position).getThirdParty().equals("")) {
+        if (!loans.get(position).getThirdParty().isEmpty()) {
             holder.loanThirdParty.setText(loans.get(position).getThirdParty());
         }
         DecimalFormat df2 = new DecimalFormat(".##");       //this is to only have 2 decimal numbers

@@ -103,6 +103,9 @@ public interface DatabaseDao {
 @Insert
 void insertinit(Categories... categories);
 
+@Query("select * from categories")
+    List<Categories> getCategories();
+
 
 
     /*@Query("SELECT * FROM wallet WHERE is_current = 1")

@@ -29,8 +29,6 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
 
     @BindView(R.id.btn_loan_date)
     Button btnLoanDate;
-    //@BindView(R.id.btn_due_date)
-   // Button btnDueDate;
     @BindView(R.id.add_loan_amount)
     EditText loanAmount;
     @BindView(R.id.thirdP) EditText thirdP;
@@ -82,11 +80,7 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
         DialogFragment datePicker = new DatePickerFragment();
         datePicker.show(getSupportFragmentManager(),"date picker");
     }
-    /*@OnClick(R.id.btn_due_date)
-    public void pickDueDate(){
-        DialogFragment datePicker = new DatePickerFragment();
-        datePicker.show(getSupportFragmentManager(),"date picker");
-    }*/
+
 
     @OnClick(R.id.button_save_loan)
     public void saveLoan(){
