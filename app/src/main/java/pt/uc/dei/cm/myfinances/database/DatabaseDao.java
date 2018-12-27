@@ -111,5 +111,8 @@ public interface DatabaseDao {
 
     @Query("UPDATE categories set label=:myLabel, color=:newColor where catId=:id")
     void updateCat(String myLabel, int newColor, int id);
+
+    @Query("SELECT color FROM categories WHERE label = :key")
+    int getCategoryByName(String key);
 }
 

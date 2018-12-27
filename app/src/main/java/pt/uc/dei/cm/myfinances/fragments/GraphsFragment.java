@@ -93,9 +93,10 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
             List pieData =  new ArrayList<>();
             for(Map.Entry<String,Double> entry : aux.entrySet()){
                  int value = (int) Math.round(entry.getValue());
+                 int color=app.getDb().databaseDao().getCategoryByName(entry.getKey());
                  //int color = app.getCategories().get(entry.getKey());
                  //here we add a value, color and a label
-                 //pieData.add(new SliceValue(value,color).setLabel(entry.getKey()));
+                 pieData.add(new SliceValue(value,color).setLabel(entry.getKey()));
             }
 
             PieChartData pieChartData = new PieChartData(pieData);
