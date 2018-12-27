@@ -1,10 +1,8 @@
 package pt.uc.dei.cm.myfinances.activities;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,8 +12,6 @@ import pt.uc.dei.cm.myfinances.fragments.GraphsFragment;
 import pt.uc.dei.cm.myfinances.fragments.HomeFragment;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,16 +20,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.auth.util.ExtraConstants;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,27 +36,11 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
     @BindView(R.id.activity_signed_in) View mRootView;
     @BindView(R.id.navigation) BottomNavigationView navigation;
 
-    private FirebaseUser currentUser;
-
-    //Only used to send back to LoginActivity
-    @NonNull
-    public static Intent createIntent(@NonNull Context context, @Nullable IdpResponse response) {
-        return new Intent().setClass(context, SignedInActivity.class)
-                .putExtra(ExtraConstants.IDP_RESPONSE, response);
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signed_in);
         ButterKnife.bind(this);
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) {
-            startActivity(LoginActivity.createIntent(this));
-            finish();
-            return;
-        }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -115,13 +89,10 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
                 Toast.makeText(getApplicationContext(),"Export",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_bar_about:
-                Toast.makeText(getApplicationContext(),"About",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.action_settings:
-                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_log_off:
-                askSignOut();
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -132,36 +103,6 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
     private void Wallets(){
         Intent startWalletsActivity =  new Intent(this, WalletsActivity.class);
         startActivity(startWalletsActivity);
-    }
-
-    //alert dialog to ask if user wants to log out
-    private void askSignOut(){
-        new AlertDialog.Builder(this)
-                .setMessage("Are you sure you want to log out?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        signOut();
-                    }
-                })
-                .setNegativeButton("No", null)
-                .show();
-    }
-
-    //log the user out
-    private void signOut() {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                startActivity(LoginActivity.createIntent(SignedInActivity.this));
-                                finish();
-                            } else {
-                                Log.w(TAG, "signOut:failure", task.getException());
-                                showSnackbar(R.string.sign_out_failed);
-                            }
-                        }
-                );
     }
 
 

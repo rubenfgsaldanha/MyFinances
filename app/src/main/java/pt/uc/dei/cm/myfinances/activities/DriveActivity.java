@@ -6,6 +6,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
+import pt.uc.dei.cm.myfinances.SharedPreferencesHelper;
 import pt.uc.dei.cm.myfinances.google.drive.REST;
 import pt.uc.dei.cm.myfinances.google.drive.UT;
 import pt.uc.dei.cm.myfinances.myfinances.R;
@@ -14,15 +15,19 @@ import pt.uc.dei.cm.myfinances.util.MimeUtils;
 import android.accounts.AccountManager;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +37,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static pt.uc.dei.cm.myfinances.MyFinancesApplication.DATABASE_NAME;
@@ -48,8 +56,12 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
     @BindView(R.id.btnDriveBackup) Button btnDriveBackup;
     @BindView(R.id.btnRestoreDrive) Button btnDriveRestore;
     @BindView(R.id.connected_user) TextView connectedUser;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
 
     private MyFinancesApplication app;
+    private SharedPreferences mPreferences;
+    private String id="";
+    AsyncTask task = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +71,7 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
         ButterKnife.bind(this);
 
         app = (MyFinancesApplication) getApplicationContext();
+        mPreferences = getSharedPreferences(SharedPreferencesHelper.SHARED_PREFS, MODE_PRIVATE);
 
         if (savedInstanceState == null) {
             UT.init(this);
@@ -153,71 +166,13 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
 
     @OnClick(R.id.btnDriveBackup)
     public void driveBackup(){
-        //startActivity(new Intent(this,MainActivity.class));
-        createTree(DATABASE_NAME);
+        task = new DriveBackup(DATABASE_NAME).execute();
     }
 
 
     @OnClick(R.id.btnRestoreDrive)
     public void restoreDrive(){
-        Toast.makeText(this,"Drive Restore",Toast.LENGTH_SHORT).show();
-    }
-
-
-    private void createTree(final String titl) {
-        if (titl != null && !mBusy) {
-
-            new AsyncTask<Void, String, Void>() {
-                private String findOrCreateFolder(String prnt, String titl) {
-                    ArrayList<ContentValues> cvs = REST.search(prnt, titl, UT.MIME_FLDR);
-                    String id, txt;
-                    if (cvs.size() > 0) {
-                        txt = "found ";
-                        id = cvs.get(0).getAsString(UT.GDID);
-                    } else {
-                        id = REST.createFolder(prnt, titl);
-                        txt = "created ";
-                    }
-                    if (id != null)
-                        txt += titl;
-                    else
-                        txt = "failed " + titl;
-                    publishProgress(txt);
-                    return id;
-                }
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    mBusy = true;
-                    String rsid = findOrCreateFolder("root", UT.MYROOT);
-                    if (rsid != null) {
-                        rsid = findOrCreateFolder(rsid, "Backups");
-                        if (rsid != null) {
-                            //File fl = UT.str2File("This is a teste", "tmp");
-                            File fl = new File(getDatabasePath(DATABASE_NAME).getAbsolutePath());
-                            String id = null;
-                            if (fl != null) {
-                                String mime = MimeUtils.guessMimeTypeFromExtension("odb");
-                                id = REST.createFile(rsid, titl, mime, fl);
-                                fl.delete();
-                            }
-                            if (id != null)
-                                publishProgress("created " + titl);
-                            else
-                                publishProgress("failed " + titl);
-                        }
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void nada) {
-                    super.onPostExecute(nada);
-                    mBusy = false;
-                    showSnackbar(R.string.backup_drive_success);
-                }
-            }.execute();
-        }
+        task = new DriveRestore().execute();
     }
 
 
@@ -237,5 +192,131 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
 
     private void showSnackbar(@StringRes int errorMessageRes) {
         Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
+    }
+
+
+
+    abstract private class BaseTask<T> extends AsyncTask<T, Integer, Integer>{
+        final String titl;
+
+        BaseTask(String title){
+            super();
+            titl = title;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            /*Drawable progressDraw = getResources().getDrawable(R.drawable.custom_progress_bar);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setProgressDrawable(progressDraw);
+            progressBar.setProgress(0);*/
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            mBusy = false;
+            //progressBar.setVisibility(View.GONE);
+            showSnackbar(integer);
+        }
+
+        protected String findOrCreateFolder(String prnt, String titl) {
+            ArrayList<ContentValues> cvs = REST.search(prnt, titl, UT.MIME_FLDR);
+            String id, txt;
+            if (cvs.size() > 0) {
+                id = cvs.get(0).getAsString(UT.GDID);
+            } else {
+                id = REST.createFolder(prnt, titl);
+            }
+            return id;
+        }
+    }
+
+    private class DriveBackup extends BaseTask<Void>{
+        DriveBackup(String title){
+            super(title);
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            mBusy = true;
+            String rsid = findOrCreateFolder("root", UT.MYROOT);
+            if (rsid != null) {
+                rsid = findOrCreateFolder(rsid, "Backups");
+                if (rsid != null) {
+                    app.closeDB();
+                    File fl = new File(getDatabasePath(DATABASE_NAME).getAbsolutePath());
+                    id = null;
+                    String id_ = mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID, null);
+                    System.out.println("------------------------------------------------------------");
+                    System.out.println(id_);
+                    if(id_ !=null){
+                        REST.trash(id_);
+                    }
+                    if (fl != null) {
+                        String mime = MimeUtils.guessMimeTypeFromExtension("odb");
+                        id = REST.createFile(rsid, titl, mime, fl);
+                        System.out.println(id);
+                        SharedPreferences.Editor editor = mPreferences.edit();
+                        editor.putString(SharedPreferencesHelper.DRIVE_FILE_ID, id);
+                        editor.apply();
+                        System.out.println(mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID,null));
+                        System.out.println("------------------------------------------------------------");
+                        app.openDB();
+                        return R.string.backup_drive_success;
+                    }
+                }
+                app.openDB();
+            }
+
+            return R.string.backup_drive_fail;
+        }
+
+        /*@Override
+        protected void onProgressUpdate(Integer... values) {
+            progressBar.setProgress(values[0]);
+        }*/
+    }
+
+    private class DriveRestore extends BaseTask<Void>{
+        DriveRestore(){
+            super(null);
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            String id = mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID, null);
+            int res=0;
+            app.closeDB();
+            if(id!=null){
+                REST.read(id);
+                String dbPath = getDatabasePath(DATABASE_NAME).getAbsolutePath();
+                //gets Internal Storage path
+                String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+                String drivePath = internalPath + "/MyFinances/DriveBackup";
+                String driveDBPath = drivePath + "/MyFinances.db";
+
+                File driveBD = new File(driveDBPath);
+                File currentDB = new File(dbPath);
+                currentDB.delete();
+
+                try {
+                    FileUtils.copyFile(driveBD, currentDB);
+                    res = R.string.restore_drive_success;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                res = R.string.restore_drive_fail;
+            }
+            app.openDB();
+            return res;
+        }
+
+        /*@Override
+        protected void onProgressUpdate(Integer... values) {
+            progressBar.setProgress(values[0]);
+        }*/
     }
 }

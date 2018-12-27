@@ -59,6 +59,11 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnConnectGoogleDrive)
     public void connectToGoogleDrive(){
+        BackupOrRestoreActivityPermissionsDispatcher.startDriveActivityWithPermissionCheck(this);
+    }
+
+    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.GET_ACCOUNTS})
+    public void startDriveActivity(){
         startActivity(new Intent(this, DriveActivity.class));
     }
 
@@ -73,14 +78,12 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
                     BackupOrRestoreActivityPermissionsDispatcher.doBackUpWithPermissionCheck(this);
                     dialog.dismiss();
-                    showSnackbar(R.string.backup_success);
                 })
                 .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
                 .show();
 
         app.openDB();
     }
-
 
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void doBackUp(){
@@ -90,7 +93,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
         //gets Internal Storage path
         String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-        String backupPath = internalPath + "/MyFinancesBackup";
+        String backupPath = internalPath + "/MyFinances/LocalBackup";
         String backupDBPath = backupPath + "/MyFinances.db";
 
         File backup = new File(backupPath);
@@ -103,6 +106,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
         try {
             FileUtils.copyFile(currentDB, backupBD);
+            showSnackbar(R.string.backup_success);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,7 +124,6 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
                     if(verifyFile()){
                         BackupOrRestoreActivityPermissionsDispatcher.doRestoreWithPermissionCheck(this);
                         dialog.dismiss();
-                        showSnackbar(R.string.restore_success);
                     }
                     else{
                         showSnackbar(R.string.file_not_found);
@@ -136,7 +139,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
     public boolean verifyFile(){
         //gets the file to restore path
         String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String fileToRestore = internalPath + "/MyFinancesBackup/MyFinances.db";
+        String fileToRestore = internalPath + "/MyFinances/LocalBackup/MyFinances.db";
         File file = new File(fileToRestore);
 
         return file.exists() ? true : false;
@@ -150,7 +153,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
         //gets the file to restore path
         String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String fileToRestore = internalPath + "/MyFinancesBackup/MyFinances.db";
+        String fileToRestore = internalPath + "/MyFinances/LocalBackup/MyFinances.db";
         File fileRestore = new File(fileToRestore);
 
         //delete current DB file
@@ -160,6 +163,7 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
         //copy the backup file to the DB directory
         try {
             FileUtils.copyFile(fileRestore, dbFile);
+            showSnackbar(R.string.restore_success);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,9 +2,11 @@ package pt.uc.dei.cm.myfinances.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
+import pt.uc.dei.cm.myfinances.SharedPreferencesHelper;
 import pt.uc.dei.cm.myfinances.activities.AddTransactionActivity;
 import pt.uc.dei.cm.myfinances.activities.EditTransactionActivity;
 import pt.uc.dei.cm.myfinances.adapters.TransactionAdapter;
@@ -51,15 +54,17 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     @BindView(R.id.previous_month) ImageButton previousMonth;
     @BindView(R.id.next_month) ImageButton nextMonth;
     @BindView(R.id.current_month) TextView currentMonth;
+    @BindView(R.id.noRecords) TextView noDataFound;
+
     private RecyclerView.LayoutManager mLayoutManager;
     private TransactionAdapter adapter;
     private int currentMonthNum;
     private int currentYearNum;
 
-    MyFinancesApplication app;
-    DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
+    private MyFinancesApplication app;
+    private DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
 
-    List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -174,6 +179,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
         currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+        verifyData();
     }
 
     @OnClick(R.id.next_month)
@@ -189,6 +195,17 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
         currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+        verifyData();
+    }
+
+    //Verifies if exists transaction on the selected month
+    private void verifyData(){
+        if(transactions.size() == 0){
+            noDataFound.setText(R.string.no_data_found);
+        }
+        else{
+            noDataFound.setText("");
+        }
     }
 
     //starts activity to add a transaction
@@ -201,13 +218,27 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "OnResume");
 
         transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
         adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
 
+        verifyData();
+
         String value = df2.format(app.getDb().databaseDao().getCurrentWallet().getBalance());
-        balance.setText(getString(R.string.balance)+" "+value);
+
+        SharedPreferences preferences = getActivity().getSharedPreferences(SharedPreferencesHelper.SHARED_PREFS, Context.MODE_PRIVATE);
+        String currency = preferences.getString(SharedPreferencesHelper.CURRENCY, null);
+
+        if(currency != null){
+            balance.setText(getString(R.string.balance)+ " " +value+ currency);
+        }
+        else{
+            balance.setText(getString(R.string.balance)+" "+value);
+        }
+
+        Log.d(TAG, "Still onResume");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

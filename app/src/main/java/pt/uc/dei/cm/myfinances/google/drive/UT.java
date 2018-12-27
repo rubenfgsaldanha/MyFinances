@@ -10,6 +10,9 @@ package pt.uc.dei.cm.myfinances.google.drive;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Adapted by Rúben Saldanha on 20-12-2018
+ *
  */
 
 import android.content.ContentValues;
@@ -18,15 +21,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 final public class UT {
     public UT() {
@@ -79,58 +74,6 @@ final public class UT {
     private static File cchFile(String flNm) {
         File cche = UT.acx.getExternalCacheDir();
         return (cche == null || flNm == null) ? null : new File(cche.getPath() + File.separator + flNm);
-    }
-
-    public static File str2File(String str, String name) {
-        if (str == null) return null;
-        byte[] buf = str.getBytes();
-        File fl = cchFile(name);
-        if (fl == null) return null;
-        BufferedOutputStream bs = null;
-        try {
-            bs = new BufferedOutputStream(new FileOutputStream(fl));
-            bs.write(buf);
-        } catch (Exception e) {
-            le(e);
-        } finally {
-            if (bs != null) try {
-                bs.close();
-            } catch (Exception e) {
-                le(e);
-            }
-        }
-        return fl;
-    }
-
-    static byte[] is2Bytes(InputStream is) {
-        byte[] buf = null;
-        BufferedInputStream bufIS = null;
-        if (is != null) try {
-            ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-            bufIS = new BufferedInputStream(is);
-            buf = new byte[4096];
-            int cnt;
-            while ((cnt = bufIS.read(buf)) >= 0) {
-                byteBuffer.write(buf, 0, cnt);
-            }
-            buf = byteBuffer.size() > 0 ? byteBuffer.toByteArray() : null;
-        } catch (Exception ignore) {
-        } finally {
-            try {
-                if (bufIS != null) bufIS.close();
-            } catch (Exception ignore) {
-            }
-        }
-        return buf;
-    }
-
-    public static String time2Titl(Long milis) {       // time -> yymmdd-hhmmss
-        Date dt = (milis == null) ? new Date() : (milis >= 0) ? new Date(milis) : null;
-        return (dt == null) ? null : new SimpleDateFormat(TITL_FMT, Locale.US).format(dt);
-    }
-
-    public static String titl2Month(String titl) {
-        return titl == null ? null : ("20" + titl.substring(0, 2) + "-" + titl.substring(2, 4));
     }
 
     static void le(Throwable ex) {

@@ -10,11 +10,15 @@ package pt.uc.dei.cm.myfinances.google.drive;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Adapted by Rúben Saldanha on 18-12-2018
+ *
  **/
 
 import android.app.Activity;
 import android.content.ContentValues;
 import android.os.AsyncTask;
+import android.os.Environment;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -30,7 +34,10 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -94,6 +101,7 @@ final public class REST {
                     } catch (Exception e) {  // "the name must not be empty" indicates
                         UT.le(e);           // UNREGISTERED / EMPTY account in 'setSelectedAccountName()' above
                     }
+
                     return null;
                 }
 
@@ -114,43 +122,6 @@ final public class REST {
      * disconnect    disconnects GoogleApiClient
      */
     public static void disconnect() {
-    }
-
-    /************************************************************************************************
-     * find file/folder in GOODrive
-     * @param prnId   parent ID (optional), null searches full drive, "root" searches Drive root
-     * @param titl    file/folder name (optional)
-     * @param mime    file/folder mime type (optional)
-     * @return arraylist of found objects
-     */
-    public static ArrayList<ContentValues> search(String prnId, String titl, String mime) {
-        ArrayList<ContentValues> gfs = new ArrayList<>();
-        if (mGOOSvc != null && mConnected) try {
-            // add query conditions, build query
-            String qryClause = "'me' in owners and ";
-            if (prnId != null) qryClause += "'" + prnId + "' in parents and ";
-            if (titl != null) qryClause += "title = '" + titl + "' and ";
-            if (mime != null) qryClause += "mimeType = '" + mime + "' and ";
-            qryClause = qryClause.substring(0, qryClause.length() - " and ".length());
-            Drive.Files.List qry = mGOOSvc.files().list().setQ(qryClause)
-                    .setFields("items(id,mimeType,labels/trashed,title),nextPageToken");
-            String npTok = null;
-            if (qry != null) do {
-                FileList gLst = qry.execute();
-                if (gLst != null) {
-                    for (File gFl : gLst.getItems()) {
-                        if (gFl.getLabels().getTrashed()) continue;
-                        gfs.add(UT.newCVs(gFl.getTitle(), gFl.getId(), gFl.getMimeType()));
-                    }                                                                 //else UT.lg("failed " + gFl.getTitle());
-                    npTok = gLst.getNextPageToken();
-                    qry.setPageToken(npTok);
-                }
-            }
-            while (npTok != null && npTok.length() > 0);                     //UT.lg("found " + vlss.size());
-        } catch (Exception e) {
-            UT.le(e);
-        }
-        return gfs;
     }
 
     /************************************************************************************************
@@ -208,16 +179,74 @@ final public class REST {
     }
 
     /************************************************************************************************
+     * find file/folder in GOODrive
+     * @param prnId   parent ID (optional), null searches full drive, "root" searches Drive root
+     * @param titl    file/folder name (optional)
+     * @param mime    file/folder mime type (optional)
+     * @return arraylist of found objects
+     */
+    public static ArrayList<ContentValues> search(String prnId, String titl, String mime) {
+        ArrayList<ContentValues> gfs = new ArrayList<>();
+        if (mGOOSvc != null && mConnected) try {
+            // add query conditions, build query
+            String qryClause = "'me' in owners and ";
+            if (prnId != null) qryClause += "'" + prnId + "' in parents and ";
+            if (titl != null) qryClause += "title = '" + titl + "' and ";
+            if (mime != null) qryClause += "mimeType = '" + mime + "' and ";
+            qryClause = qryClause.substring(0, qryClause.length() - " and ".length());
+            Drive.Files.List qry = mGOOSvc.files().list().setQ(qryClause)
+                    .setFields("items(id,mimeType,labels/trashed,title),nextPageToken");
+            String npTok = null;
+            if (qry != null) do {
+                FileList gLst = qry.execute();
+                if (gLst != null) {
+                    for (File gFl : gLst.getItems()) {
+                        if (gFl.getLabels().getTrashed()) continue;
+                        gfs.add(UT.newCVs(gFl.getTitle(), gFl.getId(), gFl.getMimeType()));
+                    }                                                                 //else UT.lg("failed " + gFl.getTitle());
+                    npTok = gLst.getNextPageToken();
+                    qry.setPageToken(npTok);
+                }
+            }
+            while (npTok != null && npTok.length() > 0);                     //UT.lg("found " + vlss.size());
+        } catch (Exception e) {
+            UT.le(e);
+        }
+        return gfs;
+    }
+
+    /************************************************************************************************
      * get file contents
      * @param resId  file driveId
      * @return file's content  / null on fail
      */
-    static byte[] read(String resId) {
+    public static byte[] read(String resId) {
         if (mGOOSvc != null && mConnected && resId != null) try {
             File gFl = mGOOSvc.files().get(resId).setFields("downloadUrl").execute();
+
             if (gFl != null) {
                 String strUrl = gFl.getDownloadUrl();
-                return UT.is2Bytes(mGOOSvc.getRequestFactory().buildGetRequest(new GenericUrl(strUrl)).execute().getContent());
+
+                //gets Internal Storage path
+                String internalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+                String drivePath = internalPath + "/MyFinances/DriveBackup";
+                String driveDBPath = drivePath + "/MyFinances.db";
+
+                java.io.File drive = new java.io.File(drivePath);
+
+                if(!drive.exists()){
+                    drive.mkdir();
+                }
+                java.io.File driveBD = new java.io.File(driveDBPath);
+                driveBD.delete();
+                driveBD = new java.io.File(driveDBPath);
+
+                OutputStream outputStream = new FileOutputStream(driveBD);
+                mGOOSvc.getRequestFactory().buildGetRequest(new GenericUrl(strUrl)).execute().download(outputStream);
+                outputStream.close();
+
+                return null;
             }
         } catch (Exception e) {
             UT.le(e);
@@ -226,56 +255,18 @@ final public class REST {
     }
 
     /************************************************************************************************
-     * update file in GOODrive,  see https://youtu.be/r2dr8_Mxr2M (WRONG?)
-     * see https://youtu.be/r2dr8_Mxr2M   .... WRONG !!!
-     * @param resId  file  id
-     * @param titl  new file name (optional)
-     * @param mime  new mime type (optional, "application/vnd.google-apps.folder" indicates folder)
-     * @param file  new file content (optional)
-     * @return file id  / null on fail
-     */
-    static String update(String resId, String titl, String mime, String desc, java.io.File file) {
-        File gFl = null;
-        if (mGOOSvc != null && mConnected && resId != null) try {
-            File meta = new File();
-            if (titl != null) meta.setTitle(titl);
-            if (mime != null) meta.setMimeType(mime);
-            if (desc != null) meta.setDescription(desc);
-
-            if (file == null)
-                gFl = mGOOSvc.files().patch(resId, meta).execute();
-            else
-                gFl = mGOOSvc.files().update(resId, meta, new FileContent(mime, file)).execute();
-
-        } catch (Exception e) {
-            UT.le(e);
-        }
-        return gFl == null ? null : gFl.getId();
-    }
-
-    /************************************************************************************************
      * trash file in GOODrive
      * @param resId  file  id
      * @return success status
      */
-    static boolean trash(String resId) {
-        if (mGOOSvc != null && mConnected && resId != null) try {
-            return null != mGOOSvc.files().trash(resId).execute();
-        } catch (Exception e) {
-            UT.le(e);
+    public static void trash(String resId) {
+        if (mGOOSvc != null && mConnected && resId != null){
+            try {
+                mGOOSvc.files().delete(resId).execute();
+            } catch (Exception e) {
+                UT.le(e);
+            }
         }
-        return false;
-    }
-
-    /**
-     * FILE / FOLDER type object inquiry
-     *
-     * @param cv oontent values
-     * @return TRUE if FOLDER, FALSE otherwise
-     */
-    static boolean isFolder(ContentValues cv) {
-        String mime = cv.getAsString(UT.MIME);
-        return mime != null && UT.MIME_FLDR.equalsIgnoreCase(mime);
     }
 
 }
