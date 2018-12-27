@@ -22,4 +22,5 @@
         android:text="@string/about_text"
         android:textSize="20sp"/>
 
+    
 </LinearLayout>
