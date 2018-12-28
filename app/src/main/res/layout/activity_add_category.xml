@@ -25,7 +25,6 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="openColor"
         android:layout_below="@id/txtV"
         android:id="@+id/colorButton"
         android:text="color"/>
@@ -46,9 +45,9 @@
 
 
     <Button
+        android:id="@+id/btnSaveCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/colorButton"
-        android:text="@string/save"
-        android:onClick="saveCategoty"/>
+        android:text="@string/save"/>
 </RelativeLayout>

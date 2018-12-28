@@ -7,11 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
-import pt.uc.dei.cm.myfinances.fragments.CategoriesFragment;
 import pt.uc.dei.cm.myfinances.fragments.GraphsFragment;
 import pt.uc.dei.cm.myfinances.fragments.HomeFragment;
 import pt.uc.dei.cm.myfinances.fragments.LoanFragment;
-import pt.uc.dei.cm.myfinances.general.Categories;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.content.Intent;
@@ -31,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignedInActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener,
-        LoanFragment.OnFragmentInteractionListener, GraphsFragment.OnFragmentInteractionListener, CategoriesFragment.OnFragmentInteractionListener{
+        LoanFragment.OnFragmentInteractionListener, GraphsFragment.OnFragmentInteractionListener{
 
     private static final String TAG = "SignedInActivity";
 
@@ -87,9 +85,6 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
             case R.id.wallets:
                 Wallets();
                 return true;
-            case R.id.action_bar_export:
-                Toast.makeText(getApplicationContext(),"Export",Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.action_bar_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
@@ -97,7 +92,7 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.categories:
-                categories();
+                startActivity(new Intent(this, CategoriesActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -146,14 +141,6 @@ public class SignedInActivity extends AppCompatActivity implements HomeFragment.
         ft.commit();
     }
 
-    //fragment categories
-    private void categories(){
-        CategoriesFragment categoriesFragment = new CategoriesFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.activity_signed_in,categoriesFragment);
-        ft.addToBackStack("ToCategories");
-        ft.commit();
-    }
     // fragment loans
     private  void loans(){
         LoanFragment loanFragment = new LoanFragment();

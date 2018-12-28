@@ -16,26 +16,20 @@
         android:title="@string/add_wallet" />
 
     <item
-        android:id="@+id/action_bar_export"
-        android:icon="@drawable/ic_action_export"
+        android:id="@+id/categories"
+        android:icon="@drawable/ic_action_settings"
         app:showAsAction="never"
-        android:title="@string/export"/>
-
-    <item
-        android:id="@+id/action_bar_about"
-        android:icon="@drawable/ic_action_about"
-        app:showAsAction="never"
-        android:title="@string/about"/>
+        android:title="@string/categories" />
 
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_action_settings"
         app:showAsAction="never"
         android:title="@string/settings" />
-  
+
     <item
-        android:id="@+id/categories"
-        android:icon="@drawable/ic_action_settings"
+        android:id="@+id/action_bar_about"
+        android:icon="@drawable/ic_action_about"
         app:showAsAction="never"
-        android:title="@string/categories" />
+        android:title="@string/about"/>
 </menu>

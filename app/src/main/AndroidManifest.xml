@@ -43,17 +43,27 @@
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.DriveActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.BackupOrRestoreActivity" />
-      
-        <activity android:name="pt.uc.dei.cm.myfinances.activities.AddLoanActivity" />
-        <activity android:name="pt.uc.dei.cm.myfinances.activities.EditLoanActivity" />
-        <activity android:name="pt.uc.dei.cm.myfinances.activities.AddCategoryActivity" />
-        <activity android:name="pt.uc.dei.cm.myfinances.activities.EditCategoryactivity"></activity>
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.AddLoanActivity"
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity"/>
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.EditLoanActivity"
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity"/>
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.AddCategoryActivity"
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.CategoriesActivity"/>
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.EditCategoryactivity"
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.CategoriesActivity"/>
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.SettingsActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.AboutActivity"
-            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity"/>
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity" />
+        <activity
+            android:name="pt.uc.dei.cm.myfinances.activities.CategoriesActivity"
+            android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity"></activity>
     </application>
 
 </manifest>

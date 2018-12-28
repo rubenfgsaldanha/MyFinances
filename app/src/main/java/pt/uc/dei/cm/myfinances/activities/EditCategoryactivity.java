@@ -3,6 +3,7 @@ package pt.uc.dei.cm.myfinances.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import petrov.kristiyan.colorpicker.ColorPicker;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
 import pt.uc.dei.cm.myfinances.general.Categories;
@@ -16,10 +17,10 @@ import android.widget.EditText;
 
 public class EditCategoryactivity extends AppCompatActivity {
 
-    @BindView(R.id.colorButton)
-    Button colorButton;
-    @BindView(R.id.add_label)
-    EditText label;
+    @BindView(R.id.colorButton) Button colorButton;
+    @BindView(R.id.add_label) EditText label;
+    @BindView(R.id.btnSaveEditCategory) Button btnSaveEditCategory;
+    @BindView(R.id.btnDeleteCategory) Button btnDeleteCategory;
 
     private MyFinancesApplication app;
     Categories c;
@@ -36,16 +37,17 @@ public class EditCategoryactivity extends AppCompatActivity {
 
         //gets loan id
         Intent intent = getIntent();
-        int id = Integer.parseInt(intent.getStringExtra("id"));
+        String labelCat = intent.getStringExtra("label");
 
         //sets the date to the transaction date
-        c = app.getDb().databaseDao().getCategoryByID(id);
+        c = app.getDb().databaseDao().getCategoryByName(labelCat);
         colorButton.setBackgroundColor(c.getColor());
         label.setText(c.getLabel());
         newColor=c.getColor();
     }
 
 
+    @OnClick(R.id.colorButton)
     public void editColor(View view) {
         ColorPicker colorPicker = new ColorPicker(this);
         colorPicker.show();
@@ -64,10 +66,18 @@ public class EditCategoryactivity extends AppCompatActivity {
     }
 
 
-    public void saveCategoty(View view) {
+    @OnClick(R.id.btnSaveEditCategory)
+    public void saveCategory(View view) {
         String myLabel=label.getText().toString();
         app.getDb().databaseDao().updateCat(myLabel,newColor, c.getCatId());
         setResult(RESULT_OK);
+        finish();
+    }
+
+    @OnClick(R.id.btnDeleteCategory)
+    public void deleteCategory(){
+        String myLabel=label.getText().toString();
+        app.getDb().databaseDao().deleteCategory(myLabel);
         finish();
     }
 }

@@ -24,10 +24,9 @@ import com.skydoves.colorpickerpreference.ColorPickerView;*/
 
 public class AddCategoryActivity extends AppCompatActivity {
 
-    @BindView(R.id.colorButton)
-    Button colorButton;
-    @BindView(R.id.add_label)
-    EditText label;
+    @BindView(R.id.colorButton) Button colorButton;
+    @BindView(R.id.add_label) EditText label;
+    @BindView(R.id.btnSaveCategory) Button btnSaveCategory;
 
     private MyFinancesApplication app;
 
@@ -46,9 +45,8 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
 
-
-    public void saveCategoty(View view) {
-
+    @OnClick(R.id.btnSaveCategory)
+    public void saveCategory(View view) {
         String myLabel=label.getText().toString();
         Categories category= new Categories(myLabel,myColor);
         app.getDb().databaseDao().insertinit(category);
@@ -57,13 +55,13 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
 
 
+    @OnClick(R.id.colorButton)
     public void openColor(View view) {
         ColorPicker colorPicker = new ColorPicker(this);
         colorPicker.show();
         colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
             @Override
             public void onChooseColor(int position,int color) {
-
                 myColor=color;
             }
 

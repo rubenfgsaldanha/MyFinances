@@ -32,14 +32,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.label_item)
-        TextView label;
-        @BindView(R.id.diplay_color)
-        Button dispC;
-        @BindView(R.id.category_id)
-        TextView catId;
-        @BindView(R.id.cat_item_image)
-        ImageView catImag;
+        @BindView(R.id.category_item_text) TextView label;
+        @BindView(R.id.category_item_image) ImageView catImag;
 
 
         public ViewHolder(View itemView) {
@@ -48,7 +42,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         }
 
-        @OnClick(R.id.category_id)
+        @OnClick(R.id.category_item_text)
         public void onClick(View v) {
             onItemClickListener.onItemClick(null, v, getAdapterPosition(), v.getId());
 
@@ -77,14 +71,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //set the data to be displayed
-
-
         holder.label.setText(categories.get(position).getLabel());
-        holder.dispC.setBackgroundColor(categories.get(position).getColor());
-        holder.catId.setText(String.valueOf(categories.get(position).getCatId()));
-
-
-
+        holder.catImag.setColorFilter(categories.get(position).getColor());
     }
 
 
