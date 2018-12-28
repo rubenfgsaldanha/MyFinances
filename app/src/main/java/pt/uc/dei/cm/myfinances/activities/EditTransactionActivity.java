@@ -41,7 +41,6 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
     @BindView(R.id.income) RadioButton radioIncome;
 
     private String category;
-    private ArrayAdapter<CharSequence> adapter;
     private boolean expense;
     private int[] transactionDate;
     private ArrayAdapter<String> dataAdapter;
@@ -55,17 +54,10 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
         setContentView(R.layout.activity_edit_transaction);
         ButterKnife.bind(this);
 
-        /*//create a spinner with the categories defined in the categories.xml file
-        adapter = ArrayAdapter.createFromResource(this,R.array.categories, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categories.setAdapter(adapter);*/
-
-
         app = (MyFinancesApplication) getApplicationContext();
 
         // Spinner Drop down elements
         List<String> labels =  app.getDb().databaseDao().getAllLabels();
-        //Log.d("smthg", "onCreate: ----------------------------------------------------"+labels);
         // Creating adapter for spinner
         dataAdapter = new ArrayAdapter (this, android.R.layout.simple_spinner_item, labels);
         // Drop down layout style - list view with radio button
@@ -73,12 +65,20 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
 
         // attaching data adapter to spinner
         categories.setAdapter(dataAdapter);
+
         //gets transaction id
         Intent intent = getIntent();
         int id = Integer.parseInt(intent.getStringExtra("id"));
 
-        //sets the date to the transaction date
+        //sets the selected category
         t = app.getDb().databaseDao().getTransactionByID(id);
+        category = t.getCategory();
+
+        for(int i=0; i<labels.size(); i++){
+            if(labels.get(i).equals(category)){
+                categories.setSelection(i);
+            }
+        }
 
         //sets the transaction amount and comment
         if(t.getAmount() < 0){
@@ -176,7 +176,7 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
     //when the user clicks a category from the spinner we save it
     @OnItemSelected(R.id.spinner_categories)
     public void selectedCategory(AdapterView<?> parent, View view, final int position, long id){
-        category = adapter.getItem(position).toString();
+        category = dataAdapter.getItem(position).toString();
     }
 
     public void onRadioButtonClicked(View v){

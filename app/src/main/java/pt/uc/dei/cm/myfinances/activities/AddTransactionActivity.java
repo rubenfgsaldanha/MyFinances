@@ -55,24 +55,13 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
         setContentView(R.layout.activity_add_transaction);
         ButterKnife.bind(this);
 
-
-
-        /*//create a spinner with the categories defined in the categories.xml file
-        adapter = ArrayAdapter.createFromResource(this,R.array.categories, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categories.setAdapter(adapter);*/
-
-        //create a spinner with the categories in the db
-        // database handler
-
-
-
         app = (MyFinancesApplication) getApplicationContext();
         // Spinner Drop down elements
         List<String> labels =  app.getDb().databaseDao().getAllLabels();
-        //Log.d("smthg", "onCreate: ----------------------------------------------------"+labels);
+
         // Creating adapter for spinner
         dataAdapter = new ArrayAdapter (this, android.R.layout.simple_spinner_item, labels);
+
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 

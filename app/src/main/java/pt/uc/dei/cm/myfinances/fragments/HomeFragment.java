@@ -18,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import pt.uc.dei.cm.myfinances.SharedPreferencesHelper;
 import pt.uc.dei.cm.myfinances.activities.AddTransactionActivity;
 import pt.uc.dei.cm.myfinances.activities.EditTransactionActivity;
 import pt.uc.dei.cm.myfinances.adapters.TransactionAdapter;
+import pt.uc.dei.cm.myfinances.general.Categories;
 import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.general.Wallet;
 import pt.uc.dei.cm.myfinances.myfinances.R;
@@ -41,20 +43,28 @@ import pt.uc.dei.cm.myfinances.myfinances.R;
 import static android.app.Activity.RESULT_OK;
 
 
-public class HomeFragment extends androidx.fragment.app.Fragment implements AdapterView.OnItemClickListener{
+public class HomeFragment extends androidx.fragment.app.Fragment implements AdapterView.OnItemClickListener {
     private static final String TAG = "HomeFragment";
     private static final int START_ACT_ADD_CODE = 1000;
     private static final int START_ACT_EDIT_CODE = 1001;
     private OnFragmentInteractionListener mListener;
 
-    @BindView(R.id.fragmentHome) View mRootView;
-    @BindView(R.id.recycle_view_transactions) RecyclerView transactionsList;
-    @BindView(R.id.fab_add_transaction) FloatingActionButton fabAddTransaction;
-    @BindView(R.id.balance) TextView balance;
-    @BindView(R.id.previous_month) ImageButton previousMonth;
-    @BindView(R.id.next_month) ImageButton nextMonth;
-    @BindView(R.id.current_month) TextView currentMonth;
-    @BindView(R.id.noRecords) TextView noDataFound;
+    @BindView(R.id.fragmentHome)
+    View mRootView;
+    @BindView(R.id.recycle_view_transactions)
+    RecyclerView transactionsList;
+    @BindView(R.id.fab_add_transaction)
+    FloatingActionButton fabAddTransaction;
+    @BindView(R.id.balance)
+    TextView balance;
+    @BindView(R.id.previous_month)
+    ImageButton previousMonth;
+    @BindView(R.id.next_month)
+    ImageButton nextMonth;
+    @BindView(R.id.current_month)
+    TextView currentMonth;
+    @BindView(R.id.noRecords)
+    TextView noDataFound;
 
     private RecyclerView.LayoutManager mLayoutManager;
     private TransactionAdapter adapter;
@@ -85,21 +95,12 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
 
         app = (MyFinancesApplication) getActivity().getApplicationContext();
 
-
         app.setCurrentWallet(app.getDb().databaseDao().getCurrentWallet());
 
-
-
-        /*
-        * For now we create a default Wallet and load the categories to the MyFinancesApplication class
-        * This need to be changed when we have a DB
-        */
-
-        if(app.getCurrentWallet() == null){
+        if (app.getCurrentWallet() == null) {
             defaultWallet();
+            loadCategories();
         }
-
-        //loadCategories();
 
         return rootView;
     }
@@ -124,9 +125,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
 
     //TODO Comunicar com BD para saber as wallets existentes
     //for now create a default wallets
-    private void defaultWallet(){
-        Wallet wallet1 =  new Wallet("Wallet1",0);
-
+    private void defaultWallet() {
+        Wallet wallet1 = new Wallet("Wallet1", 0);
 
 
         app.getDb().databaseDao().insertWallet(wallet1);
@@ -137,81 +137,71 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
 
     //loads the categories to an hashmap<String,Integer>.
     //In the hashmap we save the name of the category and a color
-   /* private void loadCategories(){
-        HashMap<String, Integer> map = new HashMap<>();
-
+    private void loadCategories() {
         //creates an array from the categories.xml file
         String[] categories = getResources().getStringArray(R.array.categories);
 
-        map.put(categories[0],Color.BLACK);
-        map.put(categories[1],Color.BLUE);
-        map.put(categories[2],Color.CYAN);
-        map.put(categories[3],Color.DKGRAY);
-        map.put(categories[4],Color.GRAY);
-        map.put(categories[5],Color.GREEN);
-        map.put(categories[6],Color.LTGRAY);
-        map.put(categories[7],Color.MAGENTA);
-        map.put(categories[8],Color.RED);
-        map.put(categories[9],Color.YELLOW);
-        map.put(categories[10],getResources().getColor(R.color.purple));   //purple
-        map.put(categories[11],getResources().getColor(R.color.orange));   //orange
-        map.put(categories[12],getResources().getColor(R.color.brown));   //brown
-        map.put(categories[13],getResources().getColor(R.color.pink));   //pink
+        app.getDb().databaseDao().insertinit(new Categories(categories[0], Color.RED));
+        app.getDb().databaseDao().insertinit(new Categories(categories[1], Color.BLUE));
+        app.getDb().databaseDao().insertinit(new Categories(categories[2], Color.CYAN));
+        app.getDb().databaseDao().insertinit(new Categories(categories[3], Color.DKGRAY));
+        app.getDb().databaseDao().insertinit(new Categories(categories[4], Color.GRAY));
+        app.getDb().databaseDao().insertinit(new Categories(categories[5], Color.GREEN));
+        app.getDb().databaseDao().insertinit(new Categories(categories[6], Color.LTGRAY));
+        app.getDb().databaseDao().insertinit(new Categories(categories[7], Color.MAGENTA));
+        app.getDb().databaseDao().insertinit(new Categories(categories[8], Color.YELLOW));
+        app.getDb().databaseDao().insertinit(new Categories(categories[9], Color.BLACK));
+        app.getDb().databaseDao().insertinit(new Categories(categories[10], getResources().getColor(R.color.purple)));   //purple
+    }
 
-        app.setCategories(map);
-    }*/
-
-    private String getCurrentMonth(){
+    private String getCurrentMonth() {
         Calendar c = Calendar.getInstance();
-        return ""+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR);
+        return "" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
     }
 
     @OnClick(R.id.previous_month)
-    public void goToPreviousMonth(){
-        if(currentMonthNum > 0){
+    public void goToPreviousMonth() {
+        if (currentMonthNum > 0) {
             currentMonthNum--;
-        }
-        else{
+        } else {
             currentMonthNum = 11;
             currentYearNum--;
         }
-        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
-        adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum + 1, currentYearNum, app.getCurrentWallet().getName());
+        adapter = new TransactionAdapter(getContext(), this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
-        currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+        currentMonth.setText("" + (currentMonthNum + 1) + "/" + currentYearNum);
         verifyData();
     }
 
     @OnClick(R.id.next_month)
-    public void goToNextMonth(){
-        if(currentMonthNum < 11){
+    public void goToNextMonth() {
+        if (currentMonthNum < 11) {
             currentMonthNum++;
-        }
-        else{
+        } else {
             currentMonthNum = 0;
             currentYearNum++;
         }
-        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
-        adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum + 1, currentYearNum, app.getCurrentWallet().getName());
+        adapter = new TransactionAdapter(getContext(), this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
-        currentMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+        currentMonth.setText("" + (currentMonthNum + 1) + "/" + currentYearNum);
         verifyData();
     }
 
     //Verifies if exists transaction on the selected month
-    private void verifyData(){
-        if(transactions.size() == 0){
+    private void verifyData() {
+        if (transactions.size() == 0) {
             noDataFound.setText(R.string.no_data_found);
-        }
-        else{
+        } else {
             noDataFound.setText("");
         }
     }
 
     //starts activity to add a transaction
     @OnClick(R.id.fab_add_transaction)
-    public void addItem(){
-        Intent startAddTransaction =  new Intent(getActivity(), AddTransactionActivity.class);
+    public void addItem() {
+        Intent startAddTransaction = new Intent(getActivity(), AddTransactionActivity.class);
         startActivityForResult(startAddTransaction, START_ACT_ADD_CODE);
     }
 
@@ -220,8 +210,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         super.onResume();
         Log.d(TAG, "OnResume");
 
-        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
-        adapter = new TransactionAdapter(getContext(),this::onItemClick, transactions);
+        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum + 1, currentYearNum, app.getCurrentWallet().getName());
+        adapter = new TransactionAdapter(getContext(), this::onItemClick, transactions);
         transactionsList.setAdapter(adapter);
 
         verifyData();
@@ -231,11 +221,10 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         SharedPreferences preferences = getActivity().getSharedPreferences(SharedPreferencesHelper.SHARED_PREFS, Context.MODE_PRIVATE);
         String currency = preferences.getString(SharedPreferencesHelper.CURRENCY, null);
 
-        if(currency != null){
-            balance.setText(getString(R.string.balance)+ " " +value+ currency);
-        }
-        else{
-            balance.setText(getString(R.string.balance)+" "+value);
+        if (currency != null) {
+            balance.setText(getString(R.string.balance) + " " + value + currency);
+        } else {
+            balance.setText(getString(R.string.balance) + " " + value);
         }
 
         Log.d(TAG, "Still onResume");
@@ -270,15 +259,15 @@ public class HomeFragment extends androidx.fragment.app.Fragment implements Adap
         TextView t = view.findViewById(R.id.transaction_id);
 
         Intent editTransaction = new Intent(getActivity(), EditTransactionActivity.class);
-        editTransaction.putExtra("id",t.getText().toString());
-        startActivityForResult(editTransaction,START_ACT_EDIT_CODE);
+        editTransaction.putExtra("id", t.getText().toString());
+        startActivityForResult(editTransaction, START_ACT_EDIT_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){
-            switch (requestCode){
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
                 case START_ACT_ADD_CODE:
                     Snackbar.make(mRootView, R.string.add_trans_suc, Snackbar.LENGTH_SHORT).show();
                     break;
