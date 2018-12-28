@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="105dp">
 
-
-    <!--TextView
-        android:id="@+id/loanDate"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:paddingLeft="@dimen/dimen8"
-        android:textSize="18sp"
-        android:background="@color/colorPrimaryLightest"
-        android:textColor="@color/colorPrimaryDark"
-        /-->
     <TextView
         android:id="@+id/limit"
         android:layout_width="match_parent"
@@ -30,33 +20,28 @@
         android:layout_marginTop="@dimen/dimen8"
         android:paddingLeft="@dimen/dimen8">
 
-        <ImageView
-            android:id="@+id/loan_item_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_log_off"/>
 
         <TextView
-            android:id="@+id/person"
+            android:id="@+id/thirdParty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-            android:layout_toRightOf="@id/loan_item_image"
+            android:text="Third Party: "
             android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/loan_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="@dimen/dimen16"
-            android:layout_alignParentRight="true"
+            android:layout_below="@id/thirdParty"
+            android:paddingLeft="10dp"
+            android:text="Loan amount: "
             android:textSize="20sp"/>
-
 
         <TextView
             android:id="@+id/loan_id"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:paddingLeft="10dp"
             android:layout_toRightOf="@id/transaction_item_image"
             android:alpha="0"/>

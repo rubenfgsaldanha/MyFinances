@@ -27,14 +27,11 @@ import java.util.Calendar;
 
 public class AddLoanActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
-    @BindView(R.id.btn_loan_date)
-    Button btnLoanDate;
-    @BindView(R.id.add_loan_amount)
-    EditText loanAmount;
+    @BindView(R.id.btn_loan_date) Button btnLoanDate;
+    @BindView(R.id.add_loan_amount) EditText loanAmount;
     @BindView(R.id.thirdP) EditText thirdP;
     @BindView(R.id.button_save_loan) Button btnSaveLoan;
-    @BindView(R.id.lenderRadioGroup)
-    RadioGroup lenderRadioGroup;
+    @BindView(R.id.lenderRadioGroup) RadioGroup lenderRadioGroup;
 
     private ArrayAdapter<CharSequence> adapter;
     private boolean lender;

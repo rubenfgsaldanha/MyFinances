@@ -30,17 +30,10 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
     // you provide access to all the views for a data item in a view holder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.limit)
-                TextView loanDate;
-        @BindView(R.id.loan_amount)
-        TextView loanAmount;
-        @BindView(R.id.person)
-        TextView loanThirdParty;
-
-        @BindView(R.id.loan_item_image)
-        ImageView loanImage;
-        @BindView(R.id.loan_id)
-        TextView loanID;
+        @BindView(R.id.limit) TextView loanDate;
+        @BindView(R.id.loan_amount) TextView loanAmount;
+        @BindView(R.id.thirdParty) TextView loanThirdParty;
+        @BindView(R.id.loan_id) TextView loanID;
 
         public ViewHolder(View v) {
             super(v);
@@ -75,9 +68,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //set the data to be displayed
-        if (!loans.get(position).getThirdParty().isEmpty()) {
-            holder.loanThirdParty.setText(loans.get(position).getThirdParty());
-        }
+        holder.loanThirdParty.setText(loans.get(position).getThirdParty());
         DecimalFormat df2 = new DecimalFormat(".##");       //this is to only have 2 decimal numbers
         holder.loanAmount.setText(df2.format(loans.get(position).getLoanAmount()));
         holder.loanID.setText(String.valueOf(loans.get(position).getLoanId()));

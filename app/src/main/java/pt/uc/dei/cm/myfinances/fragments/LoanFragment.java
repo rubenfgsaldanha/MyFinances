@@ -60,10 +60,10 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
     private int currentYearNum;
 
 
-    MyFinancesApplication app;
-    DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
+    private MyFinancesApplication app;
+    private DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
 
-    List<Loan> loans;
+    private List<Loan> loans;
 
 
     public LoanFragment() {
@@ -91,7 +91,7 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
         app = (MyFinancesApplication) getActivity().getApplicationContext();
 
 
-        app.setCurrentWallet(app.getDb().databaseDao().getCurrentWallet());
+        //app.setCurrentWallet(app.getDb().databaseDao().getCurrentWallet());
         /*
          * For now we create a default Wallet and load the categories to the MyFinancesApplication class
          * This need to be changed when we have a DB
@@ -213,7 +213,7 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
                     Snackbar.make(mRootView, R.string.add_loan_suc, Snackbar.LENGTH_SHORT).show();
                     break;
                 case START_ACT_EDIT_CODE:
-                    Snackbar.make(mRootView, R.string.add_loan_suc, Snackbar.LENGTH_SHORT).show();
+                    //Snackbar.make(mRootView, R.string.add_loan_suc, Snackbar.LENGTH_SHORT).show();
                     break;
             }
         }

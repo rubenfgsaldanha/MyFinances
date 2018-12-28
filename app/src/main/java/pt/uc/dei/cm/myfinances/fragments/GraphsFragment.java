@@ -156,7 +156,7 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
             List pieData = new ArrayList<>();
             for (Map.Entry<String, Double> entry : aux.entrySet()) {
                 int value = (int) Math.round(entry.getValue());
-                int color = app.getCategories().get(entry.getKey());
+                ////////////////////int color = app.getCategories().get(entry.getKey());
 
                 //calculate percentage and create subtitle if the user wishes
                 String label = "";
@@ -175,7 +175,7 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
                 }
 
                 //here we add a value, color and a label
-                pieData.add(new SliceValue(value, color).setLabel(label));
+                ///////////////////pieData.add(new SliceValue(value, color).setLabel(label));
             }
 
             PieChartData pieChartData = new PieChartData(pieData);
@@ -208,7 +208,7 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
         showPercentage = sharedPreferences.getBoolean(SharedPreferencesHelper.SHOW_PERCENTAGES, false);
         showSubtitle = sharedPreferences.getBoolean(SharedPreferencesHelper.SHOW_SUBTITLES, false);
 
-        drawPieChart();
+        //drawPieChart();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

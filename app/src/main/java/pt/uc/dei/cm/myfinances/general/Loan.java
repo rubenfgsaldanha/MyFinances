@@ -46,7 +46,8 @@ public class Loan {
 
 
 
-    public Loan(String wallet, int day, int month, int year,  boolean isLender, double loanAmount, String thirdParty, boolean payed) { //int dueday, int duemonth, int dueyear,
+    public Loan(String wallet, int day, int month, int year,  boolean isLender, double loanAmount,
+                String thirdParty, boolean payed) { //int dueday, int duemonth, int dueyear,
         this.wallet=wallet;
         this.day = day;
         this.month = month;

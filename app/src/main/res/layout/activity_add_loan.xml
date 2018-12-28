@@ -64,7 +64,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/add_loan_amount"
         android:layout_marginBottom="@dimen/dimen16"
-
         android:hint="@string/thirdP"
         android:inputType="text" />
 

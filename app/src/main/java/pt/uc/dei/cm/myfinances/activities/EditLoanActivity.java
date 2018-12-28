@@ -30,16 +30,15 @@ import java.util.Calendar;
 
 public class EditLoanActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    @BindView(R.id.payed)
-    RadioButton payed;
-    @BindView(R.id.btn_edit_loan_date)
-    Button btnLoanDate;
-    @BindView(R.id.edit_loan_amount)
-    EditText loanAmount;
+    @BindView(R.id.payed) RadioButton payed;
+    @BindView(R.id.not_payed) RadioButton notPaid;
+    @BindView(R.id.btn_edit_loan_date) Button btnLoanDate;
+    @BindView(R.id.edit_loan_amount) EditText loanAmount;
     @BindView(R.id.editthirdP) EditText thirdP;
     @BindView(R.id.button_save_loan) Button btnSaveLoan;
-    @BindView(R.id.editlenderRadioGroup)
-    RadioGroup lenderRadioGroup;
+    @BindView(R.id.button_delete_loan) Button btnDeleteLoan;
+    @BindView(R.id.editlenderRadioGroup) RadioGroup lenderRadioGroup;
+    @BindView(R.id.isPaidRadioGroup) RadioGroup isPaidGroup;
     @BindView(R.id.editlender) RadioButton radioLender;
     @BindView(R.id.editlendee) RadioButton radioLendee;
 
@@ -73,27 +72,22 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
             pay=true;
         }
         else{
+            notPaid.setChecked(true);
             pay=false;
         }
         //sets the transaction amount and comment
         if(l.getLoanAmount() < 0){
             double auxAmount = l.getLoanAmount() * (-1);
             loanAmount.setText(""+auxAmount);
-        }
-        else{
-            loanAmount.setText(""+l.getLoanAmount());
-        }
-        thirdP.setText(""+l.getThirdParty());
-
-        //checks if it's an expense or income, so at least on eof the radio buttons is checked
-        if(l.getLoanAmount() < 0){
-            radioLendee.setChecked(true);
-            lender = false;
-        }
-        else{
             radioLender.setChecked(true);
             lender = true;
         }
+        else{
+            loanAmount.setText(""+l.getLoanAmount());
+            radioLendee.setChecked(true);
+            lender = false;
+        }
+        thirdP.setText(""+l.getThirdParty());
     }
 
     private String getLoanDate(){
@@ -156,8 +150,10 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
             app.getCurrentWallet().updateWalletBalance( (l.getLoanAmount()*(-1)) + amount);
             app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
         }
+
         if (pay!=l.isPayed()){    ///CONFIRMAR QUE SAO ESTAS AS CONTAS!!
-            app.getCurrentWallet().updateWalletBalance( (l.getLoanAmount()*(-1)) + amount);
+            app.getDb().databaseDao().deleteLoan(l.getLoanId());
+            app.getCurrentWallet().updateWalletBalance(l.getLoanAmount()*(-1));
             app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
         }
 
@@ -206,8 +202,13 @@ public class EditLoanActivity extends AppCompatActivity implements DatePickerDia
             case R.id.payed:
                 if(checked){
                     pay=true;
-
                 }
+                break;
+            case R.id.not_payed:
+                if(checked){
+                    pay = false;
+                }
+                break;
         }
     }
 

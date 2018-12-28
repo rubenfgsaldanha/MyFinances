@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/dimen16"
     android:id="@+id/edit_loan_layout"
-    tools:context="pt.uc.dei.cm.myfinances.activities.AddLoanActivity">
+    tools:context="pt.uc.dei.cm.myfinances.activities.EditLoanActivity">
 
 
     <Button
@@ -30,7 +30,7 @@
         android:id="@+id/editlenderRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/payed"
+        android:layout_below="@id/btn_edit_loan_date"
         android:layout_marginBottom="@dimen/dimen16"
         android:orientation="horizontal">
 
@@ -51,21 +51,39 @@
     </RadioGroup>
 
 
-    <RadioButton
-        android:id="@+id/payed"
+    <RadioGroup
+        android:id="@+id/isPaidRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/dimen16"
-        android:onClick="onRadioButtonClicked"
-        android:text="@string/payed"
-        tools:layout_below="@+id/btn_edit_loan_date" />
+        android:layout_below="@id/editlenderRadioGroup"
+        android:layout_marginBottom="@dimen/dimen16"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/payed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dimen16"
+            android:onClick="onRadioButtonClicked"
+            android:text="@string/payed"
+            tools:layout_below="@+id/btn_edit_loan_date" />
+
+        <RadioButton
+            android:id="@+id/not_payed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dimen16"
+            android:onClick="onRadioButtonClicked"
+            android:text="not paid"
+            tools:layout_below="@+id/btn_edit_loan_date" />
+    </RadioGroup>
 
 
     <EditText
         android:id="@+id/edit_loan_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editlenderRadioGroup"
+        android:layout_below="@id/isPaidRadioGroup"
         android:hint="@string/amount"
         android:layout_marginBottom="@dimen/dimen16"
         android:inputType="numberDecimal" />
