@@ -17,6 +17,7 @@ import pt.uc.dei.cm.myfinances.myfinances.R;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -70,19 +71,15 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnLocalBackup)
     public void localBackup(){
-        app.closeDB();
 
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.warning))
                 .setMessage(getString(R.string.alertDialogBackup))
                 .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-                    BackupOrRestoreActivityPermissionsDispatcher.doBackUpWithPermissionCheck(this);
-                    dialog.dismiss();
+                    new BackupTask(dialog).execute();
                 })
                 .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
                 .show();
-
-        app.openDB();
     }
 
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
@@ -115,15 +112,13 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnRestoreFile)
     public void restoreFromFile(){
-        app.closeDB();
 
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.warning))
                 .setMessage(getString(R.string.alertDialogRestore))
                 .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
                     if(verifyFile()){
-                        BackupOrRestoreActivityPermissionsDispatcher.doRestoreWithPermissionCheck(this);
-                        dialog.dismiss();
+                        new RestoreTask(dialog).execute();
                     }
                     else{
                         showSnackbar(R.string.file_not_found);
@@ -131,8 +126,6 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
                 })
                 .setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.dismiss())
                 .show();
-
-        app.openDB();
     }
 
 
@@ -190,5 +183,50 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
 
     private void showSnackbar(@StringRes int errorMessageRes) {
         Snackbar.make(mRootView, errorMessageRes, Snackbar.LENGTH_LONG).show();
+    }
+
+
+    abstract private class BaseTask<T> extends AsyncTask<Void, Void, Void>{
+        DialogInterface dialogInterface;
+
+        BaseTask(DialogInterface dialog){
+            super();
+            dialogInterface = dialog;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            app.closeDB();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            app.openDB();
+            dialogInterface.dismiss();
+        }
+    }
+
+    private class BackupTask extends BaseTask<Void>{
+        BackupTask(DialogInterface dialog){
+            super(dialog);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            BackupOrRestoreActivityPermissionsDispatcher.doBackUpWithPermissionCheck(BackupOrRestoreActivity.this);
+            return null;
+        }
+    }
+
+    private class RestoreTask extends BaseTask<Void>{
+        RestoreTask(DialogInterface dialog){
+            super(dialog);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            BackupOrRestoreActivityPermissionsDispatcher.doRestoreWithPermissionCheck(BackupOrRestoreActivity.this);
+            return null;
+        }
     }
 }

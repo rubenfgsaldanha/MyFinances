@@ -15,9 +15,11 @@ import pt.uc.dei.cm.myfinances.general.Wallet;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -63,11 +65,7 @@ public class CategoriesActivity extends AppCompatActivity implements AdapterView
     protected void onResume() {
         super.onResume();
 
-        List<Categories> categories = app.getDb().databaseDao().getCategories();
-
-        // specify an adapter (see also next example)
-        adapter = new CategoryAdapter(getApplicationContext(),this::onItemClick,categories);
-        categoriesList.setAdapter(adapter);
+        new GetCategories().execute();
     }
 
     //starts Activity to add a wallet
@@ -94,5 +92,22 @@ public class CategoriesActivity extends AppCompatActivity implements AdapterView
         Intent editCategory = new Intent(this, EditCategoryactivity.class);
         editCategory.putExtra("label",t.getText().toString());
         startActivityForResult(editCategory,START_ACT_EDIT_CODE);
+    }
+
+    private class GetCategories extends AsyncTask<Void, Void, Void> {
+        List<Categories> categories;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            categories = app.getDb().databaseDao().getCategories();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            // specify an adapter (see also next example)
+            adapter = new CategoryAdapter(getApplicationContext(),CategoriesActivity.this::onItemClick,categories);
+            categoriesList.setAdapter(adapter);
+        }
     }
 }

@@ -3,6 +3,7 @@ package pt.uc.dei.cm.myfinances.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -61,22 +62,18 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
 
 
     private MyFinancesApplication app;
-    private DecimalFormat df2 = new DecimalFormat(".##");   //this is to only have 2 decimal numbers
 
     private List<Loan> loans;
 
 
     public LoanFragment() {
         // Required empty public constructor
-
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        }
+    }
 
 
     @Override
@@ -85,17 +82,9 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
         // Inflate the layout for this fragment
         View mRootView = inflater.inflate(R.layout.fragment_loan, container, false);
 
-
         ButterKnife.bind(this, mRootView);
 
         app = (MyFinancesApplication) getActivity().getApplicationContext();
-
-
-        //app.setCurrentWallet(app.getDb().databaseDao().getCurrentWallet());
-        /*
-         * For now we create a default Wallet and load the categories to the MyFinancesApplication class
-         * This need to be changed when we have a DB
-         */
 
         return mRootView;
     }
@@ -128,10 +117,8 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
             currentMonthNum = 11;
             currentYearNum--;
         }
-        loans = app.getDb().databaseDao().getLoansPerMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
-        adapter = new LoanAdapter(getContext(),this::onItemClick, loans);
-        loansList.setAdapter(adapter);
-        nowMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+
+        new GetLoans2().execute();
     }
 
     @OnClick(R.id.following_month)
@@ -143,29 +130,14 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
             currentMonthNum = 0;
             currentYearNum++;
         }
-        loans = app.getDb().databaseDao().getLoansPerMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
-        adapter = new LoanAdapter(getContext(),this::onItemClick, loans);
-        loansList.setAdapter(adapter);
-        nowMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
-    }
 
-    /*//starts activity to add a transaction
-    @OnClick(R.id.fab_add_transaction)
-    public void addItem(){
-        Intent startAddTransaction =  new Intent(getActivity(), AddTransactionActivity.class);
-        startActivityForResult(startAddTransaction, START_ACT_ADD_CODE);
-    }*/
+        new GetLoans2().execute();
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        loans = app.getDb().databaseDao().getLoansPerMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
-        adapter = new LoanAdapter(getContext(),this::onItemClick, loans);
-        loansList.setAdapter(adapter);
-
-        /*String value = df2.format(app.getDb().databaseDao().getCurrentWallet().getBalance());
-        balance.setText(getString(R.string.balance)+" "+value);*/
+        new GetLoans1().execute();
     }
 
 
@@ -202,8 +174,6 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
         startActivityForResult(editLoan,START_ACT_EDIT_CODE);
     }
 
-    ///por long click pa set as payed/ unpayed
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -226,22 +196,47 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
         startActivityForResult(startAddLoan, START_ACT_ADD_CODE);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
     private String getCurrentMonth(){
         Calendar c = Calendar.getInstance();
         return ""+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR);
+    }
+
+    abstract private class BaseTask<T> extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            loans = app.getDb().databaseDao().getLoansPerMonth(currentMonthNum+1, currentYearNum, app.getCurrentWallet().getName());
+            return null;
+        }
+    }
+
+    private class GetLoans1 extends BaseTask<Void>{
+        GetLoans1(){
+            super();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            adapter = new LoanAdapter(getContext(),LoanFragment.this::onItemClick, loans);
+            loansList.setAdapter(adapter);
+        }
+    }
+
+    private class GetLoans2 extends BaseTask<Void>{
+        GetLoans2(){
+            super();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            adapter = new LoanAdapter(getContext(),LoanFragment.this::onItemClick, loans);
+            loansList.setAdapter(adapter);
+            nowMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+        }
     }
 }

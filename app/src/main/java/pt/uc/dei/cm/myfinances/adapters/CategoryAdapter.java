@@ -39,14 +39,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-
         }
 
         @OnClick(R.id.category_item_text)
         public void onClick(View v) {
             onItemClickListener.onItemClick(null, v, getAdapterPosition(), v.getId());
-
-
         }
     }
 
@@ -75,15 +72,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.catImag.setColorFilter(categories.get(position).getColor());
     }
 
-
-
     @Override
     public int getItemCount() {
         return categories.size();
     }
-
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
 
 }

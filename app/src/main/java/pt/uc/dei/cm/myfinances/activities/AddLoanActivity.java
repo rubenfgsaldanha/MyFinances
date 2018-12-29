@@ -5,17 +5,15 @@ import androidx.fragment.app.DialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemSelected;
 import pt.uc.dei.cm.myfinances.MyFinancesApplication;
 import pt.uc.dei.cm.myfinances.fragments.DatePickerFragment;
 import pt.uc.dei.cm.myfinances.general.Loan;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.app.DatePickerDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,10 +31,8 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
     @BindView(R.id.button_save_loan) Button btnSaveLoan;
     @BindView(R.id.lenderRadioGroup) RadioGroup lenderRadioGroup;
 
-    private ArrayAdapter<CharSequence> adapter;
     private boolean lender;
     private int[] loanDate;
-    //private int[] dueDate;
 
     private MyFinancesApplication app;
     
@@ -46,7 +42,6 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_loan);
         ButterKnife.bind(this);
-
 
         app = (MyFinancesApplication) getApplicationContext();
     }
@@ -58,7 +53,6 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         loanDate = new int[]{day,month,year};
-        //dueDate=  new int[]{day,month,year};
         return day+"/"+month+"/"+year;
     }
 
@@ -68,7 +62,6 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
 
         String date = getCurrentDate();
         btnLoanDate.setText(date);
-        //btnDueDate.setText(date);
     }
 
     @OnClick(R.id.btn_loan_date)
@@ -94,21 +87,14 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
                 amount = - amount;
             }
             l = new Loan(app.getCurrentWallet().getName(), loanDate[0], loanDate[1], loanDate[2],
-                    lender, amount, strThirdP, false); //dueDate[0], dueDate[1], dueDate[2],
+                    lender, amount, strThirdP, false);
 
-            app.getDb().databaseDao().insertLoan(l);
-            app.getCurrentWallet().updateWalletBalance(l.getLoanAmount());
-            app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
-
-            setResult(RESULT_OK);
-            finish();
+            new InsertLoan().execute(l);
         }
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-
         loanDate = new int[]{dayOfMonth, month+1, year};
 
         btnLoanDate.setText(dayOfMonth+"/"+(month+1)+"/"+year);
@@ -128,6 +114,23 @@ public class AddLoanActivity extends AppCompatActivity implements DatePickerDial
                     lender = true;
                 }
                 break;
+        }
+    }
+
+    private class InsertLoan extends AsyncTask<Loan, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Loan... l) {
+            app.getDb().databaseDao().insertLoan(l[0]);
+            app.getCurrentWallet().updateWalletBalance(l[0].getLoanAmount());
+            app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            setResult(RESULT_OK);
+            finish();
         }
     }
 }

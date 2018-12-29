@@ -13,6 +13,7 @@ import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.app.DatePickerDialog;
 import android.media.browse.MediaBrowser;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -56,17 +57,8 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
         ButterKnife.bind(this);
 
         app = (MyFinancesApplication) getApplicationContext();
-        // Spinner Drop down elements
-        List<String> labels =  app.getDb().databaseDao().getAllLabels();
 
-        // Creating adapter for spinner
-        dataAdapter = new ArrayAdapter (this, android.R.layout.simple_spinner_item, labels);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        cats.setAdapter(dataAdapter);
+        new GetCategories().execute();
     }
 
     private String getCurrentDate(){
@@ -112,12 +104,7 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
             t = new Transaction(transactionDate[0], transactionDate[1], transactionDate[2],
                     category, strComment, transactionAmount, expense, app.getCurrentWallet().getName());
 
-            app.getDb().databaseDao().insertTransaction(t);
-            app.getCurrentWallet().updateWalletBalance(t.getAmount());
-            app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
-
-            setResult(RESULT_OK);
-            finish();
+            new InsertTransaction().execute(t);
         }
     }
 
@@ -146,10 +133,47 @@ public class AddTransactionActivity extends AppCompatActivity implements DatePic
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-
         transactionDate = new int[]{dayOfMonth, month+1, year};
 
         btnDate.setText(dayOfMonth+"/"+(month+1)+"/"+year);
+    }
+
+    private class InsertTransaction extends AsyncTask<Transaction, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Transaction... t) {
+            app.getDb().databaseDao().insertTransaction(t[0]);
+            app.getCurrentWallet().updateWalletBalance(t[0].getAmount());
+            app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            setResult(RESULT_OK);
+            finish();
+        }
+    }
+
+    private class GetCategories extends AsyncTask<Void, Void, Void>{
+        List<String> labels;
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Spinner Drop down elements
+            labels =  app.getDb().databaseDao().getAllLabels();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            // Creating adapter for spinner
+            dataAdapter = new ArrayAdapter (getApplicationContext(), android.R.layout.simple_spinner_item, labels);
+
+            // Drop down layout style - list view with radio button
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            // attaching data adapter to spinner
+            cats.setAdapter(dataAdapter);
+        }
     }
 }

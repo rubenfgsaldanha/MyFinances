@@ -13,7 +13,9 @@ import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -56,49 +58,11 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
 
         app = (MyFinancesApplication) getApplicationContext();
 
-        // Spinner Drop down elements
-        List<String> labels =  app.getDb().databaseDao().getAllLabels();
-        // Creating adapter for spinner
-        dataAdapter = new ArrayAdapter (this, android.R.layout.simple_spinner_item, labels);
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        categories.setAdapter(dataAdapter);
-
         //gets transaction id
         Intent intent = getIntent();
         int id = Integer.parseInt(intent.getStringExtra("id"));
 
-        //sets the selected category
-        t = app.getDb().databaseDao().getTransactionByID(id);
-        category = t.getCategory();
-
-        for(int i=0; i<labels.size(); i++){
-            if(labels.get(i).equals(category)){
-                categories.setSelection(i);
-            }
-        }
-
-        //sets the transaction amount and comment
-        if(t.getAmount() < 0){
-            double auxAmount = t.getAmount() * (-1);
-            amount.setText(""+auxAmount);
-        }
-        else{
-            amount.setText(""+t.getAmount());
-        }
-        comment.setText(""+t.getComment());
-
-        //checks if it's an expense or income, so at least on eof the radio buttons is checked
-        if(t.getAmount() < 0){
-            radioExpense.setChecked(true);
-            expense = true;
-        }
-        else{
-            radioIncome.setChecked(true);
-            expense = false;
-        }
+        new GetTransaction().execute(id);
     }
 
     private String getTransactionDateDate(){
@@ -110,14 +74,6 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
         transactionDate = new int[]{t.getDay(),t.getMonth(),t.getYear()};
 
         return t.getDay()+"/"+t.getMonth()+"/"+t.getYear();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        String date = getTransactionDateDate();
-        btnDate.setText(date);
     }
 
     @OnClick(R.id.btn_date)
@@ -140,17 +96,7 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
             transaction.setAmount(transactionAmount);
         }
 
-        //checks if the user edited the transaction amount
-        if(transactionAmount != t.getAmount()){
-            app.getCurrentWallet().updateWalletBalance( (t.getAmount()*(-1)) + transactionAmount);
-            app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
-        }
-
-        app.getDb().databaseDao().updateTransaction(t.getId(), transaction.getDay(), transaction.getMonth(), transaction.getYear(),
-                transaction.getCategory(), transaction.getComment(), transaction.getAmount(), transaction.isExpense(), transaction.getWalletName());
-
-        setResult(RESULT_OK);
-        finish();
+        new SaveEditTransaction(transaction, transactionAmount).execute();
     }
 
     @OnClick(R.id.button_delete_transaction)
@@ -159,14 +105,7 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
                 .setTitle(getString(R.string.warning))
                 .setMessage(getString(R.string.delete_trans_ques))
                 .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-
-                    app.getDb().databaseDao().deleteTransaction(t.getId());
-                    app.getCurrentWallet().updateWalletBalance(0 - t.getAmount());
-                    app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
-
-                    dialog.dismiss();
-                    setResult(RESULT_OK);
-                    finish();
+                    new DeleteTransaction().execute(dialog);
                 }).setNegativeButton(getString(R.string.cancel),null);
 
         AlertDialog alertDialog1 = alertDialog.create();
@@ -200,5 +139,109 @@ public class EditTransactionActivity extends AppCompatActivity implements DatePi
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         transactionDate = new int[]{dayOfMonth, month+1, year};
         btnDate.setText(dayOfMonth+"/"+(month+1)+"/"+year);
+    }
+
+    private class GetTransaction extends AsyncTask<Integer, Void, Integer>{
+        List<String> labels;
+
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            // Spinner Drop down elements
+            labels =  app.getDb().databaseDao().getAllLabels();
+            return integers[0];
+        }
+
+        @Override
+        protected void onPostExecute(Integer id) {
+            // Creating adapter for spinner
+            dataAdapter = new ArrayAdapter (getApplicationContext(), android.R.layout.simple_spinner_item, labels);
+            // Drop down layout style - list view with radio button
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            // attaching data adapter to spinner
+            categories.setAdapter(dataAdapter);
+
+            //sets the selected category
+            t = app.getDb().databaseDao().getTransactionByID(id);
+            category = t.getCategory();
+
+            for(int i=0; i<labels.size(); i++){
+                if(labels.get(i).equals(category)){
+                    categories.setSelection(i);
+                }
+            }
+
+            //sets the transaction amount and comment
+            if(t.getAmount() < 0){
+                double auxAmount = t.getAmount() * (-1);
+                amount.setText(""+auxAmount);
+            }
+            else{
+                amount.setText(""+t.getAmount());
+            }
+            comment.setText(""+t.getComment());
+
+            //checks if it's an expense or income, so at least on eof the radio buttons is checked
+            if(t.getAmount() < 0){
+                radioExpense.setChecked(true);
+                expense = true;
+            }
+            else{
+                radioIncome.setChecked(true);
+                expense = false;
+            }
+
+            String date = getTransactionDateDate();
+            btnDate.setText(date);
+        }
+    }
+
+    private class SaveEditTransaction extends AsyncTask<Void, Void, Void>{
+        Transaction transaction;
+        double transactionAmount;
+
+        SaveEditTransaction(Transaction t, double a){
+            transaction = t;
+            transactionAmount = a;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            //checks if the user edited the transaction amount
+            if(transactionAmount != t.getAmount()){
+                app.getCurrentWallet().updateWalletBalance( (t.getAmount()*(-1)) + transactionAmount);
+                app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
+            }
+
+            app.getDb().databaseDao().updateTransaction(t.getId(), transaction.getDay(), transaction.getMonth(), transaction.getYear(),
+                    transaction.getCategory(), transaction.getComment(), transaction.getAmount(), transaction.isExpense(), transaction.getWalletName());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            setResult(RESULT_OK);
+            finish();
+        }
+    }
+
+    private class DeleteTransaction extends AsyncTask<DialogInterface, Void, Void>{
+        DialogInterface dialogInterface;
+
+        @Override
+        protected Void doInBackground(DialogInterface... dialog) {
+            dialogInterface = dialog[0];
+            app.getDb().databaseDao().deleteTransaction(t.getId());
+            app.getCurrentWallet().updateWalletBalance(0 - t.getAmount());
+            app.getDb().databaseDao().updateWalletBalance(app.getCurrentWallet().getBalance(), app.getCurrentWallet().getName());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            dialogInterface.dismiss();
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 }

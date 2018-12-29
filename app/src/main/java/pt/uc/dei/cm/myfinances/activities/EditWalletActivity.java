@@ -10,7 +10,9 @@ import pt.uc.dei.cm.myfinances.adapters.WalletAdapter;
 import pt.uc.dei.cm.myfinances.general.Wallet;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -46,13 +48,7 @@ public class EditWalletActivity extends AppCompatActivity {
         Intent intent = getIntent();
         nameWallet = intent.getStringExtra("wallet_name");
 
-        aux = app.getDb().databaseDao().getWalletByName(nameWallet);
-        walletName.setText(nameWallet);
-        initialBalance.setText(String.valueOf(aux.getBalance()));
-
-        if(nameWallet.equals(app.getCurrentWallet().getName())){
-            radioGroup.setVisibility(View.GONE);
-        }
+        new GetWallet().execute();
     }
 
 
@@ -63,25 +59,8 @@ public class EditWalletActivity extends AppCompatActivity {
 
         Wallet w = new Wallet(name, Double.parseDouble(strInitBalance));
         w.setId(aux.getId());
-        if(!nameWallet.equals(app.getCurrentWallet().getName())){
-            w.setCurrentWallet(false);
 
-            if(makeCurrent){
-                w.setCurrentWallet(true);
-                //agora vai colocar a current wallet a false e atualizar na base de dados
-                app.getCurrentWallet().setCurrentWallet(false);
-                app.getDb().databaseDao().updateWalletStatus(app.getCurrentWallet().isCurrentWallet(), app.getCurrentWallet().getName());
-            }
-        }
-
-        app.getDb().databaseDao().updateWallet(w);
-
-        if(w.isCurrentWallet()){
-            app.setCurrentWallet(w);
-        }
-
-        setResult(RESULT_OK);
-        finish();
+        new SaveWallet().execute(w);
     }
 
     @OnClick(R.id.delete)
@@ -95,12 +74,7 @@ public class EditWalletActivity extends AppCompatActivity {
                     .setTitle(getString(R.string.warning))
                     .setMessage(getString(R.string.delete_wallet_question))
                     .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-
-                        app.getDb().databaseDao().deleteWallet(aux);
-                        app.getDb().databaseDao().deleteAllTransactionsFromWallet(aux.getName());
-
-                        dialog.dismiss();
-                        finish();
+                        new DeleteWallet().execute(dialog);
                     }).setNegativeButton(getString(R.string.cancel),null);
 
             AlertDialog alertDialog1 = alertDialog.create();
@@ -122,6 +96,75 @@ public class EditWalletActivity extends AppCompatActivity {
                     makeCurrent = true;
                 }
                 break;
+        }
+    }
+
+    private class GetWallet extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            aux = app.getDb().databaseDao().getWalletByName(nameWallet);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            walletName.setText(nameWallet);
+            initialBalance.setText(String.valueOf(aux.getBalance()));
+
+            if(nameWallet.equals(app.getCurrentWallet().getName())){
+                radioGroup.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private class SaveWallet extends AsyncTask<Wallet, Void, Void>{
+        Wallet w;
+
+        @Override
+        protected Void doInBackground(Wallet... wallets) {
+            w = wallets[0];
+            if(!nameWallet.equals(app.getCurrentWallet().getName())){
+                w.setCurrentWallet(false);
+
+                if(makeCurrent){
+                    w.setCurrentWallet(true);
+                    //agora vai colocar a current wallet a false e atualizar na base de dados
+                    app.getCurrentWallet().setCurrentWallet(false);
+                    app.getDb().databaseDao().updateWalletStatus(app.getCurrentWallet().isCurrentWallet(), app.getCurrentWallet().getName());
+                }
+            }
+
+            app.getDb().databaseDao().updateWallet(w);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(w.isCurrentWallet()){
+                app.setCurrentWallet(w);
+            }
+
+            setResult(RESULT_OK);
+            finish();
+        }
+    }
+
+    private class DeleteWallet extends AsyncTask<DialogInterface, Void, Void>{
+        DialogInterface dialogInterface;
+
+        @Override
+        protected Void doInBackground(DialogInterface... dialogInterfaces) {
+            dialogInterface = dialogInterfaces[0];
+            app.getDb().databaseDao().deleteWallet(aux);
+            app.getDb().databaseDao().deleteAllTransactionsFromWallet(aux.getName());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            dialogInterface.dismiss();
+            finish();
         }
     }
 }

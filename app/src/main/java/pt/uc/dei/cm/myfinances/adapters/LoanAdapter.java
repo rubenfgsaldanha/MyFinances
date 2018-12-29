@@ -69,18 +69,11 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         //set the data to be displayed
         holder.loanThirdParty.setText(loans.get(position).getThirdParty());
+
         DecimalFormat df2 = new DecimalFormat(".##");       //this is to only have 2 decimal numbers
         holder.loanAmount.setText(df2.format(loans.get(position).getLoanAmount()));
         holder.loanID.setText(String.valueOf(loans.get(position).getLoanId()));
-        /*if (loans.get(position).getDuemonth()== Calendar.getInstance().get(Calendar.MONTH)) {
-            holder.loanDate.setText(loans.get(position).getDateString(loans.get(position).getDueday(), loans.get(position).getDuemonth(),loans.get(position).getDueyear()));
-        }
-        else*/
-        //if (loans.get(position).getMonth()== Calendar.getInstance().get(Calendar.MONTH)){
         holder.loanDate.setText(loans.get(position).getDateString());
-
-        //}
-
     }
 
     @Override

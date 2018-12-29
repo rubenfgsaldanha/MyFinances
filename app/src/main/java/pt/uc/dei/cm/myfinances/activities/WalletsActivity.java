@@ -14,6 +14,7 @@ import pt.uc.dei.cm.myfinances.general.Wallet;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -58,19 +59,13 @@ public class WalletsActivity extends AppCompatActivity implements AdapterView.On
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         walletsList.setLayoutManager(mLayoutManager);
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        List<Wallet> wallets = app.getDb().databaseDao().getWallets();
-
-        // specify an adapter (see also next example)
-        adapter = new WalletAdapter(getApplicationContext(),this::onItemClick, this::onItemLongClick,wallets);
-        walletsList.setAdapter(adapter);
+        new GetWallets().execute();
     }
 
     //starts Activity to add a wallet
@@ -104,5 +99,23 @@ public class WalletsActivity extends AppCompatActivity implements AdapterView.On
         //
 
         return true;
+    }
+
+    private class GetWallets extends AsyncTask<Void, Void, Void>{
+        List<Wallet> wallets;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            wallets = app.getDb().databaseDao().getWallets();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            // specify an adapter (see also next example)
+            adapter = new WalletAdapter(getApplicationContext(),WalletsActivity.this::onItemClick,
+                    WalletsActivity.this::onItemLongClick,wallets);
+            walletsList.setAdapter(adapter);
+        }
     }
 }

@@ -3,6 +3,7 @@ package pt.uc.dei.cm.myfinances.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -91,7 +92,6 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
         currentYearNum = Calendar.getInstance().get(Calendar.YEAR);
 
         currentMonth.setText(getCurrentMonth());
-        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum + 1, currentYearNum, app.getCurrentWallet().getName());
     }
 
     private String getCurrentMonth() {
@@ -107,9 +107,7 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
             currentMonthNum = 11;
             currentYearNum--;
         }
-        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum + 1, currentYearNum, app.getCurrentWallet().getName());
-        currentMonth.setText("" + (currentMonthNum + 1) + "/" + currentYearNum);
-        drawPieChart();
+        new GetTransaction1().execute();
     }
 
     @OnClick(R.id.next_month)
@@ -120,9 +118,7 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
             currentMonthNum = 0;
             currentYearNum++;
         }
-        transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum + 1, currentYearNum, app.getCurrentWallet().getName());
-        currentMonth.setText("" + (currentMonthNum + 1) + "/" + currentYearNum);
-        drawPieChart();
+        new GetTransaction1().execute();
     }
 
     //Here we draw the pie chart
@@ -182,23 +178,30 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
             PieChartData pieChartData = new PieChartData(pieData);
             pieChartData.setHasLabels(true).setValueLabelTextSize(14);
             pieChartData.setHasCenterCircle(true).setCenterCircleScale(0.42f);
-            pieChart.setPieChartData(pieChartData);
-            noDataFound.setText("");
 
-            String value = df2.format(totalAmount);
-            if(currency != null){
-                overallValue.setText(value+currency);
-            }
-            else{
-                overallValue.setText(value);
-            }
+            final double auxTotalAmount = totalAmount;
+            getActivity().runOnUiThread(() -> {
+                pieChart.setPieChartData(pieChartData);
+                noDataFound.setText("");
+
+                String value = df2.format(auxTotalAmount);
+                if(currency != null){
+                    overallValue.setText(value+currency);
+                }
+                else{
+                    overallValue.setText(value);
+                }
+            });
         } else {
             PieChartData pieChartData = new PieChartData();
             pieChartData.setHasLabels(true).setValueLabelTextSize(14);
             pieChartData.setHasCenterCircle(true).setCenterCircleScale(0.42f);
-            pieChart.setPieChartData(pieChartData);
-            noDataFound.setText(getString(R.string.no_data_found));
-            overallValue.setText("");
+
+            getActivity().runOnUiThread(() -> {
+                pieChart.setPieChartData(pieChartData);
+                noDataFound.setText(getString(R.string.no_data_found));
+                overallValue.setText("");
+            });
         }
     }
 
@@ -209,7 +212,7 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
         showPercentage = sharedPreferences.getBoolean(SharedPreferencesHelper.SHOW_PERCENTAGES, false);
         showSubtitle = sharedPreferences.getBoolean(SharedPreferencesHelper.SHOW_SUBTITLES, false);
 
-        drawPieChart();
+        new GetTransaction2().execute();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -239,5 +242,32 @@ public class GraphsFragment extends androidx.fragment.app.Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    abstract class BaseTask<T> extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            transactions = app.getDb().databaseDao().getTransactionsByMonth(currentMonthNum + 1, currentYearNum, app.getCurrentWallet().getName());
+            drawPieChart();
+            return null;
+        }
+    }
+
+    private class GetTransaction1 extends BaseTask<Void>{
+        GetTransaction1(){
+            super();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            currentMonth.setText("" + (currentMonthNum + 1) + "/" + currentYearNum);
+        }
+    }
+
+    private class GetTransaction2 extends BaseTask<Void>{
+        GetTransaction2(){
+            super();
+        }
     }
 }
