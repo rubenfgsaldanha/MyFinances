@@ -9,49 +9,34 @@
     android:orientation="vertical"
     tools:context="pt.uc.dei.cm.myfinances.activities.SettingsActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Currency"
+        android:textSize="17sp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        android:fontFamily="@font/ubuntu"/>
+
     <Spinner
         android:id="@+id/spinner_currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dimen8"/>
-
-    <Switch
-        android:id="@+id/local_backup_auto"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="@dimen/dimen8"
-        android:layout_gravity="left"
-        android:text="@string/auto_local_backup"/>
-
-    <View
-        android:id="@+id/view1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="@dimen/dimen8"
-        android:background="@color/color_light_gray"/>
-
-    <Switch
-        android:id="@+id/drive_backup_auto"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="@dimen/dimen8"
-        android:layout_gravity="left"
-        android:text="@string/auto_drive_backup"/>
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="@dimen/dimen8"
-        android:background="@color/color_light_gray"/>
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:fontFamily="@font/ubuntu"
+        android:layout_marginBottom="@dimen/dimen16"/>
 
     <Switch
         android:id="@+id/show_percentages"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="@dimen/dimen8"
+        android:layout_marginBottom="@dimen/dimen16"
         android:layout_gravity="left"
-        android:text="@string/show_perc_graph"/>
+        android:text="@string/show_perc_graph"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="17sp"
+        android:fontFamily="@font/ubuntu"/>
 
     <View
         android:id="@+id/view3"
@@ -66,13 +51,16 @@
         android:layout_height="50dp"
         android:layout_marginBottom="@dimen/dimen8"
         android:layout_gravity="left"
-        android:text="@string/show_subt_graph"/>
+        android:text="@string/show_subt_graph"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="17sp"
+        android:fontFamily="@font/ubuntu"/>
     
     <View
         android:id="@+id/view4"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginBottom="@dimen/dimen8"
+        android:layout_marginBottom="@dimen/dimen16"
         android:background="@color/color_light_gray"/>
 
 </LinearLayout>

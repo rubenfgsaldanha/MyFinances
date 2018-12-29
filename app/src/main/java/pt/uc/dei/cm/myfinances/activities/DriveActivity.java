@@ -52,7 +52,6 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
     private static boolean mBusy;
 
     @BindView(R.id.activity_drive) View mRootView;
-    @BindView(R.id.checkboxBackupDrive) CheckBox backupAutomatically;
     @BindView(R.id.btnDriveBackup) Button btnDriveBackup;
     @BindView(R.id.btnRestoreDrive) Button btnDriveRestore;
     @BindView(R.id.connected_user) TextView connectedUser;

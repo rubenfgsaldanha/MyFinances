@@ -31,7 +31,9 @@
             android:text=""
             android:gravity="center"
             android:textSize="18sp"
-            android:layout_toRightOf="@id/previous_month"/>
+            android:textColor="@color/white"
+            android:layout_toRightOf="@id/previous_month"
+            android:fontFamily="@font/ubuntu"/>
 
         <ImageButton
             android:id="@+id/next_month"
@@ -50,7 +52,9 @@
             android:textAlignment="textEnd"
             android:gravity="center"
             android:text="@string/balance"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/ubuntu"/>
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -68,7 +72,9 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text=""
-        android:textSize="17sp"/>
+        android:textSize="17sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/ubuntu"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -81,6 +87,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:tint="@color/black"
+            android:backgroundTint="@color/colorSecondary"
             android:src="@drawable/ic_fab_add"/>
     </RelativeLayout>
 

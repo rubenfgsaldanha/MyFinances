@@ -9,28 +9,49 @@
     android:id="@+id/add_wallet_layout"
     tools:context="pt.uc.dei.cm.myfinances.activities.AddWalletActivity">
 
-    <EditText
-        android:id="@+id/name"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_marginBottom="@dimen/dimen16"
-        android:hint="@string/name"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/initial_balance"
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen24"
+            android:hint="@string/name"
+            android:fontFamily="@font/ubuntu"
+            android:inputType="text"
+            android:textColorHint="@color/colorPrimaryLight"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_balance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/name"
-        android:layout_marginBottom="@dimen/dimen16"
-        android:inputType="numberDecimal"
-        android:hint="@string/initial_balance"/>
+        android:layout_below="@id/input_name">
+
+        <EditText
+            android:id="@+id/initial_balance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input_name"
+            android:layout_marginBottom="@dimen/dimen24"
+            android:inputType="numberDecimal"
+            android:hint="@string/initial_balance"
+            android:fontFamily="@font/ubuntu"
+            android:textColorHint="@color/colorPrimaryLight"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/initial_balance"
-        android:text="@string/save"/>
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_below="@id/input_balance"
+        android:text="@string/save"
+        android:fontFamily="@font/ubuntu"
+        android:textColor="@color/colorPrimary"
+        android:textAllCaps="false"
+        android:textSize="15sp"/>
 
 </RelativeLayout>

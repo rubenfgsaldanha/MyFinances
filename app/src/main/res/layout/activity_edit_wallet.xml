@@ -9,34 +9,59 @@
     android:id="@+id/add_wallet_layout"
     tools:context="pt.uc.dei.cm.myfinances.activities.EditWalletActivity">
 
-    <EditText
-        android:id="@+id/name"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_marginBottom="@dimen/dimen16"
-        android:hint="@string/name"/>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/initial_balance"
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen24"
+            android:hint="@string/name"
+            android:fontFamily="@font/ubuntu"
+            android:inputType="text"
+            android:textColorHint="@color/colorPrimaryLight"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_balance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/name"
-        android:layout_marginBottom="@dimen/dimen16"
-        android:inputType="numberDecimal"
-        android:hint="@string/initial_balance"/>
+        android:layout_below="@id/input_name">
+
+        <EditText
+            android:id="@+id/initial_balance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input_name"
+            android:layout_marginBottom="@dimen/dimen24"
+            android:inputType="numberDecimal"
+            android:hint="@string/initial_balance"
+            android:fontFamily="@font/ubuntu"
+            android:textColorHint="@color/colorPrimaryLight"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/text_current"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/input_balance"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:text="Make this the current wallet?"
+        android:textStyle="bold"
+        android:fontFamily="@font/ubuntu"
+        android:textSize="17sp"
+        android:textColor="@color/colorPrimary"/>
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dimen16"
-        android:layout_below="@id/initial_balance">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Make this my current wallet?"/>
+        android:layout_marginBottom="@dimen/dimen24"
+        android:orientation="horizontal"
+        android:layout_below="@id/text_current">
 
         <RadioButton
             android:id="@+id/no"
@@ -44,6 +69,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dimen16"
             android:text="@string/no"
+            android:fontFamily="@font/ubuntu"
+            android:textColor="@color/colorPrimary"
             android:layout_marginBottom="@dimen/dimen8"
             android:onClick="onRadioButtonClicked"/>
 
@@ -52,23 +79,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/yes"
+            android:fontFamily="@font/ubuntu"
+            android:textColor="@color/colorPrimary"
             android:onClick="onRadioButtonClicked"/>
 
     </RadioGroup>
 
     <Button
         android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
         android:layout_below="@id/radioGroup"
-        android:text="@string/delete"/>
+        android:text="@string/delete"
+        android:textAllCaps="false"
+        android:fontFamily="@font/ubuntu"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp"/>
 
     <Button
         android:id="@+id/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
         android:layout_below="@id/radioGroup"
         android:layout_alignParentRight="true"
-        android:text="@string/save"/>
+        android:text="@string/save"
+        android:textAllCaps="false"
+        android:fontFamily="@font/ubuntu"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp"/>
 
 </RelativeLayout>

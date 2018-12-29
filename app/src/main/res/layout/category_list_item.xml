@@ -2,13 +2,14 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_marginTop="@dimen/dimen16"
+    android:layout_height="55dp">
 
     <ImageView
         android:id="@+id/category_item_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_log_off"/>
+        android:src="@drawable/ic_circle"/>
 
     <TextView
         android:id="@+id/category_item_text"
@@ -16,6 +17,17 @@
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:layout_toRightOf="@id/category_item_image"
-        android:textSize="20sp"/>
+        android:layout_marginBottom="@dimen/dimen24"
+        android:textSize="20sp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/ubuntu"/>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:background="@color/color_light_gray"
+        android:layout_below="@id/category_item_text"/>
 
 </RelativeLayout>

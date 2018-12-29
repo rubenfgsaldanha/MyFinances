@@ -1,6 +1,7 @@
 package pt.uc.dei.cm.myfinances.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,13 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         DecimalFormat df2 = new DecimalFormat(".##");       //this is to only have 2 decimal numbers
         holder.walletText.setText(wallets.get(position).getName());
         holder.walletBalance.setText(df2.format(wallets.get(position).getBalance()));
+
+        if(wallets.get(position).getBalance() < 0){
+            holder.walletImage.setColorFilter(Color.RED);
+        }
+        else{
+            holder.walletImage.setColorFilter(Color.GREEN);
+        }
     }
 
     @Override

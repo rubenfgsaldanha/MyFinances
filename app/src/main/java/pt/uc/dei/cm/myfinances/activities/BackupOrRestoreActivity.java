@@ -44,7 +44,6 @@ public class BackupOrRestoreActivity extends AppCompatActivity {
     @BindView(R.id.btnConnectGoogleDrive) Button btnConnectDrive;
     @BindView(R.id.btnLocalBackup) Button btnLocalBackup;
     @BindView(R.id.btnRestoreFile) Button btnRestoreFile;
-    @BindView(R.id.checkboxBackup) CheckBox checkBoxBackup;
 
     private MyFinancesApplication app;
 

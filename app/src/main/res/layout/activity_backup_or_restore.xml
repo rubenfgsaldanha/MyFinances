@@ -16,20 +16,26 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen16"
         android:text="@string/textGoogleDrive"
-        android:textSize="16sp"/>
+        android:textStyle="bold"
+        android:fontFamily="@font/ubuntu"
+        android:textSize="17sp"
+        android:textColor="@color/colorPrimary"/>
 
     <Button
         android:id="@+id/btnConnectGoogleDrive"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginBottom="@dimen/dimen16"
+        android:layout_marginBottom="@dimen/dimen24"
         android:text="@string/btnConnectDrive"
-        android:textAllCaps="false"/>
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/ubuntu"
+        android:textAllCaps="false"
+        android:textSize="15sp"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginBottom="@dimen/dimen16"
+        android:layout_marginBottom="@dimen/dimen24"
         android:background="@color/color_light_gray"/>
     
     <TextView
@@ -38,15 +44,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen16"
         android:text="@string/localBackup"
-        android:textSize="16sp"/>
-    
-    <CheckBox
-        android:id="@+id/checkboxBackup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dimen16"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/checkboxBackup"/>
+        android:textStyle="bold"
+        android:fontFamily="@font/ubuntu"
+        android:textSize="17sp"
+        android:textColor="@color/colorPrimary"/>
 
     <Button
         android:id="@+id/btnLocalBackup"
@@ -54,13 +55,19 @@
         android:layout_height="60dp"
         android:layout_marginBottom="@dimen/dimen16"
         android:text="@string/backupFile"
-        android:textAllCaps="false"/>
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/ubuntu"
+        android:textAllCaps="false"
+        android:textSize="15sp"/>
 
     <Button
         android:id="@+id/btnRestoreFile"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="@string/restoreFile"
-        android:textAllCaps="false"/>
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/ubuntu"
+        android:textAllCaps="false"
+        android:textSize="15sp"/>
 
 </LinearLayout>

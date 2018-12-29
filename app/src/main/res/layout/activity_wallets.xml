@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_fab_add"
+        android:tint="@color/black"
         android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

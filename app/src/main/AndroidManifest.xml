@@ -64,6 +64,10 @@
         <activity
             android:name="pt.uc.dei.cm.myfinances.activities.CategoriesActivity"
             android:parentActivityName="pt.uc.dei.cm.myfinances.activities.SignedInActivity"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

@@ -8,18 +8,58 @@
     android:id="@+id/add_transaction_layout"
     tools:context="pt.uc.dei.cm.myfinances.activities.AddTransactionActivity">
 
+    <TextView
+        android:id="@+id/t_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:text="Date"
+        android:fontFamily="@font/ubuntu"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"/>
+
     <Button
         android:id="@+id/btn_date"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
+        android:layout_below="@id/t_date"
+        android:textColor="@color/colorPrimaryDark"
+        android:fontFamily="@font/ubuntu"
         android:layout_marginBottom="@dimen/dimen16"/>
+
+    <TextView
+        android:id="@+id/text_cat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_date"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:text="Category"
+        android:textStyle="bold"
+        android:fontFamily="@font/ubuntu"
+        android:textSize="17sp"
+        android:textColor="@color/colorPrimary"/>
 
     <Spinner
         android:id="@+id/spinner_add_categories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen16"
-        android:layout_below="@id/btn_date"></Spinner>
+        android:layout_below="@id/text_cat"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:fontFamily="@font/ubuntu"></Spinner>
+
+    <TextView
+        android:id="@+id/text_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_add_categories"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:text="Transaction type"
+        android:textStyle="bold"
+        android:fontFamily="@font/ubuntu"
+        android:textSize="17sp"
+        android:textColor="@color/colorPrimary"/>
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -27,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen16"
         android:orientation="horizontal"
-        android:layout_below="@id/spinner_add_categories">
+        android:layout_below="@id/text_type">
 
         <RadioButton
             android:id="@+id/expense"
@@ -35,6 +75,9 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dimen16"
             android:text="@string/expense"
+            android:fontFamily="@font/ubuntu"
+            android:textSize="15sp"
+            android:textColor="@color/colorPrimary"
             android:layout_marginBottom="@dimen/dimen8"
             android:onClick="onRadioButtonClicked"/>
 
@@ -43,32 +86,57 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/income"
+            android:fontFamily="@font/ubuntu"
+            android:textSize="15sp"
+            android:textColor="@color/colorPrimary"
             android:onClick="onRadioButtonClicked"/>
     </RadioGroup>
 
-    <EditText
-        android:id="@+id/amount"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/radioGroup"
-        android:layout_marginBottom="@dimen/dimen16"
-        android:inputType="numberDecimal"
-        android:hint="@string/amount"/>
+        android:layout_below="@id/radioGroup">
 
-    <EditText
-        android:id="@+id/comment"
+        <EditText
+            android:id="@+id/amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/radioGroup"
+            android:layout_marginBottom="@dimen/dimen16"
+            android:inputType="numberDecimal"
+            android:hint="@string/amount"
+            android:fontFamily="@font/ubuntu"
+            android:textColorHint="@color/colorPrimaryLight"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/amount"
-        android:layout_marginBottom="@dimen/dimen16"
-        android:inputType="text"
-        android:hint="@string/comment"/>
+        android:layout_below="@id/input_amount">
+
+        <EditText
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input_amount"
+            android:layout_marginBottom="@dimen/dimen16"
+            android:inputType="text"
+            android:hint="@string/comment"
+            android:fontFamily="@font/ubuntu"
+            android:textColorHint="@color/colorPrimaryLight"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/button_save_transaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/comment"
-        android:text="@string/save"/>
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_below="@id/input_comment"
+        android:text="@string/save"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/ubuntu"
+        android:textAllCaps="false"
+        android:textSize="15sp"/>
 
 </RelativeLayout>

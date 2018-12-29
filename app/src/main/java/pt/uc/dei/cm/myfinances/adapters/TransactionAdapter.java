@@ -1,6 +1,7 @@
 package pt.uc.dei.cm.myfinances.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pt.uc.dei.cm.myfinances.MyFinancesApplication;
+import pt.uc.dei.cm.myfinances.general.Categories;
 import pt.uc.dei.cm.myfinances.general.Transaction;
 import pt.uc.dei.cm.myfinances.myfinances.R;
 
@@ -82,6 +85,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         DecimalFormat df2 = new DecimalFormat(".##");       //this is to only have 2 decimal numbers
         holder.transactionBalance.setText(df2.format(transactions.get(position).getAmount()));
+
+        if(transactions.get(position).getAmount() < 0){
+            holder.transactionImage.setColorFilter(Color.RED);
+        }
+        else{
+            holder.transactionImage.setColorFilter(Color.GREEN);
+        }
     }
 
     @Override

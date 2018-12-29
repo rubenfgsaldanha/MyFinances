@@ -1,6 +1,7 @@
 package pt.uc.dei.cm.myfinances.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
         @BindView(R.id.loan_amount) TextView loanAmount;
         @BindView(R.id.thirdParty) TextView loanThirdParty;
         @BindView(R.id.loan_id) TextView loanID;
+        @BindView(R.id.loan_item_image) ImageView loanImage;
 
         public ViewHolder(View v) {
             super(v);
@@ -68,12 +70,19 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //set the data to be displayed
-        holder.loanThirdParty.setText(loans.get(position).getThirdParty());
+        holder.loanThirdParty.setText("Third party: "+loans.get(position).getThirdParty());
 
         DecimalFormat df2 = new DecimalFormat(".##");       //this is to only have 2 decimal numbers
-        holder.loanAmount.setText(df2.format(loans.get(position).getLoanAmount()));
+        holder.loanAmount.setText("Loan amount: "+df2.format(loans.get(position).getLoanAmount()));
         holder.loanID.setText(String.valueOf(loans.get(position).getLoanId()));
         holder.loanDate.setText(loans.get(position).getDateString());
+
+        if(loans.get(position).getLoanAmount() < 0){
+            holder.loanImage.setColorFilter(Color.RED);
+        }
+        else{
+            holder.loanImage.setColorFilter(Color.GREEN);
+        }
     }
 
     @Override

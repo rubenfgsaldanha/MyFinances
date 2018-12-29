@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class EditWalletActivity extends AppCompatActivity {
     @BindView(R.id.save) Button btnSave;
     @BindView(R.id.delete) Button btnDelete;
     @BindView(R.id.radioGroup) RadioGroup radioGroup;
+    @BindView(R.id.text_current) TextView textCurrent;
 
     private boolean makeCurrent = false;
     MyFinancesApplication app;
@@ -114,6 +116,7 @@ public class EditWalletActivity extends AppCompatActivity {
 
             if(nameWallet.equals(app.getCurrentWallet().getName())){
                 radioGroup.setVisibility(View.GONE);
+                textCurrent.setVisibility(View.GONE);
             }
         }
     }

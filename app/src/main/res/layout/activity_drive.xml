@@ -10,22 +10,28 @@
     android:orientation="vertical"
     tools:context="pt.uc.dei.cm.myfinances.activities.DriveActivity">
 
-    <CheckBox
-        android:id="@+id/checkboxBackupDrive"
+    <TextView
+        android:id="@+id/textGoogleDrive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen16"
-        android:layout_centerHorizontal="true"
-        android:text="@string/checkboxBackup"/>
+        android:text="@string/textGoogleDrive"
+        android:textStyle="bold"
+        android:fontFamily="@font/ubuntu"
+        android:textSize="17sp"
+        android:textColor="@color/colorPrimary"/>
 
     <Button
         android:id="@+id/btnDriveBackup"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@id/checkboxBackupDrive"
+        android:layout_below="@id/textGoogleDrive"
         android:layout_marginBottom="@dimen/dimen16"
         android:text="@string/backupDrive"
-        android:textAllCaps="false"/>
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/ubuntu"
+        android:textAllCaps="false"
+        android:textSize="15sp"/>
 
     <Button
         android:id="@+id/btnRestoreDrive"
@@ -34,15 +40,20 @@
         android:layout_below="@id/btnDriveBackup"
         android:layout_marginBottom="@dimen/dimen8"
         android:text="@string/restoreDrive"
-        android:textAllCaps="false"/>
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/ubuntu"
+        android:textAllCaps="false"
+        android:textSize="15sp"/>
 
     <TextView
         android:id="@+id/connected_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnRestoreDrive"
-        android:layout_gravity="center_horizontal"
-        android:textSize="17sp"/>
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/ubuntu"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"

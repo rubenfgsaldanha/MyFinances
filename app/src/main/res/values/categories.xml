@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="categories">
-        <item>Comida e/ou bebida</item>
-        <item>Pagamentos</item>
-        <item>Eletrodomésticos</item>
-        <item>Carro e/ou Transporte</item>
-        <item>Roupa</item>
-        <item>Desporto</item>
-        <item>Férias</item>
-        <item>Tecnologia</item>
-        <item>Salário</item>
-        <item>Presentes</item>
-        <item>Outros</item>
+        <item>Food and/or Drink</item>
+        <item>Payments</item>
+        <item>Houseware</item>
+        <item>Car and/or Transportation</item>
+        <item>Clothes</item>
+        <item>Sports</item>
+        <item>Vacations</item>
+        <item>Technology</item>
+        <item>Salary</item>
+        <item>Gifts</item>
+        <item>Others</item>
     </string-array>
 </resources>

@@ -18,8 +18,6 @@ import android.widget.Switch;
 public class SettingsActivity extends AppCompatActivity {
 
     @BindView(R.id.spinner_currency) Spinner currencies;
-    @BindView(R.id.local_backup_auto) Switch localBackupAuto;
-    @BindView(R.id.drive_backup_auto) Switch driveBackupAuto;
     @BindView(R.id.show_percentages) Switch showPercentages;
     @BindView(R.id.show_subtitles) Switch showSubtitles;
 
@@ -42,8 +40,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(SharedPreferencesHelper.SHARED_PREFS, MODE_PRIVATE);
 
-        localBackupAuto.setChecked(sharedPreferences.getBoolean(SharedPreferencesHelper.LOCAL_BACKUP, false));
-        driveBackupAuto.setChecked(sharedPreferences.getBoolean(SharedPreferencesHelper.DRIVE_BACKUP, false));
         showPercentages.setChecked(sharedPreferences.getBoolean(SharedPreferencesHelper.SHOW_PERCENTAGES, false));
         showSubtitles.setChecked(sharedPreferences.getBoolean(SharedPreferencesHelper.SHOW_SUBTITLES, false));
 
@@ -81,8 +77,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onDestroy();
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SharedPreferencesHelper.LOCAL_BACKUP, localBackupAuto.isChecked());
-        editor.putBoolean(SharedPreferencesHelper.DRIVE_BACKUP, driveBackupAuto.isChecked());
         editor.putBoolean(SharedPreferencesHelper.SHOW_PERCENTAGES, showPercentages.isChecked());
         editor.putBoolean(SharedPreferencesHelper.SHOW_SUBTITLES, showSubtitles.isChecked());
         editor.putString(SharedPreferencesHelper.CURRENCY, currencySymbol);
