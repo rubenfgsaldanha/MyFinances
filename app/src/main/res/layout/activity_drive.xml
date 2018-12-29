@@ -50,6 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnRestoreDrive"
+        android:layout_marginBottom="@dimen/dimen8"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/ubuntu"
         android:textSize="16sp"
@@ -59,7 +60,7 @@
         android:id="@+id/progress_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnDriveBackup"
+        android:layout_below="@id/connected_user"
         android:progressDrawable="@drawable/custom_progress_bar"
         android:visibility="gone"/>
 

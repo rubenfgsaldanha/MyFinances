@@ -51,6 +51,7 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
     @BindView(R.id.past_month) ImageButton pastMonth;
     @BindView(R.id.following_month) ImageButton followingMonth;
     @BindView(R.id.now_month) TextView nowMonth;
+    @BindView(R.id.noRecords) TextView noDataFound;
 
     private RecyclerView.LayoutManager mLayoutManager;
     private LoanAdapter adapter;
@@ -105,6 +106,15 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
         loansList.setLayoutManager(mLayoutManager);
 
         nowMonth.setText(getCurrentMonth());
+    }
+
+    //Verifies if exists transaction on the selected month
+    private void verifyData() {
+        if (loans.size() == 0) {
+            noDataFound.setText(R.string.no_data_found);
+        } else {
+            noDataFound.setText("");
+        }
     }
 
 
@@ -224,6 +234,7 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
         protected void onPostExecute(Void aVoid) {
             adapter = new LoanAdapter(getContext(),LoanFragment.this::onItemClick, loans);
             loansList.setAdapter(adapter);
+            verifyData();
         }
     }
 
@@ -237,6 +248,7 @@ public class LoanFragment extends androidx.fragment.app.Fragment implements Adap
             adapter = new LoanAdapter(getContext(),LoanFragment.this::onItemClick, loans);
             loansList.setAdapter(adapter);
             nowMonth.setText(""+(currentMonthNum+1)+"/"+currentYearNum);
+            verifyData();
         }
     }
 }

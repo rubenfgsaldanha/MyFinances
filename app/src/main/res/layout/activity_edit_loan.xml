@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_edit_loan_date"
         android:layout_marginBottom="@dimen/dimen8"
-        android:text="Loan type"
+        android:text="@string/loan_type"
         android:textStyle="bold"
         android:fontFamily="@font/ubuntu"
         android:textSize="17sp"
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editlenderRadioGroup"
         android:layout_marginBottom="@dimen/dimen8"
-        android:text="Loan status"
+        android:text="@string/loan_status"
         android:textStyle="bold"
         android:fontFamily="@font/ubuntu"
         android:textSize="17sp"
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dimen16"
             android:onClick="onRadioButtonClicked"
-            android:text="Not paid"
+            android:text="@string/not_paid"
             android:fontFamily="@font/ubuntu"
             android:textColor="@color/colorPrimary" />
     </RadioGroup>

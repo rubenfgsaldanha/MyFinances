@@ -205,16 +205,16 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
 
         @Override
         protected void onPreExecute() {
-            /*Drawable progressDraw = getResources().getDrawable(R.drawable.custom_progress_bar);
+            Drawable progressDraw = getResources().getDrawable(R.drawable.custom_progress_bar);
             progressBar.setVisibility(View.VISIBLE);
             progressBar.setProgressDrawable(progressDraw);
-            progressBar.setProgress(0);*/
+            progressBar.setProgress(0);
         }
 
         @Override
         protected void onPostExecute(Integer integer) {
             mBusy = false;
-            //progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
             showSnackbar(integer);
         }
 
@@ -246,20 +246,18 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
                     File fl = new File(getDatabasePath(DATABASE_NAME).getAbsolutePath());
                     id = null;
                     String id_ = mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID, null);
-                    System.out.println("------------------------------------------------------------");
-                    System.out.println(id_);
+
                     if(id_ !=null){
                         REST.trash(id_);
                     }
                     if (fl != null) {
                         String mime = MimeUtils.guessMimeTypeFromExtension("odb");
                         id = REST.createFile(rsid, titl, mime, fl);
-                        System.out.println(id);
+
                         SharedPreferences.Editor editor = mPreferences.edit();
                         editor.putString(SharedPreferencesHelper.DRIVE_FILE_ID, id);
                         editor.apply();
-                        System.out.println(mPreferences.getString(SharedPreferencesHelper.DRIVE_FILE_ID,null));
-                        System.out.println("------------------------------------------------------------");
+
                         app.openDB();
                         return R.string.backup_drive_success;
                     }
@@ -270,10 +268,10 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
             return R.string.backup_drive_fail;
         }
 
-        /*@Override
+        @Override
         protected void onProgressUpdate(Integer... values) {
             progressBar.setProgress(values[0]);
-        }*/
+        }
     }
 
     private class DriveRestore extends BaseTask<Void>{
@@ -313,9 +311,9 @@ public class DriveActivity extends AppCompatActivity implements REST.ConnectCBs 
             return res;
         }
 
-        /*@Override
+        @Override
         protected void onProgressUpdate(Integer... values) {
             progressBar.setProgress(values[0]);
-        }*/
+        }
     }
 }

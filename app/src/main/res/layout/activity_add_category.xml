@@ -42,7 +42,7 @@
         android:layout_below="@id/txtV"
         android:layout_marginBottom="@dimen/dimen24"
         android:id="@+id/colorButton"
-        android:text="Color"
+        android:text="@string/btn_color"
         android:textColor="@color/colorPrimary"
         android:fontFamily="@font/ubuntu"
         android:textAllCaps="false"

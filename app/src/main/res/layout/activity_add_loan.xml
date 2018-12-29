@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_loan_date"
         android:layout_marginBottom="@dimen/dimen8"
-        android:text="Loan type"
+        android:text="@string/loan_type"
         android:textStyle="bold"
         android:fontFamily="@font/ubuntu"
         android:textSize="17sp"

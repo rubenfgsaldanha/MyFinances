@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Currency"
+        android:text="@string/currency"
         android:textSize="17sp"
         android:layout_marginBottom="@dimen/dimen8"
         android:textColor="@color/colorPrimaryDark"
