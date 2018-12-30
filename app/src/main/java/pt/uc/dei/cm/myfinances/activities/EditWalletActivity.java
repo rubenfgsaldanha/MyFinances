@@ -35,7 +35,7 @@ public class EditWalletActivity extends AppCompatActivity {
     @BindView(R.id.text_current) TextView textCurrent;
 
     private boolean makeCurrent = false;
-    MyFinancesApplication app;
+    private MyFinancesApplication app;
     private String nameWallet;
     private Wallet aux;
 
@@ -114,7 +114,7 @@ public class EditWalletActivity extends AppCompatActivity {
             walletName.setText(nameWallet);
             initialBalance.setText(String.valueOf(aux.getBalance()));
 
-            if(nameWallet.equals(app.getCurrentWallet().getName())){
+            if(aux.isCurrentWallet()){
                 radioGroup.setVisibility(View.GONE);
                 textCurrent.setVisibility(View.GONE);
             }
@@ -127,7 +127,7 @@ public class EditWalletActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Wallet... wallets) {
             w = wallets[0];
-            if(!nameWallet.equals(app.getCurrentWallet().getName())){
+            if(!aux.isCurrentWallet()){
                 w.setCurrentWallet(false);
 
                 if(makeCurrent){
@@ -137,8 +137,17 @@ public class EditWalletActivity extends AppCompatActivity {
                     app.getDb().databaseDao().updateWalletStatus(app.getCurrentWallet().isCurrentWallet(), app.getCurrentWallet().getName());
                 }
             }
+            else{
+                w.setCurrentWallet(true);
+            }
 
             app.getDb().databaseDao().updateWallet(w);
+
+            if(!aux.getName().equals(w.getName())){
+                //updates the name of the wallet in the transactions
+                app.getDb().databaseDao().updateTransactionWalletName(aux.getName(), w.getName());
+                app.getDb().databaseDao().updateLoanWalletName(aux.getName(), w.getName());
+            }
             return null;
         }
 

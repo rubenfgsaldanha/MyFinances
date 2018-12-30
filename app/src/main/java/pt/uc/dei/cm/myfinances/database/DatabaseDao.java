@@ -59,6 +59,9 @@ public interface DatabaseDao {
             "expense = :isExpense, wallet_name = :wallet_name WHERE id = :id")
     void updateTransaction(int id, int day, int month, int year, String category, String comment, double amount, boolean isExpense, String wallet_name);
 
+    @Query("UPDATE `transaction` SET wallet_name = :walletNameAfter WHERE wallet_name = :walletNameBefore")
+    void updateTransactionWalletName(String walletNameBefore, String walletNameAfter);
+
     @Query("DELETE FROM `transaction` WHERE id = :id")
     void deleteTransaction(int id);
 
@@ -90,6 +93,9 @@ public interface DatabaseDao {
             " third_party = :thirdParty, loan_amount = :loanAmount, " +
             "is_lender = :lender, wallet_name = :wallet WHERE loanId = :loanId")
     void updateLoan(int loanId, int day, int month, int year, /*int dueyear, int duemonth, int dueday, */ String thirdParty, double loanAmount, boolean lender, String wallet);
+
+    @Query("UPDATE `loan` SET wallet_name = :walletNameAfter WHERE wallet_name = :walletNameBefore")
+    void updateLoanWalletName(String walletNameBefore, String walletNameAfter);
 
     @Query("DELETE FROM `loan` WHERE loanId = :id")
     void deleteLoan(int id);
